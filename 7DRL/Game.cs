@@ -29,6 +29,7 @@ namespace _7DRL
         private char[,] lastFrame;
 
         private Entities.drawable player;
+        private Entities.drawable enemy;
 
         public Game()
         {
@@ -45,7 +46,7 @@ namespace _7DRL
 
             input = new nullEngine.Managers.InputManager();
 
-            worldSize = 1000;
+            worldSize = 400;
             ground = new char[worldSize, worldSize];
             world = new char[worldSize, worldSize];
             screenX = 119;
@@ -97,30 +98,32 @@ namespace _7DRL
             for(int x = 0; x < screenX; x++)
             {
                 for (int y = 0; y < screenY; y++)
-                {
-                    if (ground[x + worldOffsetX, y + worldOffsetY] == '#')
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                    }
-                    else if (ground[x + worldOffsetX, y + worldOffsetY] == '.')
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    }
-                    
+                {                    
                     if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
+
+                        if (ground[x + worldOffsetX, y + worldOffsetY] == '#')
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                        }
+                        else if (ground[x + worldOffsetX, y + worldOffsetY] == '.')
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        }
+
                         Console.SetCursorPosition(x, y);
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY]);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
                     }
 
-                    if (world[x + worldOffsetX, y + worldOffsetY] == '@')
-                    {
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                    }
-
                     if (world[x + worldOffsetX, y + worldOffsetY] != ' ')
                     {
+
+                        if (world[x + worldOffsetX, y + worldOffsetY] == '@')
+                        {
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                        }
+
                         Console.SetCursorPosition(x, y);
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY]);
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];

@@ -12,7 +12,7 @@ namespace _7DRL
     {
         static void Main(string[] args)
         {
-            int fps = 60;
+            int fps = 30;
             int updateTime = 1000 / fps;
 
             Game game = new Game();
