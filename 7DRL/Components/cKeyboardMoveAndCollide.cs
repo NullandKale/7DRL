@@ -35,16 +35,11 @@ namespace _7DRL.Components
                 moveY++;
             }
 
-            bool canMoveX = Managers.CollisionManager.CheckCollision(moveX, 0, d);
-            bool canMoveY = Managers.CollisionManager.CheckCollision(0, moveY, d);
+            bool canMove = Managers.CollisionManager.CheckCollision(moveX, moveY, d);
 
-            if(canMoveX)
+            if (canMove)
             {
-                d.setPosRelative(moveX, 0);
-            }
-            if(canMoveY)
-            {
-                d.setPosRelative(0, moveY);
+                d.setPosRelative(moveX, moveY);
             }
         }
     }
