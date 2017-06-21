@@ -130,7 +130,7 @@ namespace _7DRL
             {
                 for (int y = 0; y < worldSize; y++)
                 {
-                    if(x == 0 || y == 0)
+                    if(x == 0 || y == 0 || x == worldSize - 1 || y == worldSize - 1)
                     {
                         ground[x, y] = '#';
                     }
