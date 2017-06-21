@@ -70,6 +70,7 @@ namespace _7DRL
             player.texture = '@';
             player.tag = "Player";
             player.AddComponent(new Components.cKeyboardMoveAndCollide());
+            player.AddComponent(new Components.cCameraFollow(this));
             onUpdate.Add(player.update);
 
             lastFrameDone = true;
