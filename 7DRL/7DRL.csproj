@@ -51,7 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\cCameraFollow.cs" />
+    <Compile Include="Components\cEnemyAI.cs" />
     <Compile Include="Components\cKeyboardMoveAndCollide.cs" />
+    <Compile Include="Components\cStats.cs" />
     <Compile Include="Components\iComponent.cs" />
     <Compile Include="Entities\drawable.cs" />
     <Compile Include="Extensions\IntExtensions.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tile.cs" />
+    <Compile Include="Utils\Point.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

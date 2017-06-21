@@ -11,6 +11,7 @@ namespace _7DRL
     {
         public static Game g;
         public static nullEngine.Managers.InputManager input;
+        public Random rng;
         public List<Action> onUpdate;
         public bool running;
         public bool stop;
@@ -29,8 +30,9 @@ namespace _7DRL
         private Tile[,] lastFrame;
 
         private Entities.drawable player;
+        private Entities.drawable enemy;
 
-        public Game()
+        public Game(int seed)
         {
             if(g == null)
             {
@@ -42,12 +44,16 @@ namespace _7DRL
             }
 
             onUpdate = new List<Action>();
+            rng = new Random(seed);
 
             input = new nullEngine.Managers.InputManager();
 
-            worldSize = 1000;
+            worldSize = 400;
+            ground = new char[worldSize, worldSize];
+            world = new char[worldSize, worldSize];
             screenX = 119;
             screenY = 29;
+            lastFrame = new char[screenX, screenY];
 
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
@@ -124,6 +130,15 @@ namespace _7DRL
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                         }
 
+                        if (ground[x + worldOffsetX, y + worldOffsetY] == '#')
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                        }
+                        else if (ground[x + worldOffsetX, y + worldOffsetY] == '.')
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
+                        }
+
                         Console.SetCursorPosition(x, y);
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
@@ -132,6 +147,11 @@ namespace _7DRL
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
                         if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
+                          
+                    if (world[x + worldOffsetX, y + worldOffsetY] != ' ')
+                    {
+
+                        if (world[x + worldOffsetX, y + worldOffsetY] == '@')
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                         }

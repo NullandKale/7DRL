@@ -20,7 +20,7 @@ namespace _7DRL.Components
 
         public void Run(drawable d)
         {
-            if(Point.dist(player.pos, d.pos) > 4)
+            if (Point.dist(player.pos, d.pos) > 4)
             {
                 if (d.pos.xPos == targetPos.x && d.pos.yPos == targetPos.y)
                 {
@@ -42,11 +42,11 @@ namespace _7DRL.Components
             int moveX = 0;
             int moveY = 0;
 
-            if(target.x > d.pos.xPos)
+            if (target.x > d.pos.xPos)
             {
                 moveX++;
             }
-            if(target.x < d.pos.xPos)
+            if (target.x < d.pos.xPos)
             {
                 moveX--;
             }
@@ -77,7 +77,7 @@ namespace _7DRL.Components
         {
             Point p = Point.getRandomPoint(Game.g.worldSize);
 
-            if(Managers.CollisionManager.CheckCollision(p.x, p.y))
+            if (Managers.CollisionManager.CheckCollision(p.x, p.y))
             {
                 return p;
             }

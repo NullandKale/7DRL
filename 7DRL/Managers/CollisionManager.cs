@@ -29,5 +29,24 @@ namespace _7DRL.Managers
                 return false;
             }
         }
+
+        public static bool CheckCollision(int x, int y)
+        {
+            if (Game.isInWorld(x, y))
+            {
+                if (Game.g.ground[x, y] == ' ')
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
