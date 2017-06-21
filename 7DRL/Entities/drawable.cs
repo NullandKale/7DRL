@@ -55,7 +55,7 @@ namespace _7DRL.Entities
 
         private void draw()
         {
-            Game.g.world[pos.xPos, pos.yPos] = texture;
+            Game.g.world[pos.xPos, pos.yPos].Visual = texture;
         }
     }
 

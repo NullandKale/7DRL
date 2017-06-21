@@ -16,8 +16,8 @@ namespace _7DRL
         public bool stop;
         public bool lastFrameDone;
 
-        public char[,] ground;
-        public char[,] world;
+        public Tile[,] ground;
+        public Tile[,] world;
 
         public int worldSize;
         public int worldOffsetX;
@@ -26,7 +26,7 @@ namespace _7DRL
         public int screenX;
         public int screenY;
 
-        private char[,] lastFrame;
+        private Tile[,] lastFrame;
 
         private Entities.drawable player;
 
@@ -46,12 +46,31 @@ namespace _7DRL
             input = new nullEngine.Managers.InputManager();
 
             worldSize = 1000;
-            ground = new char[worldSize, worldSize];
-            world = new char[worldSize, worldSize];
             screenX = 119;
             screenY = 30;
-            lastFrame = new char[screenX, screenY];
 
+            ground = new Tile[worldSize, worldSize];
+            world = new Tile[worldSize, worldSize];
+            lastFrame = new Tile[screenX, screenY];
+
+            for (var i = 0; i < worldSize; i++)
+            {
+                for (var j = 0; j < worldSize; j++)
+                {
+                    ground[i, j] = new Tile();
+                }
+            }
+
+            world = ground;
+
+            for (var i = 0; i < screenX; i++)
+            {
+                for (var j = 0; j < screenY; j++)
+                {
+                    lastFrame[i, j] = new Tile();
+                }
+            }
+            
             worldOffsetX = 0;
             worldOffsetY = 0;
         }
@@ -62,7 +81,7 @@ namespace _7DRL
 
             running = true;
             stop = false;
-            ground = WorldManager.GenerateWorld(worldSize);
+            ground = WorldManager.GenerateWorld(ground, worldSize);
             ClearFrameBuffer();
 
             player = new Entities.drawable();
@@ -97,34 +116,30 @@ namespace _7DRL
             for(int x = 0; x < screenX; x++)
             {
                 for (int y = 0; y < screenY; y++)
-                {
-                    if (ground[x + worldOffsetX, y + worldOffsetY] == '#')
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                    }
-                    else if (ground[x + worldOffsetX, y + worldOffsetY] == '.')
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkGreen;
-                    }
-                    
+                {                    
                     if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
+                        if (ground[x + worldOffsetX, y + worldOffsetY].Visual == '#')
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                        }
+
                         Console.SetCursorPosition(x, y);
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY]);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
                     }
 
-                    if (world[x + worldOffsetX, y + worldOffsetY] == '@')
+                    if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                    }
+                        if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
+                        {
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                        }
 
-                    if (world[x + worldOffsetX, y + worldOffsetY] != ' ')
-                    {
                         Console.SetCursorPosition(x, y);
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY]);
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
-                        world[x + worldOffsetX, y + worldOffsetY] = ' ';
+                        world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
                     }                    
                 }
             }
@@ -139,13 +154,14 @@ namespace _7DRL
         {
             return !(x < 0 || x >= g.worldSize || y < 0 || y >= g.worldSize);
         }
+
         private void ClearFrameBuffer()
         {
             for (int x = 0; x < screenX; x++)
             {
                 for (int y = 0; y < screenY; y++)
                 {
-                    lastFrame[x, y] = ' ';
+                    lastFrame[x, y].Visual = ' ';
                 }
             }
         }
