@@ -49,11 +49,8 @@ namespace _7DRL
             input = new nullEngine.Managers.InputManager();
 
             worldSize = 400;
-            ground = new char[worldSize, worldSize];
-            world = new char[worldSize, worldSize];
             screenX = 119;
             screenY = 29;
-            lastFrame = new char[screenX, screenY];
 
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
@@ -130,15 +127,6 @@ namespace _7DRL
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                         }
 
-                        if (ground[x + worldOffsetX, y + worldOffsetY] == '#')
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkGray;
-                        }
-                        else if (ground[x + worldOffsetX, y + worldOffsetY] == '.')
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkGreen;
-                        }
-
                         Console.SetCursorPosition(x, y);
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
@@ -147,11 +135,6 @@ namespace _7DRL
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
                         if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
-                          
-                    if (world[x + worldOffsetX, y + worldOffsetY] != ' ')
-                    {
-
-                        if (world[x + worldOffsetX, y + worldOffsetY] == '@')
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                         }

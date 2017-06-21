@@ -34,7 +34,7 @@ namespace _7DRL.Managers
         {
             if (Game.isInWorld(x, y))
             {
-                if (Game.g.ground[x, y] == ' ')
+                if (Game.g.ground[x, y].collideable == false)
                 {
                     return true;
                 }
