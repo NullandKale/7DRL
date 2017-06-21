@@ -55,8 +55,7 @@ namespace _7DRL.Entities
 
         private void draw()
         {
-            Console.SetCursorPosition(pos.xPos - 1, pos.yPos);
-            Console.Write(texture);
+            Game.g.world[pos.xPos, pos.yPos] = texture;
         }
     }
 

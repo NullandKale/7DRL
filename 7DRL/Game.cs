@@ -15,7 +15,9 @@ namespace _7DRL
         public bool stop;
         public bool lastFrameDone;
 
+        public char[,] ground;
         public char[,] world;
+
         public int worldSize;
         public int worldOffsetX;
         public int worldOffsetY;
@@ -43,6 +45,7 @@ namespace _7DRL
             input = new nullEngine.Managers.InputManager();
 
             worldSize = 1000;
+            ground = new char[worldSize, worldSize];
             world = new char[worldSize, worldSize];
             screenX = 119;
             screenY = 29;
@@ -54,6 +57,8 @@ namespace _7DRL
 
         public void onLoad()
         {
+            Console.CursorVisible = false;
+
             running = true;
             stop = false;
             GenerateWorld();
@@ -91,11 +96,19 @@ namespace _7DRL
             {
                 for (int y = 0; y < screenY; y++)
                 {
-                    if (lastFrame[x, y] != world[x + worldOffsetX, y + worldOffsetY])
+                    if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
+                    {
+                        Console.SetCursorPosition(x, y);
+                        Console.Write(ground[x + worldOffsetX, y + worldOffsetY]);
+                        lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
+                    }
+
+                    if (world[x + worldOffsetX, y + worldOffsetY] != ' ')
                     {
                         Console.SetCursorPosition(x, y);
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY]);
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
+                        world[x + worldOffsetX, y + worldOffsetY] = ' ';
                     }
                 }
             }
@@ -119,12 +132,14 @@ namespace _7DRL
                 {
                     if(x == 0 || y == 0)
                     {
-                        world[x, y] = '#';
+                        ground[x, y] = '#';
                     }
                     else
                     {
-                        world[x, y] = '.';
+                        ground[x, y] = '.';
                     }
+
+                    world[x, y] = ' ';
                 }
             }
         }
@@ -139,6 +154,5 @@ namespace _7DRL
                 }
             }
         }
-
     }
 }
