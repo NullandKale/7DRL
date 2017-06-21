@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _7DRL.Entities;
+using nullEngine;
 
 namespace _7DRL.Components
 {
@@ -14,22 +15,22 @@ namespace _7DRL.Components
             int moveX = 0;
             int moveY = 0;
 
-            if(Managers.InputManager.isKeyFalling(System.Windows.Input.Key.A))
+            if(Game.input.isKeyFalling(OpenTK.Input.Key.A))
             {
                 moveX--;
             }
 
-            if (Managers.InputManager.isKeyFalling(System.Windows.Input.Key.D))
+            if (Game.input.isKeyFalling(OpenTK.Input.Key.D))
             {
                 moveX++;
             }
 
-            if (Managers.InputManager.isKeyFalling(System.Windows.Input.Key.W))
+            if (Game.input.isKeyFalling(OpenTK.Input.Key.W))
             {
                 moveY--;
             }
 
-            if (Managers.InputManager.isKeyFalling(System.Windows.Input.Key.S))
+            if (Game.input.isKeyFalling(OpenTK.Input.Key.S))
             {
                 moveY++;
             }

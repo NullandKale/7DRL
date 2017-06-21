@@ -9,6 +9,8 @@ namespace _7DRL
     public class Game
     {
         public static Game g;
+        public static nullEngine.Managers.InputManager input;
+        public List<Action> onUpdate;
         public bool running;
         public bool stop;
 
@@ -21,8 +23,6 @@ namespace _7DRL
         public int screenY;
 
         private char[,] lastFrame;
-
-        private List<Action> onUpdate;
 
         private Entities.drawable player;
 
@@ -37,6 +37,10 @@ namespace _7DRL
                 throw new Exception("Too many Game objects");
             }
 
+            onUpdate = new List<Action>();
+
+            input = new nullEngine.Managers.InputManager();
+
             worldSize = 1000;
             world = new char[worldSize, worldSize];
             screenX = 119;
@@ -45,8 +49,6 @@ namespace _7DRL
 
             worldOffsetX = 0;
             worldOffsetY = 0;
-
-            onUpdate = new List<Action>();
         }
 
         public void onLoad()
@@ -61,7 +63,7 @@ namespace _7DRL
             player.pos.yPos = 10;
             player.texture = '@';
             player.tag = "Player";
-            //player.AddComponent(new Components.cKeyboardMoveAndCollide());
+            player.AddComponent(new Components.cKeyboardMoveAndCollide());
             onUpdate.Add(player.update);
             
         }

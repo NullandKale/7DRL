@@ -14,15 +14,10 @@ namespace _7DRL.Entities
         public bool active = true;
         public string tag;
 
-        private transform lastPos;
-        private char coveredTexture;
-
         public drawable()
         {
             components = new List<Components.iComponent>();
             pos = new transform();
-            lastPos = pos;
-            coveredTexture = texture;
         }
 
         public void update()
@@ -31,11 +26,7 @@ namespace _7DRL.Entities
             {
                 for(int i = 0; i < components.Count; i++)
                 {
-                    Console.SetCursorPosition(0, 30);
-                    Console.Write("Running Components...");
                     components[i].Run(this);
-                    Console.SetCursorPosition(0, 30);
-                    Console.Write("                       Finished");
                 }
 
                 draw();
@@ -52,28 +43,19 @@ namespace _7DRL.Entities
 
         public void setPos(int x, int y)
         {
-            lastPos.xPos = pos.xPos;
-            lastPos.xPos = pos.yPos;
             pos.xPos = x;
             pos.yPos = y;
         }
 
         public void setPosRelative(int x, int y)
         {
-            lastPos.xPos = pos.xPos;
-            lastPos.xPos = pos.yPos;
             pos.xPos += x;
             pos.yPos += y;
         }
 
         private void draw()
         {
-            Console.SetCursorPosition(lastPos.xPos, lastPos.yPos);
-            Console.Write(coveredTexture);
-
-            coveredTexture = Game.g.world[pos.xPos, pos.yPos];
-
-            Console.SetCursorPosition(pos.xPos, pos.yPos);
+            Console.SetCursorPosition(pos.xPos - 1, pos.yPos);
             Console.Write(texture);
         }
     }

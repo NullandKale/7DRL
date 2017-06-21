@@ -1,54 +1,73 @@
-﻿using System;
-using System.Windows.Input;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenTK;
+using OpenTK.Input;
+using System.Drawing;
 
-namespace _7DRL.Managers
+namespace nullEngine.Managers
 {
-    public static class InputManager
+    public class InputManager
     {
-        public static bool isKeyFalling(Key k)
-        {
-            KeyStates kS = Keyboard.GetKeyStates(k);
+        //keyboard state storage, one for the current frame and one for the last frame
+        private KeyboardState lastKeyState;
+        private KeyboardState currentKeyState;
 
-            if (kS == KeyStates.Down && kS == KeyStates.Toggled)
+        public InputManager()
+        {
+            _7DRL.Game.g.onUpdate.Add(update);
+        }
+
+        public void update()
+        {
+            //on update if the currentKeyState is not invalid set lastKeyState to the old currentKeyState
+            if (currentKeyState != null)
             {
-                return true;
+                lastKeyState = currentKeyState;
+            }
+
+            //update currentKeyState
+            currentKeyState = Keyboard.GetState();
+
+        }
+        //keyboard state functions
+        public bool isKeyRising(Key k)
+        {
+            if (!isKeystateValid())
+            {
+                return false;
             }
             else
             {
-                return false;
+                return lastKeyState.IsKeyDown(k) && currentKeyState.IsKeyUp(k);
             }
         }
 
-        public static bool isKeyRising(Key k)
+        public bool isKeyFalling(Key k)
         {
-            KeyStates kS = Keyboard.GetKeyStates(k);
-
-            if (kS == KeyStates.None && kS == KeyStates.Toggled)
+            if (!isKeystateValid())
             {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                return lastKeyState.IsKeyUp(k) && currentKeyState.IsKeyDown(k);
             }
         }
 
-        public static bool isKeyHeld(Key k)
+        public bool isKeyHeld(Key k)
         {
-            KeyStates kS = Keyboard.GetKeyStates(k);
-
-            if(kS == KeyStates.Down && kS != KeyStates.Toggled)
-            {
-                return true;
-            }
-            else
+            if (!isKeystateValid())
             {
                 return false;
             }
+            else
+            {
+                return lastKeyState.IsKeyDown(k) && currentKeyState.IsKeyDown(k);
+            }
+        }
+
+        //check that the keyboard state is valid | this might not be needed
+        private bool isKeystateValid()
+        {
+            return currentKeyState != null && lastKeyState != null;
         }
     }
 }
