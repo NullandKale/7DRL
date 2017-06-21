@@ -11,6 +11,7 @@ namespace _7DRL
     {
         public static Game g;
         public static nullEngine.Managers.InputManager input;
+        public Random rng;
         public List<Action> onUpdate;
         public bool running;
         public bool stop;
@@ -31,7 +32,7 @@ namespace _7DRL
         private Entities.drawable player;
         private Entities.drawable enemy;
 
-        public Game()
+        public Game(int seed)
         {
             if(g == null)
             {
@@ -43,6 +44,7 @@ namespace _7DRL
             }
 
             onUpdate = new List<Action>();
+            rng = new Random(seed);
 
             input = new nullEngine.Managers.InputManager();
 
@@ -50,7 +52,7 @@ namespace _7DRL
             ground = new char[worldSize, worldSize];
             world = new char[worldSize, worldSize];
             screenX = 119;
-            screenY = 30;
+            screenY = 29;
             lastFrame = new char[screenX, screenY];
 
             worldOffsetX = 0;

@@ -15,7 +15,7 @@ namespace _7DRL
             int fps = 30;
             int updateTime = 1000 / fps;
 
-            Game game = new Game();
+            Game game = new Game(5);
             game.onLoad();
 
             Timer updateTimer = new Timer(updateTime);
