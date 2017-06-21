@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _7DRL.Managers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,7 +49,7 @@ namespace _7DRL
             ground = new char[worldSize, worldSize];
             world = new char[worldSize, worldSize];
             screenX = 119;
-            screenY = 29;
+            screenY = 30;
             lastFrame = new char[screenX, screenY];
 
             worldOffsetX = 0;
@@ -61,7 +62,7 @@ namespace _7DRL
 
             running = true;
             stop = false;
-            GenerateWorld();
+            ground = WorldManager.GenerateWorld(worldSize);
             ClearFrameBuffer();
 
             player = new Entities.drawable();
@@ -97,11 +98,25 @@ namespace _7DRL
             {
                 for (int y = 0; y < screenY; y++)
                 {
+                    if (ground[x + worldOffsetX, y + worldOffsetY] == '#')
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                    }
+                    else if (ground[x + worldOffsetX, y + worldOffsetY] == '.')
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    }
+                    
                     if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
                         Console.SetCursorPosition(x, y);
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY]);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
+                    }
+
+                    if (world[x + worldOffsetX, y + worldOffsetY] == '@')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
                     }
 
                     if (world[x + worldOffsetX, y + worldOffsetY] != ' ')
@@ -110,7 +125,7 @@ namespace _7DRL
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY]);
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
                         world[x + worldOffsetX, y + worldOffsetY] = ' ';
-                    }
+                    }                    
                 }
             }
         }
@@ -124,27 +139,6 @@ namespace _7DRL
         {
             return !(x < 0 || x >= g.worldSize || y < 0 || y >= g.worldSize);
         }
-
-        private void GenerateWorld()
-        {
-            for(int x = 0; x < worldSize; x++)
-            {
-                for (int y = 0; y < worldSize; y++)
-                {
-                    if(x == 0 || y == 0 || x == worldSize - 1 || y == worldSize - 1)
-                    {
-                        ground[x, y] = '#';
-                    }
-                    else
-                    {
-                        ground[x, y] = '.';
-                    }
-
-                    world[x, y] = ' ';
-                }
-            }
-        }
-
         private void ClearFrameBuffer()
         {
             for (int x = 0; x < screenX; x++)
