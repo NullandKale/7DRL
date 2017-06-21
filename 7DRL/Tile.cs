@@ -10,10 +10,5 @@ namespace _7DRL
     {
         public char Visual;
         public bool collideable;
-
-        public override string ToString()
-        {
-            return Visual.ToString();
-        }
     }
 }

@@ -47,7 +47,7 @@ namespace _7DRL
 
             worldSize = 1000;
             screenX = 119;
-            screenY = 30;
+            screenY = 29;
 
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
@@ -125,7 +125,7 @@ namespace _7DRL
                         }
 
                         Console.SetCursorPosition(x, y);
-                        Console.Write(ground[x + worldOffsetX, y + worldOffsetY]);
+                        Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
                     }
 
@@ -137,7 +137,7 @@ namespace _7DRL
                         }
 
                         Console.SetCursorPosition(x, y);
-                        Console.Write(world[x + worldOffsetX, y + worldOffsetY]);
+                        Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
                     }                    
