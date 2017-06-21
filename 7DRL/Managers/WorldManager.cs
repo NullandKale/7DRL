@@ -6,7 +6,7 @@
     {
         private static float chanceToStartAlive = 0.45f;
 
-        private static char[,] initialiseMap(char[,] map, int worldSize)
+        private static Tile[,] initialiseMap(Tile[,] map, int worldSize)
         {
             Random r = new Random();
             for (int x = 0; x < worldSize; x++)
@@ -15,7 +15,8 @@
                 {
                     if (r.NextDouble() < chanceToStartAlive)
                     {
-                        map[x, y] = '#';
+                        map[x, y].Visual = '#';
+                        map[x, y].collideable = true;
                     }
                 }
             }
@@ -23,7 +24,7 @@
         }
 
         //Returns the number of cells in a ring around (x,y) that are alive.
-        private static int countAliveNeighbours(char[,] map, int x, int y, int worldSize)
+        private static int countAliveNeighbours(Tile[,] map, int x, int y, int worldSize)
         {
             int count = 0;
             for (int i = -1; i < 2; i++)
@@ -43,7 +44,7 @@
                         count = count + 1;
                     }
                     //Otherwise, a normal check of the neighbour
-                    else if (map[neighbour_x, neighbour_y] == '#')
+                    else if (map[neighbour_x, neighbour_y].Visual == '#')
                     {
                         count = count + 1;
                     }
@@ -52,17 +53,19 @@
             return count;
         }
 
-        private static char[,] doSimulationStep(char[,] oldMap, int worldSize)
+        private static Tile[,] doSimulationStep(Tile[,] oldMap, int worldSize)
         {
-            char[,] newMap = new char[worldSize, worldSize];
+            Tile[,] newMap = new Tile[worldSize, worldSize];
             //Loop over each row and column of the map
             for (int x = 0; x < worldSize; x++)
             {
                 for (int y = 0; y < worldSize; y++)
                 {
+                    newMap[x, y] = new Tile();
                     if (x == 0 || y == 0 || x == worldSize || y == worldSize)
                     {
-                        newMap[x, y] = '#';
+                        newMap[x, y].Visual = '#';
+                        newMap[x, y].collideable = true;
                         continue;
                     }
 
@@ -70,26 +73,30 @@
                     int nbs = countAliveNeighbours(oldMap, x, y, worldSize);
                     //The new value is based on our simulation rules
                     //First, if a cell is alive but has too few neighbours, kill it.
-                    if (oldMap[x, y] == '#')
+                    if (oldMap[x, y].Visual == '#')
                     {
                         if (nbs < 4)
                         {
-                            newMap[x, y] = ' ';
+                            newMap[x, y].Visual = ' ';
+                            newMap[x, y].collideable = false;
                         }
                         else
                         {
-                            newMap[x, y] = '#';
+                            newMap[x, y].Visual = '#';
+                            newMap[x, y].collideable = true;
                         }
                     } //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
                     else
                     {
                         if (nbs > 4)
                         {
-                            newMap[x, y] = '#';
+                            newMap[x, y].Visual = '#';
+                            newMap[x, y].collideable = true;
                         }
                         else
                         {
-                            newMap[x, y] = ' ';
+                            newMap[x, y].Visual = ' ';
+                            newMap[x, y].collideable = false;
                         }
                     }
                 }
@@ -97,10 +104,8 @@
             return newMap;
         }
 
-        public static char[,] GenerateWorld(int worldSize)
+        public static Tile[,] GenerateWorld(Tile[,] cellmap, int worldSize)
         {
-            //Create a new map
-            char[,] cellmap = new char[worldSize, worldSize];
             //Set up the map with random values
             cellmap = initialiseMap(cellmap, worldSize);
             //And now run the simulation for a set number of steps

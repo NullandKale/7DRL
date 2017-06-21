@@ -15,7 +15,7 @@ namespace _7DRL.Managers
 
             if (Game.isInWorld(futureX, futureY))
             {
-                if(Game.g.ground[futureX, futureY] == ' ')
+                if(Game.g.ground[futureX, futureY].collideable == false)
                 {
                     return true;
                 }
