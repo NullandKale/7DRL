@@ -13,6 +13,7 @@ namespace _7DRL
         public List<Action> onUpdate;
         public bool running;
         public bool stop;
+        public bool lastFrameDone;
 
         public char[,] world;
         public int worldSize;
@@ -65,17 +66,23 @@ namespace _7DRL
             player.tag = "Player";
             player.AddComponent(new Components.cKeyboardMoveAndCollide());
             onUpdate.Add(player.update);
+
+            lastFrameDone = true;
             
         }
 
         public void update(Object source, System.Timers.ElapsedEventArgs e)
         {
-            for(int i = 0; i < onUpdate.Count; i++)
+            if(lastFrameDone)
             {
-                onUpdate[i].Invoke();
+                lastFrameDone = false;
+                Draw();
+                for (int i = 0; i < onUpdate.Count; i++)
+                {
+                    onUpdate[i].Invoke();
+                }
+                lastFrameDone = true;
             }
-
-            Draw();
         }
 
         private void Draw()
