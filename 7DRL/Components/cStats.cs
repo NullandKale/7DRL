@@ -112,6 +112,7 @@ namespace _7DRL.Components
         {
             if(currentHealth - attackAmount < 0)
             {
+                Console.SetCursorPosition(0, 29);
                 Console.WriteLine("GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER");
                 Game.g.stop = true;
             }

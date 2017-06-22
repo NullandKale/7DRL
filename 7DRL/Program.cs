@@ -43,7 +43,7 @@ namespace _7DRL
                 DeleteMenu(sysMenu, SC_SIZE, MF_BYCOMMAND);
             }
 
-            Game game = new Game(5);
+            Game game = new Game(6);
             game.onLoad();
 
             Timer updateTimer = new Timer(updateTime);

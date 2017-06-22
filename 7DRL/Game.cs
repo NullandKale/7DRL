@@ -197,6 +197,11 @@ namespace _7DRL
                             Console.SetCursorPosition(x, y);
                             Random ran = new Random();
                             Console.Write(toPrint);
+                            for (var i = gameX + 1 + toPrint.Length; i < screenX; i++)
+                            {
+                                Console.SetCursorPosition(i, y);
+                                Console.Write(' ');
+                            }
                         }
                     }
                 }

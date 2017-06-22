@@ -105,6 +105,23 @@
             return newMap;
         }
 
+        private static Tile[,] generateBorders(Tile[,] map, int worldSize)
+        {
+            for (var x = 0; x < worldSize; x++)
+            {
+                for (var y = 0; y < worldSize; y++)
+                {
+                    if (x == 0 || y == 0 || x == worldSize -1 || y == worldSize -1)
+                    {
+                        map[x, y].Visual = wall;
+                        map[x, y].collideable = true;
+                    }
+                }
+            }
+
+            return map;
+        }
+
         public static Tile[,] GenerateWorld(Tile[,] cellmap, int worldSize)
         {
             //Set up the map with random values
@@ -114,6 +131,8 @@
             {
                 cellmap = doSimulationStep(cellmap, worldSize);
             }
+
+            cellmap = generateBorders(cellmap, worldSize);
 
             return cellmap;
         }
