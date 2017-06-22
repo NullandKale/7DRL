@@ -24,9 +24,19 @@ namespace _7DRL.Entities
         {
             if(active)
             {
-                for(int i = 0; i < components.Count; i++)
+                if(Game.doTick && tag != "Player")
                 {
-                    components[i].Run(this);
+                    for (int i = 0; i < components.Count; i++)
+                    {
+                        components[i].Run(this);
+                    }
+                }
+                else if(tag == "Player")
+                {
+                    for (int i = 0; i < components.Count; i++)
+                    {
+                        components[i].Run(this);
+                    }
                 }
 
                 draw();
@@ -43,19 +53,25 @@ namespace _7DRL.Entities
 
         public void setPos(int x, int y)
         {
+            Game.g.world[pos.xPos, pos.yPos].collideable = false;
             pos.xPos = x;
             pos.yPos = y;
         }
 
         public void setPosRelative(int x, int y)
         {
+            Game.g.world[pos.xPos, pos.yPos].collideable = false;
             pos.xPos += x;
             pos.yPos += y;
         }
 
         private void draw()
         {
-            Game.g.world[pos.xPos, pos.yPos].Visual = texture;
+            if (pos.xPos != -1 && pos.yPos != -1)
+            {
+                Game.g.world[pos.xPos, pos.yPos].Visual = texture;
+                Game.g.world[pos.xPos, pos.yPos].collideable = true;
+            }
         }
     }
 

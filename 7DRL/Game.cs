@@ -11,6 +11,7 @@ namespace _7DRL
     {
         public static Game g;
         public static nullEngine.Managers.InputManager input;
+        public static bool doTick;
         public Random rng;
         public List<Action> onUpdate;
         public bool running;
@@ -19,6 +20,7 @@ namespace _7DRL
 
         public Tile[,] ground;
         public Tile[,] world;
+        public string toPrint;
 
         public int worldSize;
         public int worldOffsetX;
@@ -28,7 +30,7 @@ namespace _7DRL
         public int screenY;
 
         public int gameX;
-        
+
         private Tile[,] lastFrame;
 
         private Entities.drawable player;
@@ -36,7 +38,7 @@ namespace _7DRL
 
         public Game(int seed)
         {
-            if(g == null)
+            if (g == null)
             {
                 g = this;
             }
@@ -77,7 +79,7 @@ namespace _7DRL
                     lastFrame[i, j] = new Tile();
                 }
             }
-            
+
             worldOffsetX = 0;
             worldOffsetY = 0;
         }
@@ -92,29 +94,59 @@ namespace _7DRL
             ClearFrameBuffer();
 
             player = new Entities.drawable();
-            player.pos.xPos = 10;
-            player.pos.yPos = 10;
+            player.pos.xPos = 18;
+            player.pos.yPos = 18;
             player.texture = '@';
             player.tag = "Player";
+            player.active = true;
             player.AddComponent(new Components.cKeyboardMoveAndCollide());
             player.AddComponent(new Components.cCameraFollow(this));
+            Components.cStats pcStats = new Components.cStats(false, 100);
+            player.AddComponent(pcStats);
             onUpdate.Add(player.update);
 
+            enemy = new Entities.drawable();
+            enemy.pos.xPos = 23;
+            enemy.pos.yPos = 23;
+            enemy.texture = 'E';
+            enemy.tag = "Enemy";
+            enemy.active = true;
+            enemy.AddComponent(new Components.cEnemyAI(player, pcStats, 50, 10, 5));
+            onUpdate.Add(enemy.update);
+
+            for (var i = 0; i < worldSize; i++)
+            {
+                for (var j = 0; j < worldSize; j++)
+                {
+                    if (ground[i, j].Visual != '#')
+                    {
+                        world[i, j].collideable = false;
+                    }
+                    else
+                    {
+                        world[i, j].collideable = true;
+                    }
+                }
+            }
+
             lastFrameDone = true;
-            
         }
 
         public void update(Object source, System.Timers.ElapsedEventArgs e)
         {
-            if(lastFrameDone)
+            if (lastFrameDone)
             {
                 lastFrameDone = false;
-                Draw();
                 for (int i = 0; i < onUpdate.Count; i++)
                 {
                     onUpdate[i].Invoke();
                 }
+                Draw();
                 lastFrameDone = true;
+
+                
+
+                doTick = false;
             }
         }
 
@@ -131,6 +163,15 @@ namespace _7DRL
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                         }
 
+                        //if (world[x + worldOffsetX, y + worldOffsetY].collideable == true)
+                        //{
+                        //    Console.BackgroundColor = ConsoleColor.Red;
+                        //}
+                        //else
+                        //{
+                        //    Console.BackgroundColor = ConsoleColor.Black;
+                        //}
+
                         Console.SetCursorPosition(x, y);
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
@@ -142,6 +183,10 @@ namespace _7DRL
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                         }
+                        else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E')
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        }
 
                         Console.SetCursorPosition(x, y);
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
@@ -150,6 +195,7 @@ namespace _7DRL
                     }
                 }
             }
+
             for (int x = gameX; x < screenX; x++)
             {
                 for (int y = 0; y < screenY; y++)
@@ -179,14 +225,7 @@ namespace _7DRL
                             Console.ForegroundColor = ConsoleColor.White;
                             Console.SetCursorPosition(x, y);
                             Random ran = new Random();
-                            Console.Write("Health: " + (ran.Next() % 100 + 1).ToString());
-                        }
-                        if (y == 1 && x == gameX + 1)
-                        {
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.SetCursorPosition(x, y);
-                            Random ran = new Random();
-                            Console.Write("Stam: " + (ran.Next() % 100 + 1).ToString());
+                            Console.Write(toPrint);
                         }
                     }
                 }

@@ -12,16 +12,29 @@ namespace _7DRL.Components
     {
         private Point targetPos;
         private drawable player;
+        private cStats playerStats;
 
-        public cEnemyAI(drawable pc)
+        private int health;
+        private int damage;
+        private int range;
+
+        public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range)
         {
             player = pc;
+            playerStats = pcStats;
+            this.health = health;
+            this.range = range;
+            damage = attack;
         }
 
         public void Run(drawable d)
         {
             if (Point.dist(player.pos, d.pos) > 4)
             {
+                if(targetPos == null)
+                {
+                    targetPos = GenerateTarget();
+                }
                 if (d.pos.xPos == targetPos.x && d.pos.yPos == targetPos.y)
                 {
                     targetPos = GenerateTarget();
@@ -34,6 +47,41 @@ namespace _7DRL.Components
             else
             {
                 MoveTowards(new Point(player.pos.xPos, player.pos.yPos), d);
+                Attack(d);
+            }
+        }
+
+        private void Attack(drawable d)
+        {
+            if (Point.dist(d.pos, player.pos) < 1.5)
+            {
+                int attack = damage + Game.g.rng.Next(-range, range);
+
+                int whoseFirst = Game.g.rng.Next(0, 21);
+
+                if(whoseFirst < playerStats.dex)
+                {
+                    Damage(playerStats.getAttack(), d);
+                    playerStats.Damage(attack);
+                }
+                else
+                {
+                    playerStats.Damage(attack);
+                    Damage(playerStats.getAttack(), d);
+                }
+            }
+        }
+
+        private void Damage(int amount, drawable d)
+        {
+            if(health - amount <= 0)
+            {
+                d.setPos(-1, -1);
+                d.active = false;
+            }
+            else
+            {
+                health -= amount;
             }
         }
 
@@ -60,17 +108,25 @@ namespace _7DRL.Components
                 moveY--;
             }
 
+            bool canMoveBoth = Managers.CollisionManager.CheckCollision(moveX, moveY, d);
             bool canMoveX = Managers.CollisionManager.CheckCollision(moveX, 0, d);
             bool canMoveY = Managers.CollisionManager.CheckCollision(0, moveY, d);
 
-            if (canMoveX)
+            if (canMoveBoth && moveX != 0 && moveY != 0)
+            {
+                d.setPosRelative(moveX, moveY);
+            }
+            else if (canMoveX && moveX != 0)
             {
                 d.setPosRelative(moveX, 0);
             }
-            if (canMoveY)
+            else if (canMoveY && moveY != 0)
             {
                 d.setPosRelative(0, moveY);
             }
+
+            Console.SetCursorPosition(0, 29);
+            Console.Write(moveX + ", " + moveY + ", " + canMoveBoth + ", " + canMoveX + ", " + canMoveY);
         }
 
         private Point GenerateTarget()
