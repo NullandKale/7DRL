@@ -27,6 +27,8 @@ namespace _7DRL
         public int screenX;
         public int screenY;
 
+        public int gameX;
+        
         private Tile[,] lastFrame;
 
         private Entities.drawable player;
@@ -50,7 +52,9 @@ namespace _7DRL
 
             worldSize = 400;
             screenX = 119;
-            screenY = 29;
+            screenY = 28;
+
+            gameX = 79;
 
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
@@ -116,10 +120,10 @@ namespace _7DRL
 
         private void Draw()
         {
-            for(int x = 0; x < screenX; x++)
+            for (int x = 0; x < gameX; x++)
             {
                 for (int y = 0; y < screenY; y++)
-                {                    
+                {
                     if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
                         if (ground[x + worldOffsetX, y + worldOffsetY].Visual == '#')
@@ -143,8 +147,55 @@ namespace _7DRL
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
-                    }                    
+                    }
                 }
+            }
+            for (int x = gameX; x < screenX; x++)
+            {
+                for (int y = 0; y < screenY; y++)
+                {
+                    if (x == gameX)
+                    {
+                        if (lastFrame[x, y].Visual != '-'
+                             || lastFrame[x, y].Visual != '|')
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.SetCursorPosition(x, y);
+                            if (x == gameX)
+                            {
+                                Console.Write('|');
+                            }
+
+                            lastFrame[x, y] = new Tile()
+                            {
+                                Visual = '/'
+                            };
+                        }
+                    }
+                    else
+                    {
+                        if (y == 0 && x == gameX + 1)
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.SetCursorPosition(x, y);
+                            Random ran = new Random();
+                            Console.Write("Health: " + (ran.Next() % 100 + 1).ToString());
+                        }
+                        if (y == 1 && x == gameX + 1)
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.SetCursorPosition(x, y);
+                            Random ran = new Random();
+                            Console.Write("Stam: " + (ran.Next() % 100 + 1).ToString());
+                        }
+                    }
+                }
+            }
+
+            for (int x = 0; x < screenX; x++)
+            {
+                Console.SetCursorPosition(x, 28);
+                Console.Write('-');
             }
         }
 
