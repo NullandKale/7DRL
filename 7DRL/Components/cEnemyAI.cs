@@ -19,6 +19,7 @@ namespace _7DRL.Components
         private int health;
         private int damage;
         private int range;
+        private int xpAmount;
 
         public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range)
         {
@@ -27,6 +28,7 @@ namespace _7DRL.Components
             this.health = health;
             this.range = range;
             damage = attack;
+            xpAmount = health;
         }
 
         public void Run(drawable d)
@@ -63,23 +65,24 @@ namespace _7DRL.Components
 
                 if(whoseFirst < playerStats.dex)
                 {
-                    Damage(playerStats.getAttack(), d);
+                    Damage(playerStats.getAttack(), d, playerStats);
                     playerStats.Damage(attack);
                 }
                 else
                 {
                     playerStats.Damage(attack);
-                    Damage(playerStats.getAttack(), d);
+                    Damage(playerStats.getAttack(), d, playerStats);
                 }
             }
         }
 
-        private void Damage(int amount, drawable d)
+        private void Damage(int amount, drawable d, cStats playerStats)
         {
             if(health - amount <= 0)
             {
                 d.setPos(-1, -1);
                 d.active = false;
+                playerStats.GainXP(xpAmount);
             }
             else
             {
