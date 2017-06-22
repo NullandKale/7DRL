@@ -20,6 +20,7 @@ namespace _7DRL
 
         public Tile[,] ground;
         public Tile[,] world;
+        public string toPrint;
 
         public int worldSize;
         public int worldOffsetX;
@@ -95,6 +96,7 @@ namespace _7DRL
             player.tag = "Player";
             player.AddComponent(new Components.cKeyboardMoveAndCollide());
             player.AddComponent(new Components.cCameraFollow(this));
+            player.AddComponent(new Components.cStats(false, 100));
             onUpdate.Add(player.update);
 
             enemy = new Entities.drawable();
@@ -156,6 +158,8 @@ namespace _7DRL
                     }                    
                 }
             }
+            Console.SetCursorPosition(0, Game.g.screenY + 1);
+            Console.Write(toPrint);
         }
 
         public static bool isInRange(int max, int x, int y)
