@@ -134,8 +134,8 @@ namespace _7DRL.Components
                 d.setPosRelative(0, moveY);
             }
 
-            Console.SetCursorPosition(0, 29);
-            Console.Write(moveX + ", " + moveY + ", " + canMoveBoth + ", " + canMoveX + ", " + canMoveY);
+            //Console.SetCursorPosition(0, 29);
+            //Console.Write(moveX + ", " + moveY + ", " + canMoveBoth + ", " + canMoveX + ", " + canMoveY);
         }
 
         private Point GenerateTarget()
