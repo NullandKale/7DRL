@@ -5,17 +5,18 @@
     public static class WorldManager
     {
         private static float chanceToStartAlive = 0.45f;
+        private static char wall = (char)0x2588;
+        private static char air = ' ';
 
         private static Tile[,] initialiseMap(Tile[,] map, int worldSize)
         {
-            Random r = new Random();
             for (int x = 0; x < worldSize; x++)
             {
                 for (int y = 0; y < worldSize; y++)
                 {
-                    if (r.NextDouble() < chanceToStartAlive)
+                    if (Game.g.rng.NextDouble() < chanceToStartAlive)
                     {
-                        map[x, y].Visual = '#';
+                        map[x, y].Visual = wall;
                         map[x, y].collideable = true;
                     }
                 }
@@ -44,7 +45,7 @@
                         count = count + 1;
                     }
                     //Otherwise, a normal check of the neighbour
-                    else if (map[neighbour_x, neighbour_y].Visual == '#')
+                    else if (map[neighbour_x, neighbour_y].Visual == wall)
                     {
                         count = count + 1;
                     }
@@ -64,7 +65,7 @@
                     newMap[x, y] = new Tile();
                     if (x == 0 || y == 0 || x == worldSize || y == worldSize)
                     {
-                        newMap[x, y].Visual = '#';
+                        newMap[x, y].Visual = wall;
                         newMap[x, y].collideable = true;
                         continue;
                     }
@@ -73,16 +74,16 @@
                     int nbs = countAliveNeighbours(oldMap, x, y, worldSize);
                     //The new value is based on our simulation rules
                     //First, if a cell is alive but has too few neighbours, kill it.
-                    if (oldMap[x, y].Visual == '#')
+                    if (oldMap[x, y].Visual == wall)
                     {
                         if (nbs < 4)
                         {
-                            newMap[x, y].Visual = ' ';
+                            newMap[x, y].Visual = air;
                             newMap[x, y].collideable = false;
                         }
                         else
                         {
-                            newMap[x, y].Visual = '#';
+                            newMap[x, y].Visual = wall;
                             newMap[x, y].collideable = true;
                         }
                     } //Otherwise, if the cell is dead now, check if it has the right number of neighbours to be 'born'
@@ -90,12 +91,12 @@
                     {
                         if (nbs > 4)
                         {
-                            newMap[x, y].Visual = '#';
+                            newMap[x, y].Visual = wall;
                             newMap[x, y].collideable = true;
                         }
                         else
                         {
-                            newMap[x, y].Visual = ' ';
+                            newMap[x, y].Visual = air;
                             newMap[x, y].collideable = false;
                         }
                     }

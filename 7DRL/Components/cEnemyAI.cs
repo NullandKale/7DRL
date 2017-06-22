@@ -14,6 +14,8 @@ namespace _7DRL.Components
         private drawable player;
         private cStats playerStats;
 
+        private bool getNewTargetPos;
+
         private int health;
         private int damage;
         private int range;
@@ -31,7 +33,7 @@ namespace _7DRL.Components
         {
             if (Point.dist(player.pos, d.pos) > 4)
             {
-                if(targetPos == null)
+                if(targetPos == null || getNewTargetPos)
                 {
                     targetPos = GenerateTarget();
                 }
@@ -111,6 +113,13 @@ namespace _7DRL.Components
             bool canMoveBoth = Managers.CollisionManager.CheckCollision(moveX, moveY, d);
             bool canMoveX = Managers.CollisionManager.CheckCollision(moveX, 0, d);
             bool canMoveY = Managers.CollisionManager.CheckCollision(0, moveY, d);
+
+            if(!(canMoveBoth || canMoveX || canMoveY))
+            {
+                //if the enemy is colliding pick a new targetPos
+                getNewTargetPos = true;
+            }
+
 
             if (canMoveBoth && moveX != 0 && moveY != 0)
             {

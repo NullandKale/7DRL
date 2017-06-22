@@ -129,7 +129,7 @@ namespace _7DRL
             {
                 for (var j = 0; j < worldSize; j++)
                 {
-                    if (ground[i, j].Visual != '#')
+                    if (ground[i, j].Visual != (char)0x2588)
                     {
                         world[i, j].collideable = false;
                     }
@@ -169,7 +169,7 @@ namespace _7DRL
                 {
                     if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
-                        if (ground[x + worldOffsetX, y + worldOffsetY].Visual == '#')
+                        if (ground[x + worldOffsetX, y + worldOffsetY].Visual == (char)0x2588)
                         {
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                         }

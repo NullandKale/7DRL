@@ -79,7 +79,7 @@ namespace _7DRL.Components
             maxMana = wis * 20 + 5 * level;
             maxStamina = dex * 20 + 5 * level;
 
-            healRate = con / 2;
+            healRate = con / 4;
 
             currentHealth = maxHealth;
             currentMana = maxMana;
