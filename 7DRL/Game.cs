@@ -158,7 +158,7 @@ namespace _7DRL
                         }
                         else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E')
                         {
-                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.ForegroundColor = ConsoleColor.Red;
                         }
 
                         Console.SetCursorPosition(x, y);

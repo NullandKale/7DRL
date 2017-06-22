@@ -15,6 +15,10 @@ namespace _7DRL.Managers
     {
         List<Item> items;
 
+        float currentWeight;
+        float MaxWeight;
+
+        //private void CheckWeight()
     }
 
     public class Item
@@ -27,7 +31,7 @@ namespace _7DRL.Managers
         public int inventoryPos;
         public string name;
         public string description;
-        public int weight;
+        public float weight;
         public int value;
 
         public override string ToString()

@@ -130,7 +130,7 @@ namespace _7DRL.Components
             if(currentHealth - attackAmount < 0)
             {
                 currentHealth -= attackAmount;
-                Console.WriteLine("GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER");
+                Console.WriteLine(" GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER");
                 Game.g.stop = true;
             }
             else
