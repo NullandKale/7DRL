@@ -34,7 +34,9 @@ namespace _7DRL
         private Tile[,] lastFrame;
 
         private Entities.drawable player;
-        private Entities.drawable enemy;
+
+        private Entities.drawable[] enemy;
+        private int enemyCount = 50;
 
         public Game(int seed)
         {
@@ -94,8 +96,9 @@ namespace _7DRL
             ClearFrameBuffer();
 
             player = new Entities.drawable();
-            player.pos.xPos = 18;
-            player.pos.yPos = 18;
+            Utils.Point playerPos = Utils.Point.getRandomPointInWorld();
+            player.pos.xPos = playerPos.x;
+            player.pos.yPos = playerPos.y;
             player.texture = '@';
             player.tag = "Player";
             player.active = true;
@@ -105,14 +108,22 @@ namespace _7DRL
             player.AddComponent(pcStats);
             onUpdate.Add(player.update);
 
-            enemy = new Entities.drawable();
-            enemy.pos.xPos = 23;
-            enemy.pos.yPos = 23;
-            enemy.texture = 'E';
-            enemy.tag = "Enemy";
-            enemy.active = true;
-            enemy.AddComponent(new Components.cEnemyAI(player, pcStats, 50, 10, 5));
-            onUpdate.Add(enemy.update);
+
+
+            enemy = new Entities.drawable[enemyCount];
+
+            for (int i = 0; i < enemyCount; i++)
+            {
+                enemy[i] = new Entities.drawable();
+                Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
+                enemy[i].pos.xPos = enemyPos.x;
+                enemy[i].pos.yPos = enemyPos.y;
+                enemy[i].texture = 'E';
+                enemy[i].tag = "Enemy";
+                enemy[i].active = true;
+                enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10));
+                onUpdate.Add(enemy[i].update);
+            }
 
             for (var i = 0; i < worldSize; i++)
             {

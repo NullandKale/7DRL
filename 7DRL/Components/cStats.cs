@@ -28,6 +28,8 @@ namespace _7DRL.Components
         public int NeededXP;
         public int currentXP;
 
+        public int healRate;
+
         private bool statsChanged;
 
         public cStats(bool random, int maxStat)
@@ -62,6 +64,12 @@ namespace _7DRL.Components
             {
                 RegenStats();
             }
+
+            if(Game.doTick)
+            {
+                PassiveHeal();
+            }
+
             Game.g.toPrint = ("H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
         }
 
@@ -71,11 +79,33 @@ namespace _7DRL.Components
             maxMana = wis * 20 + 5 * level;
             maxStamina = dex * 20 + 5 * level;
 
+            healRate = con / 2;
+
             currentHealth = maxHealth;
             currentMana = maxMana;
             currentStamina = maxStamina;
 
             NeededXP = 75 * level + 125;
+        }
+
+        private void PassiveHeal()
+        {
+            if(((float)currentHealth / (float)maxHealth) < 1f)
+            {
+                Heal(healRate);
+            }
+        }
+
+        public void Heal(int amount)
+        {
+            if(currentHealth + amount > maxHealth)
+            {
+                currentHealth = maxHealth;
+            }
+            else
+            {
+                currentHealth += amount;
+            }
         }
 
         public void Damage(int attackAmount)

@@ -42,5 +42,18 @@ namespace _7DRL.Utils
         {
             return new Point(Game.g.rng.Next(max), Game.g.rng.Next(max));
         }
+
+        public static Point getRandomPointInWorld()
+        {
+            Point p = getRandomPoint(Game.g.worldSize);
+            if(!Managers.CollisionManager.CheckCollision(p.x, p.y))
+            {
+                return getRandomPointInWorld();
+            }
+            else
+            {
+                return p;
+            }
+        }
     }
 }
