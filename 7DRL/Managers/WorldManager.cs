@@ -111,7 +111,7 @@
             {
                 for (var y = 0; y < worldSize; y++)
                 {
-                    if (x == 0 || y == 0 || x == worldSize -1 || y == worldSize -1)
+                    if (x == 0 || y == 0 || x == worldSize - 1 || y == worldSize - 1)
                     {
                         map[x, y].Visual = wall;
                         map[x, y].collideable = true;

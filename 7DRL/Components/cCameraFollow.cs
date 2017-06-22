@@ -19,14 +19,14 @@ namespace _7DRL.Components
 
         public void Run(drawable d)
         {
-            if (d.pos.xPos > (world.screenX / 2) + world.worldOffsetX)
+            if (d.pos.xPos > (world.gameX / 2) + world.worldOffsetX)
             {
-                if (world.screenX + world.worldOffsetX < world.worldSize)
+                if (world.gameX + world.worldOffsetX < world.worldSize)
                 {
                     world.worldOffsetX++;
                 }
             }
-            else if (d.pos.xPos < (world.screenX / 2) + world.worldOffsetX)
+            else if (d.pos.xPos < (world.gameX / 2) + world.worldOffsetX)
             {
                 if (world.worldOffsetX > 0)
                 {

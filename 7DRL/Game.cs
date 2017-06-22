@@ -74,7 +74,7 @@ namespace _7DRL
                     ground[i, j] = new Tile();
                 }
             }
-
+            
             world = ground;
 
             for (var i = 0; i < screenX; i++)
