@@ -90,21 +90,22 @@ namespace _7DRL
             ClearFrameBuffer();
 
             player = new Entities.drawable();
-            player.pos.xPos = 10;
-            player.pos.yPos = 10;
+            player.pos.xPos = 18;
+            player.pos.yPos = 18;
             player.texture = '@';
             player.tag = "Player";
             player.AddComponent(new Components.cKeyboardMoveAndCollide());
             player.AddComponent(new Components.cCameraFollow(this));
-            player.AddComponent(new Components.cStats(false, 100));
+            Components.cStats pcStats = new Components.cStats(false, 100);
+            player.AddComponent(pcStats);
             onUpdate.Add(player.update);
 
             enemy = new Entities.drawable();
-            enemy.pos.xPos = 15;
-            enemy.pos.yPos = 15;
+            enemy.pos.xPos = 23;
+            enemy.pos.yPos = 23;
             enemy.texture = 'E';
             enemy.tag = "Enemy";
-            enemy.AddComponent(new Components.cEnemyAI(player));
+            enemy.AddComponent(new Components.cEnemyAI(player, pcStats, 50, 10, 5));
             onUpdate.Add(enemy.update);
 
             lastFrameDone = true;
@@ -116,11 +117,11 @@ namespace _7DRL
             if(lastFrameDone)
             {
                 lastFrameDone = false;
-                Draw();
                 for (int i = 0; i < onUpdate.Count; i++)
                 {
                     onUpdate[i].Invoke();
                 }
+                Draw();
                 lastFrameDone = true;
                 Game.doTick = false;
             }
@@ -155,10 +156,11 @@ namespace _7DRL
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
+                        world[x + worldOffsetX, y + worldOffsetY].collideable = false;
                     }                    
                 }
             }
-            Console.SetCursorPosition(0, Game.g.screenY + 1);
+            Console.SetCursorPosition(0, Game.g.screenY);
             Console.Write(toPrint);
         }
 

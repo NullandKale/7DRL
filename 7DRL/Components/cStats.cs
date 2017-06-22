@@ -71,7 +71,38 @@ namespace _7DRL.Components
             maxMana = wis * 20 + 5 * level;
             maxStamina = dex * 20 + 5 * level;
 
+            currentHealth = maxHealth;
+            currentMana = maxMana;
+            currentStamina = maxStamina;
+
             NeededXP = 75 * level + 125;
+        }
+
+        public void Damage(int attackAmount)
+        {
+            if(currentHealth - attackAmount < 0)
+            {
+                Console.WriteLine("Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD");
+                Game.g.stop = true;
+            }
+            else
+            {
+                currentHealth -= attackAmount;
+            }
+        }
+
+        public int getAttack()
+        {
+            int crit = Game.g.rng.Next(0, 21);
+
+            if(crit < dex)
+            {
+                return str * 2;
+            }
+            else
+            {
+                return str;
+            }
         }
     }
 }

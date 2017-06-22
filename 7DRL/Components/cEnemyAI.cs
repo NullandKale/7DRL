@@ -12,10 +12,19 @@ namespace _7DRL.Components
     {
         private Point targetPos;
         private drawable player;
+        private cStats playerStats;
 
-        public cEnemyAI(drawable pc)
+        private int health;
+        private int damage;
+        private int range;
+
+        public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range)
         {
             player = pc;
+            playerStats = pcStats;
+            this.health = health;
+            this.range = range;
+            damage = attack;
         }
 
         public void Run(drawable d)
@@ -38,6 +47,40 @@ namespace _7DRL.Components
             else
             {
                 MoveTowards(new Point(player.pos.xPos, player.pos.yPos), d);
+                Attack(d);
+            }
+        }
+
+        private void Attack(drawable d)
+        {
+            if (Point.dist(d.pos, player.pos) < 1.5)
+            {
+                int attack = damage + Game.g.rng.Next(-range, range);
+
+                int whoseFirst = Game.g.rng.Next(0, 21);
+
+                if(whoseFirst < playerStats.dex)
+                {
+                    Damage(playerStats.getAttack(), d);
+                    playerStats.Damage(attack);
+                }
+                else
+                {
+                    playerStats.Damage(attack);
+                    Damage(playerStats.getAttack(), d);
+                }
+            }
+        }
+
+        private void Damage(int amount, drawable d)
+        {
+            if(health - amount <= 0)
+            {
+                d.active = false;
+            }
+            else
+            {
+                health -= amount;
             }
         }
 

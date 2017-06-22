@@ -15,7 +15,7 @@ namespace _7DRL.Managers
 
             if (Game.isInWorld(futureX, futureY))
             {
-                if(Game.g.ground[futureX, futureY].collideable == false)
+                if (Game.g.ground[futureX, futureY].collideable == false && Game.g.world[futureX, futureY].collideable == false)
                 {
                     return true;
                 }
@@ -34,7 +34,7 @@ namespace _7DRL.Managers
         {
             if (Game.isInWorld(x, y))
             {
-                if (Game.g.ground[x, y].collideable == false)
+                if (Game.g.ground[x, y].collideable == false && Game.g.world[x, y].collideable == false)
                 {
                     return true;
                 }
