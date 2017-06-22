@@ -76,7 +76,7 @@ namespace _7DRL.Components
             }
 
             Console.SetCursorPosition(0,Game.g.screenY + 1);
-            Console.WriteLine("XP: " + currentXP + "/" + NeededXP);
+            Console.WriteLine("Level: " + level + " XP: " + currentXP + "/" + NeededXP);
 
             Game.g.toPrint = ("H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
         }
