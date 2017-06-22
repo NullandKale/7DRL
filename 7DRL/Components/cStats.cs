@@ -60,6 +60,11 @@ namespace _7DRL.Components
 
         public void Run(drawable d)
         {
+            if(currentXP > NeededXP)
+            {
+                LevelUP();
+            }
+
             if(statsChanged)
             {
                 RegenStats();
@@ -69,6 +74,9 @@ namespace _7DRL.Components
             {
                 PassiveHeal();
             }
+
+            Console.SetCursorPosition(0,Game.g.screenY + 1);
+            Console.WriteLine("Level: " + level + " XP: " + currentXP + "/" + NeededXP);
 
             Game.g.toPrint = ("H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
         }
@@ -90,10 +98,21 @@ namespace _7DRL.Components
 
         private void PassiveHeal()
         {
-            if(((float)currentHealth / (float)maxHealth) < 1f)
+            if(((float)currentHealth / (float)maxHealth) < .85f)
             {
                 Heal(healRate);
             }
+        }
+
+        public void GainXP(int amount)
+        {
+            currentXP += amount;
+        }
+
+        private void LevelUP()
+        {
+            level++;
+            statsChanged = true;
         }
 
         public void Heal(int amount)
@@ -112,7 +131,7 @@ namespace _7DRL.Components
         {
             if(currentHealth - attackAmount < 0)
             {
-                Console.SetCursorPosition(0, 29);
+                currentHealth -= attackAmount;
                 Console.WriteLine("GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER");
                 Game.g.stop = true;
             }
