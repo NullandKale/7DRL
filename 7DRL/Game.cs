@@ -125,9 +125,10 @@ namespace _7DRL
 
         private void Draw()
         {
-            for (int x = 0; x < gameX; x++)
+            for (int y = 0; y < screenY; y++)
             {
-                for (int y = 0; y < screenY; y++)
+                Console.SetCursorPosition(0, y);
+                for (int x = 0; x < gameX; x++)
                 {
                     if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
@@ -136,16 +137,6 @@ namespace _7DRL
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                         }
 
-                        //if (world[x + worldOffsetX, y + worldOffsetY].collideable == true)
-                        //{
-                        //    Console.BackgroundColor = ConsoleColor.Red;
-                        //}
-                        //else
-                        //{
-                        //    Console.BackgroundColor = ConsoleColor.Black;
-                        //}
-
-                        Console.SetCursorPosition(x, y);
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
                     }
@@ -163,11 +154,12 @@ namespace _7DRL
 
                         Console.SetCursorPosition(x, y);
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
-                        lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
-                        world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
+                        lastFrame[x, y].Visual = ' ';
                     }
                 }
             }
+
+            ClearWorld();
 
             for (int x = gameX; x < screenX; x++)
             {
@@ -247,6 +239,17 @@ namespace _7DRL
                 for (int y = 0; y < screenY; y++)
                 {
                     lastFrame[x, y].Visual = ' ';
+                }
+            }
+        }
+
+        private void ClearWorld()
+        {
+            for (var i = 0; i < worldSize; i++)
+            {
+                for (var j = 0; j < worldSize; j++)
+                {
+                    world[i, j].Visual = ' ';
                 }
             }
         }
