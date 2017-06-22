@@ -11,6 +11,7 @@ namespace _7DRL
     {
         public static Game g;
         public static nullEngine.Managers.InputManager input;
+        public static bool doTick;
         public Random rng;
         public List<Action> onUpdate;
         public bool running;
@@ -96,6 +97,14 @@ namespace _7DRL
             player.AddComponent(new Components.cCameraFollow(this));
             onUpdate.Add(player.update);
 
+            enemy = new Entities.drawable();
+            enemy.pos.xPos = 15;
+            enemy.pos.yPos = 15;
+            enemy.texture = 'E';
+            enemy.tag = "Enemy";
+            enemy.AddComponent(new Components.cEnemyAI(player));
+            onUpdate.Add(enemy.update);
+
             lastFrameDone = true;
             
         }
@@ -111,6 +120,7 @@ namespace _7DRL
                     onUpdate[i].Invoke();
                 }
                 lastFrameDone = true;
+                Game.doTick = false;
             }
         }
 

@@ -22,6 +22,10 @@ namespace _7DRL.Components
         {
             if (Point.dist(player.pos, d.pos) > 4)
             {
+                if(targetPos == null)
+                {
+                    targetPos = GenerateTarget();
+                }
                 if (d.pos.xPos == targetPos.x && d.pos.yPos == targetPos.y)
                 {
                     targetPos = GenerateTarget();

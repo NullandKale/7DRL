@@ -24,9 +24,19 @@ namespace _7DRL.Entities
         {
             if(active)
             {
-                for(int i = 0; i < components.Count; i++)
+                if(Game.doTick && tag != "Player")
                 {
-                    components[i].Run(this);
+                    for (int i = 0; i < components.Count; i++)
+                    {
+                        components[i].Run(this);
+                    }
+                }
+                else if(tag == "Player")
+                {
+                    for (int i = 0; i < components.Count; i++)
+                    {
+                        components[i].Run(this);
+                    }
                 }
 
                 draw();

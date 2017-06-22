@@ -18,21 +18,25 @@ namespace _7DRL.Components
             if(Game.input.isKeyHeld(OpenTK.Input.Key.A))
             {
                 moveX--;
+                Game.doTick = true;
             }
 
             if (Game.input.isKeyHeld(OpenTK.Input.Key.D))
             {
                 moveX++;
+                Game.doTick = true;
             }
 
             if (Game.input.isKeyHeld(OpenTK.Input.Key.W))
             {
                 moveY--;
+                Game.doTick = true;
             }
 
             if (Game.input.isKeyHeld(OpenTK.Input.Key.S))
             {
                 moveY++;
+                Game.doTick = true;
             }
 
             bool canMove = Managers.CollisionManager.CheckCollision(moveX, moveY, d);
