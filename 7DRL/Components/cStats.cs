@@ -75,10 +75,11 @@ namespace _7DRL.Components
                 PassiveHeal();
             }
 
-            Console.SetCursorPosition(0,Game.g.screenY + 1);
-            Console.WriteLine("Level: " + level + " XP: " + currentXP + "/" + NeededXP);
-
-            Game.g.toPrint = ("H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
+            //Console.SetCursorPosition(0,Game.g.screenY + 1);
+            //Console.WriteLine("Level: " + level + " XP: " + currentXP + "/" + NeededXP);
+            //Game.g.toPrint = ("H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
+            Game.g.AddUIElement(0, "Level: " + level + " XP: " + currentXP + "/" + NeededXP);
+            Game.g.AddUIElement(1, "H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
         }
 
         private void RegenStats()

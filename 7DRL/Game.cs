@@ -39,6 +39,8 @@ namespace _7DRL
         private Entities.drawable[] enemy;
         private int enemyCount = 50;
 
+        private Dictionary<int, string> guiItem = new Dictionary<int, string>();
+
         public Game(int seed)
         {
             if (g == null)
@@ -194,13 +196,15 @@ namespace _7DRL
                         if (y == 0 && x == gameX + 1)
                         {
                             Console.ForegroundColor = ConsoleColor.White;
-                            Console.SetCursorPosition(x, y);
-                            Random ran = new Random();
-                            Console.Write(toPrint);
-                            for (var i = gameX + 1 + toPrint.Length; i < screenX; i++)
+                            for (var j = 0; j < guiItem.Count; j++)
                             {
-                                Console.SetCursorPosition(i, y);
-                                Console.Write(' ');
+                                Console.SetCursorPosition(x, j);
+                                Console.Write(guiItem[j]);
+                                for (var i = gameX + 1 + guiItem[j].Length; i < screenX; i++)
+                                {
+                                    Console.SetCursorPosition(i, j);
+                                    Console.Write(' ');
+                                }
                             }
                         }
                     }
@@ -211,6 +215,18 @@ namespace _7DRL
             {
                 Console.SetCursorPosition(x, 28);
                 Console.Write('-');
+            }
+        }
+
+        public void AddUIElement(int index, string item)
+        {
+            if (guiItem.ContainsKey(index))
+            {
+                guiItem[index] = item;
+            }
+            else
+            { 
+                guiItem.Add(index, item);
             }
         }
 
