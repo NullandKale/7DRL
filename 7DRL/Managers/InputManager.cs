@@ -2,6 +2,10 @@
 using OpenTK.Input;
 using System.Drawing;
 
+
+//This is a slimmed down version of InputManager from
+//https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Managers/InputManager.cs
+
 namespace nullEngine.Managers
 {
     public class InputManager

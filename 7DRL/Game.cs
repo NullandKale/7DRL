@@ -34,6 +34,7 @@ namespace _7DRL
         private Tile[,] lastFrame;
 
         private Entities.drawable player;
+        private Components.cStats pcStats;
 
         private Entities.drawable[] enemy;
         private int enemyCount = 50;
@@ -54,7 +55,7 @@ namespace _7DRL
 
             input = new nullEngine.Managers.InputManager();
 
-            worldSize = 400;
+            worldSize = 200;
             screenX = 119;
             screenY = 28;
 
@@ -95,50 +96,9 @@ namespace _7DRL
             ground = WorldManager.GenerateWorld(ground, worldSize);
             ClearFrameBuffer();
 
-            player = new Entities.drawable();
-            Utils.Point playerPos = Utils.Point.getRandomPointInWorld();
-            player.pos.xPos = playerPos.x;
-            player.pos.yPos = playerPos.y;
-            player.texture = '@';
-            player.tag = "Player";
-            player.active = true;
-            player.AddComponent(new Components.cKeyboardMoveAndCollide());
-            player.AddComponent(new Components.cCameraFollow(this));
-            Components.cStats pcStats = new Components.cStats(false, 100);
-            player.AddComponent(pcStats);
-            onUpdate.Add(player.update);
-
-
-
-            enemy = new Entities.drawable[enemyCount];
-
-            for (int i = 0; i < enemyCount; i++)
-            {
-                enemy[i] = new Entities.drawable();
-                Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
-                enemy[i].pos.xPos = enemyPos.x;
-                enemy[i].pos.yPos = enemyPos.y;
-                enemy[i].texture = 'E';
-                enemy[i].tag = "Enemy";
-                enemy[i].active = true;
-                enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10));
-                onUpdate.Add(enemy[i].update);
-            }
-
-            for (var i = 0; i < worldSize; i++)
-            {
-                for (var j = 0; j < worldSize; j++)
-                {
-                    if (ground[i, j].Visual != (char)0x2588)
-                    {
-                        world[i, j].collideable = false;
-                    }
-                    else
-                    {
-                        world[i, j].collideable = true;
-                    }
-                }
-            }
+            InitializeCollisionMap();
+            InitializePlayer();
+            InitializeEnemies();
 
             lastFrameDone = true;
         }
@@ -267,6 +227,58 @@ namespace _7DRL
                 {
                     lastFrame[x, y].Visual = ' ';
                 }
+            }
+        }
+
+        private void InitializeCollisionMap()
+        {
+            for (var i = 0; i < worldSize; i++)
+            {
+                for (var j = 0; j < worldSize; j++)
+                {
+                    if (ground[i, j].Visual != (char)0x2588)
+                    {
+                        world[i, j].collideable = false;
+                    }
+                    else
+                    {
+                        world[i, j].collideable = true;
+                    }
+                }
+            }
+        }
+
+        private void InitializePlayer()
+        {
+            player = new Entities.drawable();
+            Utils.Point playerPos = Utils.Point.getRandomPointInWorld();
+            player.pos.xPos = playerPos.x;
+            player.pos.yPos = playerPos.y;
+            player.texture = '@';
+            player.tag = "Player";
+            player.active = true;
+            player.AddComponent(new Components.cKeyboardMoveAndCollide());
+            player.AddComponent(new Components.cCameraFollow(this));
+            pcStats = new Components.cStats(false, 100);
+            player.AddComponent(pcStats);
+            onUpdate.Add(player.update);
+        }
+
+        private void InitializeEnemies()
+        {
+            enemy = new Entities.drawable[enemyCount];
+
+            for (int i = 0; i < enemyCount; i++)
+            {
+                enemy[i] = new Entities.drawable();
+                Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
+                enemy[i].pos.xPos = enemyPos.x;
+                enemy[i].pos.yPos = enemyPos.y;
+                enemy[i].texture = 'E';
+                enemy[i].tag = "Enemy";
+                enemy[i].active = true;
+                enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10));
+                onUpdate.Add(enemy[i].update);
             }
         }
     }

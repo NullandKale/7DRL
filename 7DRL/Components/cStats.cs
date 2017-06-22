@@ -112,7 +112,7 @@ namespace _7DRL.Components
         {
             if(currentHealth - attackAmount < 0)
             {
-                Console.WriteLine("Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD Player DEAD");
+                Console.WriteLine("GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER");
                 Game.g.stop = true;
             }
             else
