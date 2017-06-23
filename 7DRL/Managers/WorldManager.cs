@@ -25,6 +25,19 @@
             return map;
         }
 
+        private static Tile[,] clearMap(Tile[,] map, int worldSize)
+        {
+            for (int x = 0; x < worldSize; x++)
+            {
+                for (int y = 0; y < worldSize; y++)
+                {
+                    map[x, y].Visual = air;
+                    map[x, y].collideable = false;
+                }
+            }
+            return map;
+        }
+
         //Returns the number of cells in a ring around (x,y) that are alive.
         private static int countAliveNeighbours(Tile[,] map, int x, int y, int worldSize)
         {
@@ -159,7 +172,10 @@
 
         public static Tile[,] GenerateRooms(Tile[,] cellmap, int worldSize)
         {
-            cellmap = initialiseMap(cellmap, worldSize, 0f);
+            cellmap = initialiseMap(cellmap, worldSize, 0.46f);
+
+            cellmap = doSimulationStep(cellmap, worldSize);
+            cellmap = clearMap(cellmap, worldSize);
 
             cellmap = generateBorders(cellmap, worldSize);
 
