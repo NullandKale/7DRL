@@ -32,9 +32,9 @@ namespace _7DRL.Managers
         {
             for (int i = 0; i < items.Count; i++)
             {
-                if(items[i].name == item.name)
+                if (items[i].name == item.name)
                 {
-                    if(items[i].currentStackSize + item.currentStackSize <= items[i].maxStackSize)
+                    if (items[i].currentStackSize + item.currentStackSize <= items[i].maxStackSize)
                     {
                         items[i].currentStackSize += item.currentStackSize;
                         updateWeight();
@@ -46,6 +46,7 @@ namespace _7DRL.Managers
                         items[i].currentStackSize = items[i].maxStackSize;
                         item.currentStackSize = itemsOver;
                         items.Add(item);
+                        items.Last().inventoryPos = items.Count;
                         updateWeight();
                         return;
                     }
@@ -53,12 +54,13 @@ namespace _7DRL.Managers
             }
 
             items.Add(item);
+            items.Last().inventoryPos = items.Count;
             updateWeight();
         }
 
         public void removeItem(int loc, int amount)
         {
-            if(items[loc].currentStackSize - amount < 0)
+            if (items[loc].currentStackSize - amount < 0)
             {
                 items[loc].currentStackSize -= amount;
             }
@@ -74,7 +76,7 @@ namespace _7DRL.Managers
         {
             for (int i = 0; i < items.Count; i++)
             {
-                if(items[i].currentStackSize <= 0)
+                if (items[i].currentStackSize <= 0)
                 {
                     removeItem(i, 10000);
                 }
@@ -86,12 +88,12 @@ namespace _7DRL.Managers
             MaxWeight = Game.g.pcStats.carryWeight;
 
             currentWeight = 0;
-            for(int i = 0; i < items.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 currentWeight += items[i].weight * items[i].currentStackSize;
             }
 
-            if(currentWeight > MaxWeight)
+            if (currentWeight > MaxWeight)
             {
                 Game.g.pcStats.isEncumbered = true;
             }
@@ -103,7 +105,7 @@ namespace _7DRL.Managers
         }
     }
 
-    public class Item
+    public abstract class Item
     {
         public char texture;
         public bool isOnGround;
@@ -112,7 +114,6 @@ namespace _7DRL.Managers
 
         public int inventoryPos;
         public string name;
-        public string description;
         public float weight;
         public int value;
 
@@ -123,5 +124,105 @@ namespace _7DRL.Managers
         {
             return (texture + " " + name + " " + weight + " lbs. " + value + " Gold");
         }
+    }
+
+    public class Weapon : Item
+    {
+        public int damage;
+
+        public int strBuff;
+        public int dexBuff;
+        public int ConBuff;
+
+        public Weapon(WeaponType w, EffectType e, int level)
+        {
+            int strBuff = 0;
+            int dexBuff = 0;
+            int ConBuff = 0;
+
+            name = w.ToString() + "of" + e.ToString();
+
+            if(w == WeaponType.Dagger)
+            {
+                damage = 5 * level;
+                dexBuff += 1 * level;
+            }
+            else if (w == WeaponType.Sword)
+            {
+                damage = 10 * level;
+            }
+            else if (w == WeaponType.Axe)
+            {
+                damage = 15 * level;
+                dexBuff -= 1 * level;
+            }
+
+            if (e == EffectType.strength)
+            {
+                strBuff += 1 * level;
+            }
+            else if (e == EffectType.speed)
+            {
+                dexBuff += 1 * level;
+            }
+            else if (e == EffectType.poison)
+            {
+                damage += 5 * level;
+            }
+            else if (e == EffectType.hardening)
+            {
+                ConBuff += 1 * level;
+            }
+        }
+
+
+        public void OnEquip()
+        {
+            Game.g.pcStats.str += strBuff;
+            Game.g.pcStats.dex += dexBuff;
+            Game.g.pcStats.con += ConBuff;
+
+            Game.g.pcStats.RegenStats();
+        }
+
+        public void OnUnequip()
+        {
+            Game.g.pcStats.str -= strBuff;
+            Game.g.pcStats.dex -= dexBuff;
+            Game.g.pcStats.con -= ConBuff;
+
+            Game.g.pcStats.RegenStats();
+        }
+    }
+
+    public enum EffectType
+    {
+        strength,
+        speed,
+        poison,
+        hardening
+    }
+
+    public enum ItemType
+    {
+        Weapon,
+        Armor,
+        Ring,
+        Amulet,
+        Ingredient
+    }
+
+    public enum WeaponType
+    {
+        Sword,
+        Dagger,
+        Axe
+    }
+
+    public enum MaterialType
+    {
+        Leather,
+        Iron,
+        Steel
     }
 }

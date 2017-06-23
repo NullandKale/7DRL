@@ -32,6 +32,7 @@ namespace _7DRL.Components
 
         public float carryWeight;
         public bool isEncumbered;
+        public int weaponDamage;
 
         private bool statsChanged;
 
@@ -59,6 +60,7 @@ namespace _7DRL.Components
             }
 
             isEncumbered = false;
+            weaponDamage = 0;
             RegenStats();
         }
 
@@ -83,7 +85,7 @@ namespace _7DRL.Components
             Game.g.AddUIElement(1, "H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
         }
 
-        private void RegenStats()
+        public void RegenStats()
         {
             maxHealth = con * 20 + 5 * level;
             maxMana = wis * 20 + 5 * level;
@@ -151,11 +153,11 @@ namespace _7DRL.Components
 
             if(crit < dex)
             {
-                return str * 2;
+                return str * 2 + weaponDamage;
             }
             else
             {
-                return str;
+                return str + weaponDamage;
             }
         }
     }
