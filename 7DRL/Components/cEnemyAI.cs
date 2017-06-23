@@ -28,7 +28,7 @@ namespace _7DRL.Components
             this.health = health;
             this.range = range;
             damage = attack;
-            xpAmount = health / 4;
+            xpAmount = health / 3;
         }
 
         public void Run(drawable d)

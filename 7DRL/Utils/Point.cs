@@ -40,7 +40,7 @@ namespace _7DRL.Utils
 
         public static Point getRandomPoint(int max)
         {
-            return new Point(Game.g.rng.Next(max), Game.g.rng.Next(max));
+            return new Point(Game.g.rng.Next(0, max), Game.g.rng.Next(0, max));
         }
 
         public static Point getRandomPointInWorld()

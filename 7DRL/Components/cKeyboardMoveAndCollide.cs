@@ -10,6 +10,9 @@ namespace _7DRL.Components
 {
     class cKeyboardMoveAndCollide : iComponent
     {
+        int frame = 0;
+        bool debug;
+
         public void Run(drawable d)
         {
             if(!Game.g.pcStats.isEncumbered)
@@ -41,6 +44,20 @@ namespace _7DRL.Components
                     Game.doTick = true;
                 }
 
+                if(Game.input.isKeyRising(OpenTK.Input.Key.Tilde))
+                {
+                    if(debug)
+                    {
+                        Game.g.pcStats.weaponDamage = 0;
+                        debug = false;
+                    }
+                    else
+                    {
+                        Game.g.pcStats.weaponDamage = 100;
+                        debug = true;
+                    }
+                }
+
                 bool canMoveBoth = Managers.CollisionManager.CheckCollision(moveX, moveY, d);
                 bool canMoveX = Managers.CollisionManager.CheckCollision(moveX, 0, d);
                 bool canMoveY = Managers.CollisionManager.CheckCollision(0, moveY, d);
@@ -58,8 +75,10 @@ namespace _7DRL.Components
                     d.setPosRelative(0, moveY);
                 }
 
-                //Console.SetCursorPosition(0, 29);
+                Console.SetCursorPosition(0, 29);
                 //Console.Write(moveX + ", " + moveY + ", " + canMoveBoth + ", " + canMoveX + ", " + canMoveY);
+                frame++;
+                Console.Write("[" + d.pos.xPos + "," + d.pos.yPos + "] " + frame);
             }
         }
     }

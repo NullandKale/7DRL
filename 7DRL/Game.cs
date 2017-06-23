@@ -137,6 +137,9 @@ namespace _7DRL
         {
             Console.CursorVisible = false;
 
+            ClearWorld();
+            ClearGround();
+
             running = true;
             stop = false;
             ground = WorldManager.GenerateWorld(ground, worldSize, GenerationType.Rooms);
@@ -155,7 +158,7 @@ namespace _7DRL
 
         public void update(Object source, System.Timers.ElapsedEventArgs e)
         {
-            if (lastFrameDone && !resetWorld)
+            if (lastFrameDone)
             {
                 ClearWorld();
                 lastFrameDone = false;
@@ -164,16 +167,15 @@ namespace _7DRL
                     onUpdate[i].Invoke();
                 }
                 Draw();
+
+                if (resetWorld)
+                {
+                    ResetWorld(Game.g.rng.Next() % 100 + 1);
+                    resetWorld = false;
+                }
+
                 lastFrameDone = true;
-
-                
-
                 doTick = false;
-            }
-
-            if (resetWorld && !rendering)
-            {
-                ResetWorld(Game.g.rng.Next() % 100 + 1);
             }
         }
 
@@ -311,7 +313,22 @@ namespace _7DRL
             {
                 for (var j = 0; j < worldSize; j++)
                 {
+                    world[i, j] = new Tile();
                     world[i, j].Visual = ' ';
+                    world[i, j].collideable = false;
+                }
+            }
+        }
+
+        private void ClearGround()
+        {
+            for (var i = 0; i < worldSize; i++)
+            {
+                for (var j = 0; j < worldSize; j++)
+                {
+                    ground[i, j] = new Tile();
+                    ground[i, j].Visual = ' ';
+                    ground[i, j].collideable = false;
                 }
             }
         }
@@ -324,11 +341,11 @@ namespace _7DRL
                 {
                     if (ground[i, j].Visual != (char)0x2588)
                     {
-                        world[i, j].collideable = false;
+                        ground[i, j].collideable = false;
                     }
                     else
                     {
-                        world[i, j].collideable = true;
+                        ground[i, j].collideable = true;
                     }
                 }
             }
@@ -336,23 +353,24 @@ namespace _7DRL
 
         private void InitializePlayer(bool reset)
         {
-            player = new Entities.drawable();
+            if (!reset)
+            {
+                player = new Entities.drawable();
+                pcStats = new Components.cStats(false, 100);
+                player.texture = '@';
+                player.tag = "Player";
+                player.active = true;
+                player.AddComponent(new Components.cKeyboardMoveAndCollide());
+                player.AddComponent(new Components.cCameraFollow(this));
+                player.AddComponent(pcStats);
+                onUpdate.Add(player.update);
+            }
+
             Utils.Point playerPos = Utils.Point.getRandomPointInWorld();
             player.pos.xPos = playerPos.x;
             player.pos.yPos = playerPos.y;
-            player.texture = '@';
-            player.tag = "Player";
+
             player.active = true;
-            player.AddComponent(new Components.cKeyboardMoveAndCollide());
-            player.AddComponent(new Components.cCameraFollow(this));
-
-            if (!reset)
-            {
-                pcStats = new Components.cStats(false, 100);
-            }
-
-            player.AddComponent(pcStats);
-            onUpdate.Add(player.update);
         }
 
         private void InitializeEnemies()
@@ -368,7 +386,7 @@ namespace _7DRL
                 enemy[i].texture = 'E';
                 enemy[i].tag = "Enemy";
                 enemy[i].active = true;
-                enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10));
+                enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 50, 20, 10));
                 onUpdate.Add(enemy[i].update);
             }
         }
