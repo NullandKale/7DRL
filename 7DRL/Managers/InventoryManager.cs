@@ -124,6 +124,10 @@ namespace _7DRL.Managers
         {
             return (texture + " " + name + " " + weight + " lbs. " + value + " Gold");
         }
+
+        public abstract void OnEquip();
+        public abstract void OnUnequip();
+
     }
 
     public class Weapon : Item
@@ -176,7 +180,7 @@ namespace _7DRL.Managers
         }
 
 
-        public void OnEquip()
+        public override void OnEquip()
         {
             Game.g.pcStats.str += strBuff;
             Game.g.pcStats.dex += dexBuff;
@@ -185,7 +189,7 @@ namespace _7DRL.Managers
             Game.g.pcStats.RegenStats();
         }
 
-        public void OnUnequip()
+        public override void OnUnequip()
         {
             Game.g.pcStats.str -= strBuff;
             Game.g.pcStats.dex -= dexBuff;
@@ -193,6 +197,16 @@ namespace _7DRL.Managers
 
             Game.g.pcStats.RegenStats();
         }
+
+        public static Weapon GenerateWeapon(int level)
+        {
+           return new Weapon(Util.RandomEnumValue<WeaponType>(), Util.RandomEnumValue<EffectType>(), level);
+        }
+    }
+
+    public class Armor
+    {
+
     }
 
     public enum EffectType

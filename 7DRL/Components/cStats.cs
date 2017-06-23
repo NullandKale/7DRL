@@ -100,6 +100,8 @@ namespace _7DRL.Components
             NeededXP = 75 * level + 125;
 
             carryWeight = str * 2 + 20;
+
+            statsChanged = false;
         }
 
         private void PassiveHeal()

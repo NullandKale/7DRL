@@ -16,6 +16,7 @@ namespace _7DRL.Components
 
         private bool getNewTargetPos;
 
+        private int maxHealth;
         private int health;
         private int damage;
         private int range;
@@ -26,6 +27,7 @@ namespace _7DRL.Components
             player = pc;
             playerStats = pcStats;
             this.health = health;
+            this.maxHealth = health;
             this.range = range;
             damage = attack;
             xpAmount = health / 3;
@@ -53,6 +55,12 @@ namespace _7DRL.Components
                 MoveTowards(new Point(player.pos.xPos, player.pos.yPos), d);
                 Attack(d);
             }
+        }
+
+        public void Reset()
+        {
+            getNewTargetPos = true;
+            health = maxHealth;
         }
 
         private void Attack(drawable d)

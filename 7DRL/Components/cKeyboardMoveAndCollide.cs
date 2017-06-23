@@ -50,11 +50,15 @@ namespace _7DRL.Components
                     {
                         Game.g.pcStats.weaponDamage = 0;
                         debug = false;
+                        Console.SetCursorPosition(0, 29);
+                        Console.Write("                                               ");
                     }
                     else
                     {
                         Game.g.pcStats.weaponDamage = 100;
                         debug = true;
+                        Console.SetCursorPosition(0, 29);
+                        Console.Write("                        GOD MODE");
                     }
                 }
 
