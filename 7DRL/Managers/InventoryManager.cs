@@ -219,6 +219,9 @@ namespace _7DRL.Managers
 
             name = w.ToString() + " of " + e.ToString();
 
+            maxStackSize = 1;
+            currentStackSize = 1;
+
             value = 0;
 
             if(w == WeaponType.Dagger)
@@ -299,7 +302,12 @@ namespace _7DRL.Managers
             int dexBuff = 0;
             int ConBuff = 0;
 
+            texture = 'A';
+
             name = m.ToString() + " Armor of " + e.ToString();
+
+            maxStackSize = 1;
+            currentStackSize = 1;
 
             value = 0;
 
