@@ -10,6 +10,7 @@ namespace _7DRL.Managers
     {
         public Inventory playerInv;
         public Weapon equipedWeapon;
+        public Armor equipedArmor;
 
         public InventoryManager()
         {
@@ -44,6 +45,32 @@ namespace _7DRL.Managers
                     equipedWeapon.OnUnequip();
                     equipedWeapon = (Weapon)playerInv.items[itemLoc];
                     equipedWeapon.OnEquip();
+                    playerInv.removeItem(itemLoc, 1);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool EquipArmor(int itemLoc)
+        {
+            if (playerInv.items[itemLoc] is Armor)
+            {
+                if (equipedArmor == null)
+                {
+                    equipedArmor = (Armor)playerInv.items[itemLoc];
+                    playerInv.removeItem(itemLoc, 1);
+                    equipedArmor.OnEquip();
+                }
+                else
+                {
+                    playerInv.addItem(equipedArmor);
+                    equipedArmor.OnUnequip();
+                    equipedArmor = (Armor)playerInv.items[itemLoc];
+                    equipedArmor.OnEquip();
                     playerInv.removeItem(itemLoc, 1);
                 }
                 return true;
@@ -272,7 +299,7 @@ namespace _7DRL.Managers
             int dexBuff = 0;
             int ConBuff = 0;
 
-            name = m.ToString() + " Armor of" + e.ToString();
+            name = m.ToString() + " Armor of " + e.ToString();
 
             value = 0;
 
@@ -325,6 +352,11 @@ namespace _7DRL.Managers
             Game.g.pcStats.con -= ConBuff;
 
             Game.g.pcStats.RegenStats();
+        }
+
+        public static Armor GenerateArmor(int level)
+        {
+            return new Armor(Util.RandomEnumValue<MaterialType>(), Util.RandomEnumValue<EffectType>(), level);
         }
     }
 
