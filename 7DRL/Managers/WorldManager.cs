@@ -2,6 +2,8 @@
 {
     using _7DRL.Utils;
     using System;
+    using System.Drawing;
+    using System.Collections.Generic;
 
     public static class WorldManager
     {
@@ -172,15 +174,172 @@
 
         public static Tile[,] GenerateRooms(Tile[,] cellmap, int worldSize)
         {
-            cellmap = initialiseMap(cellmap, worldSize, 0.46f);
+            int numberRooms = 20;
+            int maxRoomSize = 30;
+            int minRoomSize = 5;
 
             cellmap = doSimulationStep(cellmap, worldSize);
             cellmap = clearMap(cellmap, worldSize);
+
+            cellmap = initialiseMap(cellmap, worldSize, 1f);
+
+            List<Room> rooms = new List<Room>();
+
+            for(int i = 0; i < numberRooms; i++)
+            {
+                rooms.Add(GetRandomRect(worldSize, minRoomSize, maxRoomSize, rooms));
+            }
+
+            cellmap = drawRooms(rooms, cellmap);
+
+            cellmap = connectRooms(rooms, cellmap, 3);
 
             cellmap = generateBorders(cellmap, worldSize);
 
             return cellmap;
         }
+
+        public static Room GetRandomRect(int worldSize,int minRoomSize, int maxRoomSize, List<Room> rooms)
+        {
+            int height = Game.g.rng.Next(minRoomSize, maxRoomSize);
+            int width = Game.g.rng.Next(minRoomSize, maxRoomSize);
+            int xCord = Game.g.rng.Next(0, worldSize - width + 1);
+            int yCord = Game.g.rng.Next(0, worldSize - height + 1);
+            Room temp = new Room();
+            temp.roomRect = new Rectangle(xCord, yCord, width, height);
+
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                if(rooms[i].roomRect.IntersectsWith(temp.roomRect))
+                {
+                    return GetRandomRect(worldSize,minRoomSize, maxRoomSize, rooms);
+                }
+            }
+
+            return temp;
+
+        }
+
+        public static Tile[,] drawRooms(List<Room> rooms, Tile[,] cellmap)
+        {
+            for(int i = 0; i < rooms.Count; i++)
+            {
+                for(int x = 0; x < rooms[i].roomRect.Width; x++)
+                {
+                    for (int y = 0; y < rooms[i].roomRect.Height; y++)
+                    {
+                        if((x == 0 || x == rooms[i].roomRect.Width - 1) || (y == 0 || y == rooms[i].roomRect.Height - 1))
+                        {
+                            int xPos = x + rooms[i].roomRect.X;
+                            int yPos = y + rooms[i].roomRect.Y;
+                            cellmap[xPos, yPos].Visual = wall;
+                            cellmap[xPos, yPos].collideable = true;
+                        }
+                        else
+                        {
+                            int xPos = x + rooms[i].roomRect.X;
+                            int yPos = y + rooms[i].roomRect.Y;
+                            cellmap[xPos, yPos].Visual = air;
+                            cellmap[xPos, yPos].collideable = false;
+                        }
+                    }
+                }
+            }
+
+            return cellmap;
+        }
+
+        public static Tile[,] connectRooms(List<Room> rooms, Tile[,] cellmap, int hallWidth)
+        {
+            for(int i = 0; i < rooms.Count; i++)
+            {
+                int connectedRoom = Game.g.rng.Next(0, rooms.Count);
+
+                if(i == connectedRoom)
+                {
+                    connectedRoom = Game.g.rng.Next(0, rooms.Count);
+                }
+
+                rooms[i].connectedRoom = rooms[connectedRoom];
+            }
+
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                int xDiff = rooms[i].roomRect.X - rooms[i].connectedRoom.roomRect.X;
+                int yDiff = rooms[i].roomRect.Y - rooms[i].connectedRoom.roomRect.Y;
+
+                Rectangle drill = new Rectangle(rooms[i].roomRect.X + 1, rooms[i].roomRect.Y + 1, hallWidth, hallWidth);
+
+                for(int x = 0; x < Math.Abs(xDiff); x++)
+                {
+                        for (int j = 0; j < drill.Width; j++)
+                        {
+                            for (int k = 0; k < drill.Height; k++)
+                            {
+                                int PosX = j + drill.X;
+                                int PosY = k + drill.Y;
+                                if(Game.isInWorld(PosX, PosY))
+                                {
+                                    cellmap[PosX, PosY].Visual = air;
+                                    cellmap[PosX, PosY].collideable = false;
+                                }
+                            }
+                        }
+
+                        int xPos = drill.X;
+
+                        if (rooms[i].roomRect.X > rooms[i].connectedRoom.roomRect.X)
+                        {
+                            xPos--;
+                        }
+                        else if(rooms[i].roomRect.X < rooms[i].connectedRoom.roomRect.X)
+                        {
+                            xPos++;
+                        }
+
+                    drill.X = xPos;
+                }
+
+                for (int y = 0; y < Math.Abs(yDiff); y++)
+                {
+                    for (int j = 0; j < drill.Width; j++)
+                    {
+                        for (int k = 0; k < drill.Height; k++)
+                        {
+                            int PosX = j + drill.X;
+                            int PosY = k + drill.Y;
+                            if (Game.isInWorld(PosX, PosY))
+                            {
+                                cellmap[PosX, PosY].Visual = air;
+                                cellmap[PosX, PosY].collideable = false;
+                            }
+                        }
+                    }
+
+                    int yPos = drill.Y;
+
+                    if (rooms[i].roomRect.Y > rooms[i].connectedRoom.roomRect.Y)
+                    {
+                        yPos--;
+                    }
+                    else if (rooms[i].roomRect.Y < rooms[i].connectedRoom.roomRect.Y)
+                    {
+                        yPos++;
+                    }
+
+                    drill.Y = yPos;
+                }
+
+            }
+
+            return cellmap;
+        }
+    }
+
+    public class Room
+    {
+        public Rectangle roomRect;
+        public Room connectedRoom;
     }
 
     public enum GenerationType
