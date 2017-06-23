@@ -129,9 +129,11 @@ namespace _7DRL
         {
             for (int y = 0; y < screenY; y++)
             {
-                Console.SetCursorPosition(0, y);
+                //Console.SetCursorPosition(0, y);
                 for (int x = 0; x < gameX; x++)
                 {
+                    Console.SetCursorPosition(x, y);
+
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
                         if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
@@ -143,10 +145,9 @@ namespace _7DRL
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
 
-                        //Console.SetCursorPosition(x, y);
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
-                        lastFrame[x, y] = new Tile();
+                        lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
                     }
                     else if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
@@ -155,7 +156,6 @@ namespace _7DRL
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                         }
 
-                        //Console.SetCursorPosition(x, y);
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
                     }
