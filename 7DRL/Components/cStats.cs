@@ -33,6 +33,7 @@ namespace _7DRL.Components
         public float carryWeight;
         public bool isEncumbered;
         public int weaponDamage;
+        public int damageReduction;
 
         private bool statsChanged;
 
@@ -137,11 +138,16 @@ namespace _7DRL.Components
 
         public void Damage(int attackAmount)
         {
+            attackAmount = attackAmount - damageReduction;
             if(currentHealth - attackAmount < 0)
             {
                 currentHealth -= attackAmount;
                 Console.WriteLine(" GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER");
                 Game.g.stop = true;
+            }
+            else if(attackAmount < 0)
+            {
+                //Do nothing
             }
             else
             {

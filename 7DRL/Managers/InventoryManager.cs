@@ -176,7 +176,7 @@ namespace _7DRL.Managers
             int dexBuff = 0;
             int ConBuff = 0;
 
-            name = w.ToString() + "of" + e.ToString();
+            name = w.ToString() + " of " + e.ToString();
 
             value = 0;
 
@@ -220,6 +220,7 @@ namespace _7DRL.Managers
 
         public override void OnEquip()
         {
+            Game.g.pcStats.weaponDamage = damage;
             Game.g.pcStats.str += strBuff;
             Game.g.pcStats.dex += dexBuff;
             Game.g.pcStats.con += ConBuff;
@@ -229,6 +230,7 @@ namespace _7DRL.Managers
 
         public override void OnUnequip()
         {
+            Game.g.pcStats.weaponDamage = 0;
             Game.g.pcStats.str -= strBuff;
             Game.g.pcStats.dex -= dexBuff;
             Game.g.pcStats.con -= ConBuff;
@@ -242,9 +244,74 @@ namespace _7DRL.Managers
         }
     }
 
-    public class Armor
+    public class Armor : Item
     {
+        public int damageReduct;
 
+        public int strBuff;
+        public int dexBuff;
+        public int ConBuff;
+
+        public Armor(MaterialType m, EffectType e, int level)
+        {
+            int strBuff = 0;
+            int dexBuff = 0;
+            int ConBuff = 0;
+
+            name = m.ToString() + " Armor of" + e.ToString();
+
+            value = 0;
+
+            if(m == MaterialType.Leather)
+            {
+                damageReduct = 5 * level;
+            }
+            else if(m == MaterialType.Iron)
+            {
+                damageReduct = 10 * level;
+            }
+            else if(m == MaterialType.Steel)
+            {
+                damageReduct = 15 * level;
+            }
+
+            if (e == EffectType.strength)
+            {
+                strBuff += 1 * level;
+            }
+            else if (e == EffectType.speed)
+            {
+                dexBuff += 1 * level;
+            }
+            else if (e == EffectType.poison)
+            {
+                dexBuff += 1 * level;
+            }
+            else if (e == EffectType.hardening)
+            {
+                ConBuff += 1 * level;
+            }
+        }
+
+        public override void OnEquip()
+        {
+            Game.g.pcStats.damageReduction = damageReduct;
+            Game.g.pcStats.str += strBuff;
+            Game.g.pcStats.dex += dexBuff;
+            Game.g.pcStats.con += ConBuff;
+
+            Game.g.pcStats.RegenStats();
+        }
+
+        public override void OnUnequip()
+        {
+            Game.g.pcStats.damageReduction = 0;
+            Game.g.pcStats.str -= strBuff;
+            Game.g.pcStats.dex -= dexBuff;
+            Game.g.pcStats.con -= ConBuff;
+
+            Game.g.pcStats.RegenStats();
+        }
     }
 
     public enum EffectType
