@@ -89,6 +89,38 @@ namespace _7DRL
             worldOffsetY = 0;
         }
 
+        public void ResetWorld(int seed)
+        {
+            rng = new Random(seed);
+
+            ground = new Tile[worldSize, worldSize];
+            world = new Tile[worldSize, worldSize];
+            lastFrame = new Tile[screenX, screenY];
+
+            for (var i = 0; i < worldSize; i++)
+            {
+                for (var j = 0; j < worldSize; j++)
+                {
+                    ground[i, j] = new Tile();
+                }
+            }
+
+            world = ground;
+
+            for (var i = 0; i < screenX; i++)
+            {
+                for (var j = 0; j < screenY; j++)
+                {
+                    lastFrame[i, j] = new Tile();
+                }
+            }
+
+            worldOffsetX = 0;
+            worldOffsetY = 0;
+
+            onLoad();
+        }
+
         public void onLoad()
         {
             Console.CursorVisible = false;
@@ -102,7 +134,8 @@ namespace _7DRL
             InitializeCollisionMap();
             InitializePlayer();
             InitializeEnemies();
-
+            InitializeStairs();
+            
             lastFrameDone = true;
         }
 
@@ -143,6 +176,11 @@ namespace _7DRL
                         else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E')
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
+                        }
+                        else if (world[x + worldOffsetX, y + worldOffsetY].Visual == '<'
+                            || world[x + worldOffsetX, y + worldOffsetY].Visual == '>')
+                        {
+                            Console.ForegroundColor = ConsoleColor.Gray;
                         }
 
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
@@ -307,6 +345,29 @@ namespace _7DRL
                 enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10));
                 onUpdate.Add(enemy[i].update);
             }
+        }
+
+        private void InitializeStairs()
+        {
+            var stairs = new Entities.drawable();
+            Utils.Point stairPos = Utils.Point.getRandomPointInWorld();
+            stairs.pos.xPos = stairPos.x;
+            stairs.pos.yPos = stairPos.y;
+            stairs.texture = '>';
+            stairs.tag = "Stairs";
+            stairs.active = true;
+            stairs.AddComponent(new Components.cStair(player));
+            onUpdate.Add(stairs.update);
+
+            stairs = new Entities.drawable();
+            stairPos = Utils.Point.getRandomPointInWorld();
+            stairs.pos.xPos = stairPos.x;
+            stairs.pos.yPos = stairPos.y;
+            stairs.texture = '<';
+            stairs.tag = "Stairs";
+            stairs.active = true;
+            stairs.AddComponent(new Components.cStair(player));
+            onUpdate.Add(stairs.update);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace _7DRL.Managers
 {
+    using _7DRL.Utils;
     using System;
 
     public static class WorldManager
@@ -121,7 +122,7 @@
 
             return map;
         }
-
+        
         public static Tile[,] GenerateWorld(Tile[,] cellmap, int worldSize)
         {
             //Set up the map with random values
@@ -133,7 +134,7 @@
             }
 
             cellmap = generateBorders(cellmap, worldSize);
-
+            
             return cellmap;
         }
     }
