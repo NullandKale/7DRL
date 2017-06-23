@@ -23,7 +23,7 @@ namespace _7DRL.Components
             if (Point.dist(d.pos, player.pos) < 1.5)
             {
                 // TODO: Fix world resesting. Problem Solution: needs to stop update/draw first.
-                //Game.g.ResetWorld(Game.g.rng.Next() % 100 + 1);
+                Game.g.resetWorld = true;
             }
         }
     }

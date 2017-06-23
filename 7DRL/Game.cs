@@ -17,6 +17,8 @@ namespace _7DRL
         public bool running;
         public bool stop;
         public bool lastFrameDone;
+        public bool resetWorld;
+        public bool rendering;
 
         public Tile[,] ground;
         public Tile[,] world;
@@ -51,7 +53,7 @@ namespace _7DRL
             {
                 throw new Exception("Too many Game objects");
             }
-
+            
             onUpdate = new List<Action>();
             rng = new Random(seed);
 
@@ -92,7 +94,17 @@ namespace _7DRL
         public void ResetWorld(int seed)
         {
             rng = new Random(seed);
+            input = new nullEngine.Managers.InputManager();
 
+            player.active = false;
+
+            for (var i = 1; i < enemy.Length; i++)
+            {
+                enemy[i].active = false;
+            }
+            
+            onUpdate.Clear();
+            
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
             lastFrame = new Tile[screenX, screenY];
@@ -118,10 +130,10 @@ namespace _7DRL
             worldOffsetX = 0;
             worldOffsetY = 0;
 
-            onLoad();
+            onLoad(true);
         }
 
-        public void onLoad()
+        public void onLoad(bool reset)
         {
             Console.CursorVisible = false;
 
@@ -132,16 +144,17 @@ namespace _7DRL
             ClearFrameBuffer();
 
             InitializeCollisionMap();
-            InitializePlayer();
+            InitializePlayer(reset);  
             InitializeEnemies();
             InitializeStairs();
             
             lastFrameDone = true;
+            resetWorld = false;
         }
 
         public void update(Object source, System.Timers.ElapsedEventArgs e)
         {
-            if (lastFrameDone)
+            if (lastFrameDone && !resetWorld)
             {
                 ClearWorld();
                 lastFrameDone = false;
@@ -156,10 +169,16 @@ namespace _7DRL
 
                 doTick = false;
             }
+
+            if (resetWorld && !rendering)
+            {
+                ResetWorld(Game.g.rng.Next() % 100 + 1);
+            }
         }
 
         private void Draw()
         {
+            rendering = true;
             for (int y = 0; y < screenY; y++)
             {
                 //Console.SetCursorPosition(0, y);
@@ -249,6 +268,7 @@ namespace _7DRL
             }
 
             ClearWorld();
+            rendering = false;
         }
 
         public void AddUIElement(int index, string item)
@@ -313,7 +333,7 @@ namespace _7DRL
             }
         }
 
-        private void InitializePlayer()
+        private void InitializePlayer(bool reset)
         {
             player = new Entities.drawable();
             Utils.Point playerPos = Utils.Point.getRandomPointInWorld();
@@ -324,7 +344,12 @@ namespace _7DRL
             player.active = true;
             player.AddComponent(new Components.cKeyboardMoveAndCollide());
             player.AddComponent(new Components.cCameraFollow(this));
-            pcStats = new Components.cStats(false, 100);
+
+            if (!reset)
+            {
+                pcStats = new Components.cStats(false, 100);
+            }
+
             player.AddComponent(pcStats);
             onUpdate.Add(player.update);
         }

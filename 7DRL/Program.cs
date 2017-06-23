@@ -44,7 +44,7 @@ namespace _7DRL
             }
 
             Game game = new Game(6);
-            game.onLoad();
+            game.onLoad(false);
 
             Timer updateTimer = new Timer(updateTime);
 
