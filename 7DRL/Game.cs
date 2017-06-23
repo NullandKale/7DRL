@@ -73,7 +73,7 @@ namespace _7DRL
 
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
-            lastFrame = new Tile[screenX, screenY];
+            lastFrame = new Tile[screenX, screenY + 1];
 
             for (var i = 0; i < worldSize; i++)
             {
@@ -87,7 +87,7 @@ namespace _7DRL
 
             for (var i = 0; i < screenX; i++)
             {
-                for (var j = 0; j < screenY; j++)
+                for (var j = 0; j < screenY + 1; j++)
                 {
                     lastFrame[i, j] = new Tile();
                 }
@@ -126,7 +126,7 @@ namespace _7DRL
 
             for (var i = 0; i < screenX; i++)
             {
-                for (var j = 0; j < screenY; j++)
+                for (var j = 0; j < screenY + 1; j++)
                 {
                     lastFrame[i, j] = new Tile();
                 }
@@ -196,7 +196,6 @@ namespace _7DRL
             rendering = true;
             for (int y = 0; y < screenY; y++)
             {
-                //Console.SetCursorPosition(0, y);
                 for (int x = 0; x < gameX; x++)
                 {
                     Console.SetCursorPosition(x, y);
@@ -234,6 +233,7 @@ namespace _7DRL
                 }
             }
 
+            Console.ForegroundColor = ConsoleColor.White;
             for (int x = gameX; x < screenX; x++)
             {
                 for (int y = 0; y < screenY; y++)
@@ -243,7 +243,6 @@ namespace _7DRL
                         if (lastFrame[x, y].Visual != '-'
                              || lastFrame[x, y].Visual != '|')
                         {
-                            Console.ForegroundColor = ConsoleColor.White;
                             Console.SetCursorPosition(x, y);
                             if (x == gameX)
                             {
@@ -260,14 +259,12 @@ namespace _7DRL
                     {
                         if (y == 0 && x == gameX + 1)
                         {
-                            Console.ForegroundColor = ConsoleColor.White;
                             for (var j = 0; j < guiItem.Count; j++)
                             {
                                 Console.SetCursorPosition(x, j);
                                 Console.Write(guiItem[j]);
                                 for (var i = gameX + 1 + guiItem[j].Length; i < screenX; i++)
                                 {
-                                    Console.SetCursorPosition(i, j);
                                     Console.Write(' ');
                                 }
                             }
@@ -278,8 +275,11 @@ namespace _7DRL
 
             for (int x = 0; x < screenX; x++)
             {
-                Console.SetCursorPosition(x, 28);
-                Console.Write('-');
+                if (lastFrame[x, 28].Visual != '-')
+                { 
+                    Console.SetCursorPosition(x, 28);
+                    Console.Write('-');
+                }
             }
 
             ClearWorld();
