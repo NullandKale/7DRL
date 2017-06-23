@@ -481,6 +481,16 @@ namespace _7DRL
                 }
             }
             AddUIElement(8, "----------------------------------------");
+            AddUIElement(9, "-------------< equipment >--------------");
+            if (pcInv.equipedWeapon != null)
+            {
+                AddUIElement(10, "Weapon:" + pcInv.equipedWeapon.ToString());
+            }
+            else
+            {
+                AddUIElement(10, "Weapon: ");
+            }
+
         }
     }
 }

@@ -166,7 +166,7 @@ namespace _7DRL.Managers
 
         public override string ToString()
         {
-            return (texture + " " + name + " " + weight + " lbs. " + value + " Gold");
+            return (name + " " + weight + " lbs. " + value + " Gold");
         }
 
         public abstract void OnEquip();
@@ -187,6 +187,8 @@ namespace _7DRL.Managers
             int strBuff = 0;
             int dexBuff = 0;
             int ConBuff = 0;
+
+            texture = 'W';
 
             name = w.ToString() + " of " + e.ToString();
 
