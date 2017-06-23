@@ -18,7 +18,10 @@ namespace _7DRL
         public bool stop;
         public bool lastFrameDone;
         public bool resetWorld;
+        public bool resetWorldUp;
         public bool rendering;
+
+        private int seed;
 
         public Tile[,] ground;
         public Tile[,] world;
@@ -38,9 +41,12 @@ namespace _7DRL
         public Entities.drawable player;
         public Components.cStats pcStats;
 
+        public Entities.drawable stairsUp;
+        public Entities.drawable stairsDown;
+
         private Entities.drawable[] enemy;
         private int enemyCount = 50;
-
+        
         private Dictionary<int, string> guiItem = new Dictionary<int, string>();
 
         public Game(int seed)
@@ -91,8 +97,9 @@ namespace _7DRL
             worldOffsetY = 0;
         }
 
-        public void ResetWorld(int seed)
+        public void ResetWorld(int _seed)
         {
+            seed = _seed;
             rng = new Random(seed);
             input = new nullEngine.Managers.InputManager();
 
@@ -102,9 +109,7 @@ namespace _7DRL
             {
                 enemy[i].active = false;
             }
-            
-            onUpdate.Clear();
-            
+                        
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
             lastFrame = new Tile[screenX, screenY];
@@ -149,8 +154,8 @@ namespace _7DRL
 
             InitializeCollisionMap();
             InitializePlayer(reset);  
-            InitializeEnemies();
-            InitializeStairs();
+            InitializeEnemies(reset);
+            InitializeStairs(reset);
             
             lastFrameDone = true;
             resetWorld = false;
@@ -170,7 +175,14 @@ namespace _7DRL
 
                 if (resetWorld)
                 {
-                    ResetWorld(Game.g.rng.Next() % 100 + 1);
+                    if (resetWorldUp)
+                    {
+                        ResetWorld(seed + 1);
+                    }
+                    else
+                    {
+                        ResetWorld(seed - 1);
+                    }
                     resetWorld = false;
                 }
 
@@ -373,45 +385,71 @@ namespace _7DRL
             player.active = true;
         }
 
-        private void InitializeEnemies()
+        private void InitializeEnemies(bool reset)
         {
-            enemy = new Entities.drawable[enemyCount];
-
-            for (int i = 0; i < enemyCount; i++)
+            if (!reset)
             {
-                enemy[i] = new Entities.drawable();
-                Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
-                enemy[i].pos.xPos = enemyPos.x;
-                enemy[i].pos.yPos = enemyPos.y;
-                enemy[i].texture = 'E';
-                enemy[i].tag = "Enemy";
-                enemy[i].active = true;
-                enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 50, 20, 10));
-                onUpdate.Add(enemy[i].update);
+                enemy = new Entities.drawable[enemyCount];
+
+                for (int i = 0; i < enemyCount; i++)
+                {
+                    enemy[i] = new Entities.drawable();
+                    Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
+                    enemy[i].pos.xPos = enemyPos.x;
+                    enemy[i].pos.yPos = enemyPos.y;
+                    enemy[i].texture = 'E';
+                    enemy[i].tag = "Enemy";
+                    enemy[i].active = true;
+                    enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 50, 20, 10));
+                    onUpdate.Add(enemy[i].update);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < enemyCount; i++)
+                {
+                    Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
+                    enemy[i].pos.xPos = enemyPos.x;
+                    enemy[i].pos.yPos = enemyPos.y;
+                    enemy[i].active = true;
+                }
             }
         }
 
-        private void InitializeStairs()
+        private void InitializeStairs(bool reset)
         {
-            var stairs = new Entities.drawable();
-            Utils.Point stairPos = Utils.Point.getRandomPointInWorld();
-            stairs.pos.xPos = stairPos.x;
-            stairs.pos.yPos = stairPos.y;
-            stairs.texture = '>';
-            stairs.tag = "Stairs";
-            stairs.active = true;
-            stairs.AddComponent(new Components.cStair(player));
-            onUpdate.Add(stairs.update);
+            if (!reset)
+            {
+                stairsUp = new Entities.drawable();
+                Utils.Point stairPos = Utils.Point.getRandomPointInWorld();
+                stairsUp.pos.xPos = stairPos.x;
+                stairsUp.pos.yPos = stairPos.y;
+                stairsUp.texture = '>';
+                stairsUp.tag = "Stairs";
+                stairsUp.active = true;
+                stairsUp.AddComponent(new Components.cStair(player, true));
+                onUpdate.Add(stairsUp.update);
 
-            stairs = new Entities.drawable();
-            stairPos = Utils.Point.getRandomPointInWorld();
-            stairs.pos.xPos = stairPos.x;
-            stairs.pos.yPos = stairPos.y;
-            stairs.texture = '<';
-            stairs.tag = "Stairs";
-            stairs.active = true;
-            stairs.AddComponent(new Components.cStair(player));
-            onUpdate.Add(stairs.update);
+                stairsDown = new Entities.drawable();
+                stairPos = Utils.Point.getRandomPointInWorld();
+                stairsDown.pos.xPos = stairPos.x;
+                stairsDown.pos.yPos = stairPos.y;
+                stairsDown.texture = '<';
+                stairsDown.tag = "Stairs";
+                stairsDown.active = true;
+                stairsDown.AddComponent(new Components.cStair(player, false));
+                onUpdate.Add(stairsDown.update);
+            }
+            else
+            {
+                Utils.Point stairPos = Utils.Point.getRandomPointInWorld();
+                stairsUp.pos.xPos = stairPos.x;
+                stairsUp.pos.yPos = stairPos.y;
+
+                stairPos = Utils.Point.getRandomPointInWorld();
+                stairsDown.pos.xPos = stairPos.x;
+                stairsDown.pos.yPos = stairPos.y;
+            }
         }
     }
 }
