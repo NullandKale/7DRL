@@ -36,6 +36,8 @@ namespace _7DRL
 
         public int gameX;
 
+        public int InvNum;
+
         private Tile[,] lastFrame;
 
         public Entities.drawable player;
@@ -172,6 +174,9 @@ namespace _7DRL
                 {
                     onUpdate[i].Invoke();
                 }
+
+                DrawInventory();
+
                 Draw();
 
                 if (resetWorld)
@@ -453,6 +458,29 @@ namespace _7DRL
                 stairsDown.pos.xPos = stairPos.x;
                 stairsDown.pos.yPos = stairPos.y;
             }
+        }
+
+        private void DrawInventory()
+        {
+            AddUIElement(2, "-------------< inventory >--------------");
+            AddUIElement(3, InvNum + "." + pcInv.getItem(InvNum));
+            AddUIElement(4, (InvNum + 1) + "." + pcInv.getItem(InvNum + 1));
+            AddUIElement(5, (InvNum + 2) + "." + pcInv.getItem(InvNum + 2));
+            AddUIElement(6, (InvNum + 3) + "." + pcInv.getItem(InvNum + 3));
+            AddUIElement(7, (InvNum + 4) + "." + pcInv.getItem(InvNum + 4));
+            if (input.isKeyRising(OpenTK.Input.Key.Period))
+            {
+                InvNum++;
+            }
+
+            if (input.isKeyRising(OpenTK.Input.Key.Comma))
+            {
+                if (InvNum > 0)
+                {
+                    InvNum--;
+                }
+            }
+            AddUIElement(8, "----------------------------------------");
         }
     }
 }

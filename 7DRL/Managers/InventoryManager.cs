@@ -16,6 +16,18 @@ namespace _7DRL.Managers
             playerInv = new Inventory();
         }
 
+        public string getItem(int num)
+        {
+            if (playerInv.items.Count > num)
+            {
+                return playerInv.items[num].ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
         public bool EquipWeapon(int itemLoc)
         {
             if (playerInv.items[itemLoc] is Weapon)
