@@ -40,6 +40,7 @@ namespace _7DRL
 
         public Entities.drawable player;
         public Components.cStats pcStats;
+        public InventoryManager pcInv;
 
         public Entities.drawable stairsUp;
         public Entities.drawable stairsDown;
@@ -369,6 +370,8 @@ namespace _7DRL
             {
                 player = new Entities.drawable();
                 pcStats = new Components.cStats(false, 100);
+                pcInv = new InventoryManager();
+                pcInv.playerInv.addItem(Weapon.GenerateWeapon(1));
                 player.texture = '@';
                 player.tag = "Player";
                 player.active = true;

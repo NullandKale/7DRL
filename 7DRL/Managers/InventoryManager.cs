@@ -8,12 +8,44 @@ namespace _7DRL.Managers
 {
     public class InventoryManager
     {
+        public Inventory playerInv;
+        public Weapon equipedWeapon;
 
+        public InventoryManager()
+        {
+            playerInv = new Inventory();
+        }
+
+        public bool EquipWeapon(int itemLoc)
+        {
+            if (playerInv.items[itemLoc] is Weapon)
+            {
+                if (equipedWeapon == null)
+                {
+                    equipedWeapon = (Weapon)playerInv.items[itemLoc];
+                    playerInv.removeItem(itemLoc, 1);
+                    equipedWeapon.OnEquip();
+                }
+                else
+                {
+                    playerInv.addItem(equipedWeapon);
+                    equipedWeapon.OnUnequip();
+                    equipedWeapon = (Weapon)playerInv.items[itemLoc];
+                    equipedWeapon.OnEquip();
+                    playerInv.removeItem(itemLoc, 1);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     public class Inventory
     {
-        List<Item> items;
+        public List<Item> items;
 
         public int currentGoldAmount;
 
@@ -146,19 +178,24 @@ namespace _7DRL.Managers
 
             name = w.ToString() + "of" + e.ToString();
 
+            value = 0;
+
             if(w == WeaponType.Dagger)
             {
                 damage = 5 * level;
                 dexBuff += 1 * level;
+                weight = 2f;
             }
             else if (w == WeaponType.Sword)
             {
                 damage = 10 * level;
+                weight = 3f;
             }
             else if (w == WeaponType.Axe)
             {
                 damage = 15 * level;
                 dexBuff -= 1 * level;
+                weight = 5f;
             }
 
             if (e == EffectType.strength)
@@ -177,6 +214,7 @@ namespace _7DRL.Managers
             {
                 ConBuff += 1 * level;
             }
+
         }
 
 
