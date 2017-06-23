@@ -221,6 +221,10 @@ namespace _7DRL
                         {
                             Console.ForegroundColor = ConsoleColor.Gray;
                         }
+                        else if(world[x + worldOffsetX, y + worldOffsetY].Visual == 'L')
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        }
 
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
