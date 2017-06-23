@@ -139,9 +139,10 @@ namespace _7DRL
 
             running = true;
             stop = false;
-            ground = WorldManager.GenerateWorld(ground, worldSize);
+            ground = WorldManager.GenerateWorld(ground, worldSize, GenerationType.Caves);
 
             ClearFrameBuffer();
+            ClearWorld();
 
             InitializeCollisionMap();
             InitializePlayer(reset);  

@@ -5,11 +5,10 @@
 
     public static class WorldManager
     {
-        private static float chanceToStartAlive = 0.45f;
         private static char wall = (char)0x2588;
         private static char air = ' ';
 
-        private static Tile[,] initialiseMap(Tile[,] map, int worldSize)
+        private static Tile[,] initialiseMap(Tile[,] map, int worldSize, float chanceToStartAlive)
         {
             for (int x = 0; x < worldSize; x++)
             {
@@ -17,6 +16,7 @@
                 {
                     if (Game.g.rng.NextDouble() < chanceToStartAlive)
                     {
+                        map[x, y] = new Tile();
                         map[x, y].Visual = wall;
                         map[x, y].collideable = true;
                     }
@@ -122,11 +122,30 @@
 
             return map;
         }
-        
-        public static Tile[,] GenerateWorld(Tile[,] cellmap, int worldSize)
+
+        public static Tile[,] GenerateWorld(Tile[,] cellmap, int worldSize, GenerationType type)
         {
+            switch(type)
+            {
+                case GenerationType.Caves:
+                    cellmap = GenerateCave(cellmap, worldSize);
+                    break;
+                case GenerationType.Rooms:
+                    cellmap = GenerateRooms(cellmap, worldSize);
+                    break;
+                default:
+                    cellmap = GenerateCave(cellmap, worldSize);
+                    break;
+            }
+
+            return cellmap;
+        }
+
+        public static Tile[,] GenerateCave(Tile[,] cellmap, int worldSize)
+        {
+            float chanceToStartAlive = 0.46f;
             //Set up the map with random values
-            cellmap = initialiseMap(cellmap, worldSize);
+            cellmap = initialiseMap(cellmap, worldSize, chanceToStartAlive);
             //And now run the simulation for a set number of steps
             for (int i = 0; i < 10; i++)
             {
@@ -134,8 +153,23 @@
             }
 
             cellmap = generateBorders(cellmap, worldSize);
-            
+
             return cellmap;
         }
+
+        public static Tile[,] GenerateRooms(Tile[,] cellmap, int worldSize)
+        {
+            cellmap = initialiseMap(cellmap, worldSize, 0f);
+
+            cellmap = generateBorders(cellmap, worldSize);
+
+            return cellmap;
+        }
+    }
+
+    public enum GenerationType
+    {
+        Caves,
+        Rooms,
     }
 }
