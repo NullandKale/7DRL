@@ -30,6 +30,9 @@ namespace _7DRL.Components
 
         public int healRate;
 
+        public float carryWeight;
+        public bool isEncumbered;
+
         private bool statsChanged;
 
         public cStats(bool random, int maxStat)
@@ -55,6 +58,7 @@ namespace _7DRL.Components
                 cha = 10;
             }
 
+            isEncumbered = false;
             RegenStats();
         }
 
@@ -92,6 +96,8 @@ namespace _7DRL.Components
             currentStamina = maxStamina;
 
             NeededXP = 75 * level + 125;
+
+            carryWeight = str * 2 + 20;
         }
 
         private void PassiveHeal()

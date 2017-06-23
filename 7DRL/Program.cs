@@ -56,6 +56,7 @@ namespace _7DRL
                 if(game.stop)
                 {
                     updateTimer.Stop();
+                    //game.running = false;
                 }
             }
         }

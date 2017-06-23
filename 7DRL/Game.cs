@@ -33,8 +33,8 @@ namespace _7DRL
 
         private Tile[,] lastFrame;
 
-        private Entities.drawable player;
-        private Components.cStats pcStats;
+        public Entities.drawable player;
+        public Components.cStats pcStats;
 
         private Entities.drawable[] enemy;
         private int enemyCount = 50;
