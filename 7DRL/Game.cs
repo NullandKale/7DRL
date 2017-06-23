@@ -96,6 +96,7 @@ namespace _7DRL
             running = true;
             stop = false;
             ground = WorldManager.GenerateWorld(ground, worldSize);
+
             ClearFrameBuffer();
 
             InitializeCollisionMap();
@@ -109,6 +110,7 @@ namespace _7DRL
         {
             if (lastFrameDone)
             {
+                ClearWorld();
                 lastFrameDone = false;
                 for (int i = 0; i < onUpdate.Count; i++)
                 {
@@ -130,17 +132,6 @@ namespace _7DRL
                 Console.SetCursorPosition(0, y);
                 for (int x = 0; x < gameX; x++)
                 {
-                    if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
-                    {
-                        if (ground[x + worldOffsetX, y + worldOffsetY].Visual == (char)0x2588)
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkGray;
-                        }
-
-                        Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
-                        lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
-                    }
-
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
                         if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
@@ -152,14 +143,24 @@ namespace _7DRL
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
 
-                        Console.SetCursorPosition(x, y);
+                        //Console.SetCursorPosition(x, y);
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
-                        lastFrame[x, y].Visual = ' ';
+                        world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
+                        lastFrame[x, y] = new Tile();
+                    }
+                    else if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
+                    {
+                        if (ground[x + worldOffsetX, y + worldOffsetY].Visual == (char)0x2588)
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                        }
+
+                        //Console.SetCursorPosition(x, y);
+                        Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
+                        lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
                     }
                 }
             }
-
-            ClearWorld();
 
             for (int x = gameX; x < screenX; x++)
             {
@@ -208,6 +209,8 @@ namespace _7DRL
                 Console.SetCursorPosition(x, 28);
                 Console.Write('-');
             }
+
+            ClearWorld();
         }
 
         public void AddUIElement(int index, string item)
