@@ -463,11 +463,11 @@ namespace _7DRL
         private void DrawInventory()
         {
             AddUIElement(2, "-------------< inventory >--------------");
-            AddUIElement(3, InvNum + "." + pcInv.getItem(InvNum));
-            AddUIElement(4, (InvNum + 1) + "." + pcInv.getItem(InvNum + 1));
-            AddUIElement(5, (InvNum + 2) + "." + pcInv.getItem(InvNum + 2));
-            AddUIElement(6, (InvNum + 3) + "." + pcInv.getItem(InvNum + 3));
-            AddUIElement(7, (InvNum + 4) + "." + pcInv.getItem(InvNum + 4));
+            AddUIElement(3, "1(" + InvNum + ")." + pcInv.getItem(InvNum));
+            AddUIElement(4, "2(" + (InvNum + 1) + ")." + pcInv.getItem(InvNum + 1));
+            AddUIElement(5, "3(" + (InvNum + 2) + ")." + pcInv.getItem(InvNum + 2));
+            AddUIElement(6, "4(" + (InvNum + 3) + ")." + pcInv.getItem(InvNum + 3));
+            AddUIElement(7, "5(" + (InvNum + 4) + ")." + pcInv.getItem(InvNum + 4));
             if (input.isKeyRising(OpenTK.Input.Key.Period))
             {
                 InvNum++;
@@ -480,17 +480,48 @@ namespace _7DRL
                     InvNum--;
                 }
             }
-            AddUIElement(8, "----------------------------------------");
-            AddUIElement(9, "-------------< equipment >--------------");
+            AddUIElement(8, "-------------< equipment >--------------");
             if (pcInv.equipedWeapon != null)
             {
-                AddUIElement(10, "Weapon:" + pcInv.equipedWeapon.ToString());
+                AddUIElement(9, "Weapon:" + pcInv.equipedWeapon.ToString());
             }
             else
             {
-                AddUIElement(10, "Weapon: ");
+                AddUIElement(9, "Weapon: ");
             }
 
+            if (pcInv.equipedArmor != null)
+            {
+                AddUIElement(10, "Armor:" + pcInv.equipedArmor.ToString());
+            }
+            else
+            {
+                AddUIElement(10, "Armor: ");
+            }
+
+            UseItem(OpenTK.Input.Key.Number1, InvNum);
+            UseItem(OpenTK.Input.Key.Number2, InvNum + 1);
+            UseItem(OpenTK.Input.Key.Number3, InvNum + 2);
+            UseItem(OpenTK.Input.Key.Number4, InvNum + 3);
+            UseItem(OpenTK.Input.Key.Number5, InvNum + 4);
+        }
+
+        private void UseItem(OpenTK.Input.Key key, int num)
+        {
+            if (input.isKeyRising(key))
+            {
+                if (pcInv.playerInv.items.Count > num)
+                {
+                    if (pcInv.playerInv.items[num] is Weapon)
+                    {
+                        pcInv.EquipWeapon(num);
+                    }
+                    else if (pcInv.playerInv.items[num] is Armor)
+                    {
+                        pcInv.EquipArmor(num);
+                    }
+                }
+            }
         }
     }
 }
