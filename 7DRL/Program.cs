@@ -14,6 +14,8 @@ namespace _7DRL
         private const int MF_BYCOMMAND = 0x00000000;
         public const int SC_MAXIMIZE = 0xF030;
         public const int SC_SIZE = 0xF000;
+        public const int ENABLE_QUICK_EDIT = 0x0040;
+        public const int ENABLE_MOUSE_INPUT = 0x0010;
 
         [DllImport("user32.dll")]
         public static extern int DeleteMenu(IntPtr hMenu, int nPosition, int wFlags);
@@ -23,6 +25,15 @@ namespace _7DRL
 
         [DllImport("kernel32.dll", ExactSpelling = true)]
         private static extern IntPtr GetConsoleWindow();
+        
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern IntPtr GetStdHandle(int nStdHandle);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool GetConsoleMode(IntPtr hConsoleHandle, out int lpMode);
+
+        [DllImport("kernel32.dll")]
+        static extern bool SetConsoleMode(IntPtr hConsoleHandle, int dwMode);
 
         static void Main(string[] args)
         {
@@ -36,11 +47,31 @@ namespace _7DRL
             // Disable resizing.
             IntPtr handle = GetConsoleWindow();
             IntPtr sysMenu = GetSystemMenu(handle, false);
-
+            int mode = 0;
+            
             if (handle != IntPtr.Zero)
             {
                 DeleteMenu(sysMenu, SC_MAXIMIZE, MF_BYCOMMAND);
                 DeleteMenu(sysMenu, SC_SIZE, MF_BYCOMMAND);
+            }
+
+            // Disable Mouse Clicking
+            handle = GetStdHandle(-10);
+
+            if (!GetConsoleMode(handle, out mode))
+            {
+                // error getting the console mode. Exit.
+                Console.WriteLine(Marshal.GetLastWin32Error());
+                return;
+            }
+
+            mode &= ~ENABLE_QUICK_EDIT;
+            mode &= ~ENABLE_MOUSE_INPUT;
+
+            if (!SetConsoleMode(handle, mode))
+            {
+                Console.WriteLine(Marshal.GetLastWin32Error());
+                // error setting console mode.
             }
 
             Game game = new Game(6);
