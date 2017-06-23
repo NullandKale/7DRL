@@ -112,7 +112,7 @@ namespace _7DRL
                         
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
-            lastFrame = new Tile[screenX, screenY];
+            lastFrame = new Tile[screenX, screenY + 1];
 
             for (var i = 0; i < worldSize; i++)
             {
