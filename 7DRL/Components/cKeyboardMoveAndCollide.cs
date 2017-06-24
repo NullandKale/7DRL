@@ -20,25 +20,25 @@ namespace _7DRL.Components
                 int moveX = 0;
                 int moveY = 0;
 
-                if (Game.input.isKeyHeld(OpenTK.Input.Key.A))
+                if (Game.input.isKeyFalling(OpenTK.Input.Key.A))
                 {
                     moveX--;
                     Game.doTick = true;
                 }
 
-                if (Game.input.isKeyHeld(OpenTK.Input.Key.D))
+                if (Game.input.isKeyFalling(OpenTK.Input.Key.D))
                 {
                     moveX++;
                     Game.doTick = true;
                 }
 
-                if (Game.input.isKeyHeld(OpenTK.Input.Key.W))
+                if (Game.input.isKeyFalling(OpenTK.Input.Key.W))
                 {
                     moveY--;
                     Game.doTick = true;
                 }
 
-                if (Game.input.isKeyHeld(OpenTK.Input.Key.S))
+                if (Game.input.isKeyFalling(OpenTK.Input.Key.S))
                 {
                     moveY++;
                     Game.doTick = true;

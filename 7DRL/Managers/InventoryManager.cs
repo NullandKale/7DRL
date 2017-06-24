@@ -278,7 +278,14 @@ namespace _7DRL.Managers
 
             texture = 'W';
 
-            name = w.ToString() + " of " + e.ToString();
+            if(e == EffectType.none)
+            {
+                name = w.ToString();
+            }
+            else
+            {
+                name = w.ToString() + " of " + e.ToString();
+            }
 
             maxStackSize = 1;
             currentStackSize = 1;
@@ -365,7 +372,14 @@ namespace _7DRL.Managers
 
             texture = 'A';
 
-            name = m.ToString() + " Armor of " + e.ToString();
+            if (e == EffectType.none)
+            {
+                name = m.ToString() + " Armor";
+            }
+            else
+            {
+                name = m.ToString() + " Armor of " + e.ToString();
+            }
 
             maxStackSize = 1;
             currentStackSize = 1;
@@ -431,6 +445,7 @@ namespace _7DRL.Managers
 
     public enum EffectType
     {
+        none,
         strength,
         speed,
         poison,

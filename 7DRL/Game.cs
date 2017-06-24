@@ -68,7 +68,7 @@ namespace _7DRL
 
             input = new nullEngine.Managers.InputManager();
 
-            worldSize = 200;
+            worldSize = 150;
             screenX = 119;
             screenY = 28;
 
@@ -386,8 +386,7 @@ namespace _7DRL
             {
                 player = new Entities.drawable();
                 pcStats = new Components.cStats(false, 100);
-                pcInv = new InventoryManager(10);
-                pcInv.playerInv.addItem(Weapon.GenerateWeapon(1));
+                pcInv = new InventoryManager(5);
                 player.texture = '@';
                 player.tag = "Player";
                 player.active = true;
@@ -400,6 +399,7 @@ namespace _7DRL
             Utils.Point playerPos = Utils.Point.getRandomPointInWorld();
             player.pos.xPos = playerPos.x;
             player.pos.yPos = playerPos.y;
+            pcInv.RegenLoot();
 
             player.active = true;
         }
@@ -419,7 +419,7 @@ namespace _7DRL
                     enemy[i].texture = 'E';
                     enemy[i].tag = "Enemy";
                     enemy[i].active = true;
-                    enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 50, 20, 10));
+                    enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10));
                     onUpdate.Add(enemy[i].update);
                 }
             }

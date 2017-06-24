@@ -63,6 +63,10 @@ namespace _7DRL.Components
             isEncumbered = false;
             weaponDamage = 0;
             RegenStats();
+
+            currentHealth = maxHealth;
+            currentMana = maxMana;
+            currentStamina = maxStamina;
         }
 
         public void Run(drawable d)
@@ -92,11 +96,7 @@ namespace _7DRL.Components
             maxMana = wis * 20 + 5 * level;
             maxStamina = dex * 20 + 5 * level;
 
-            healRate = con / 4;
-
-            currentHealth = maxHealth;
-            currentMana = maxMana;
-            currentStamina = maxStamina;
+            healRate = con / 6;
 
             NeededXP = 75 * level + 125;
 
@@ -107,7 +107,7 @@ namespace _7DRL.Components
 
         private void PassiveHeal()
         {
-            if(((float)currentHealth / (float)maxHealth) < .85f)
+            if(((float)currentHealth / (float)maxHealth) < .40f)
             {
                 Heal(healRate);
             }
