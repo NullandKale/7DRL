@@ -254,7 +254,7 @@ namespace _7DRL.Managers
 
         public override string ToString()
         {
-            return (name + " " + weight + " lbs. " + value + " Gold");
+            return (name + " " + weight + "lb " + value + " g");
         }
 
         public abstract void OnEquip();
