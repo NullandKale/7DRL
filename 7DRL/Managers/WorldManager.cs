@@ -255,13 +255,18 @@
             {
                 bool badConnection = true;
                 int connectedRoom = Game.g.rng.Next(0, rooms.Count);
+                double distprecentage = 4.0;
                 while (badConnection)
                 {
                     double dist = Util.dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[connectedRoom].roomRect.X, rooms[connectedRoom].roomRect.Y);
 
-                    if (i != connectedRoom && dist < worldSize / 4.0f)
+                    if (i != connectedRoom && dist < worldSize / distprecentage)
                     {
                         badConnection = false;
+                    }
+                    else
+                    {
+                        distprecentage -= 0.1;
                     }
 
                     connectedRoom = Game.g.rng.Next(0, rooms.Count);
