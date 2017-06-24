@@ -20,22 +20,26 @@ namespace _7DRL.Components
         private int health;
         private int damage;
         private int range;
+        private int detectRange;
+        private double attackRange;
         private int xpAmount;
 
-        public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range)
+        public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range, int detectRange, double attackRange)
         {
             player = pc;
             playerStats = pcStats;
             this.health = health;
             this.maxHealth = health;
             this.range = range;
+            this.detectRange = detectRange;
+            this.attackRange = attackRange;
             damage = attack;
-            xpAmount = health / 3;
+            xpAmount = (health + attack + ((int)attackRange * 3)) / 5;
         }
 
         public void Run(drawable d)
         {
-            if (Point.dist(player.pos, d.pos) > 4)
+            if (Point.dist(player.pos, d.pos) > detectRange)
             {
                 if(targetPos == null || getNewTargetPos)
                 {
@@ -65,7 +69,7 @@ namespace _7DRL.Components
 
         private void Attack(drawable d)
         {
-            if (Point.dist(d.pos, player.pos) < 1.5)
+            if (Point.dist(d.pos, player.pos) < attackRange)
             {
                 int attack = damage + Game.g.rng.Next(-range, range);
 

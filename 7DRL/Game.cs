@@ -219,7 +219,10 @@ namespace _7DRL
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                         }
-                        else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E')
+                        else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E'                            
+                            || world[x + worldOffsetX, y + worldOffsetY].Visual == 'e'
+                            || world[x + worldOffsetX, y + worldOffsetY].Visual == 'S'
+                            || world[x + worldOffsetX, y + worldOffsetY].Visual == 's')
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
@@ -416,11 +419,51 @@ namespace _7DRL
                     Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
                     enemy[i].pos.xPos = enemyPos.x;
                     enemy[i].pos.yPos = enemyPos.y;
-                    enemy[i].texture = 'E';
-                    enemy[i].tag = "Enemy";
-                    enemy[i].active = true;
-                    enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10));
-                    onUpdate.Add(enemy[i].update);
+
+                    var r = rng.NextDouble();
+                    if (r < 0.25)
+                    {
+                        var r = rng.NextDouble();
+
+                        if (r < 0.6)
+                        {
+                            enemy[i].texture = 'e';
+                            enemy[i].tag = "Enemy";
+                            enemy[i].active = true;
+                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 40, 10, 5, 6, 1.5));
+                            onUpdate.Add(enemy[i].update);
+                        }
+                        else
+                        {
+                            enemy[i].texture = 'E';
+                            enemy[i].tag = "Enemy";
+                            enemy[i].active = true;
+                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10, 4, 1.5));
+                            onUpdate.Add(enemy[i].update);
+                        }
+                    }
+                    else
+                    {
+                        var r = rng.NextDouble();
+
+                        if (r < 0.6)
+                        {
+                            enemy[i].texture = 's';
+                            enemy[i].tag = "Enemy";
+                            enemy[i].active = true;
+                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 20, 4, 1, 6, 3));
+                            onUpdate.Add(enemy[i].update);
+                        }
+                        else
+                        {
+                            enemy[i].texture = 'S';
+                            enemy[i].tag = "Enemy";
+                            enemy[i].active = true;
+                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 40, 8, 1, 4, 4.5));
+                            onUpdate.Add(enemy[i].update);
+                        }
+
+                    }
                 }
             }
             else
