@@ -163,9 +163,9 @@ namespace _7DRL
             ClearWorld();
 
             InitializeCollisionMap();
+            InitializeStairs(reset);
             InitializePlayer(reset);  
             InitializeEnemies(reset);
-            InitializeStairs(reset);
             
             lastFrameDone = true;
             resetWorld = false;
@@ -399,9 +399,17 @@ namespace _7DRL
                 onUpdate.Add(player.update);
             }
 
-            Utils.Point playerPos = Utils.Point.getRandomPointInWorld();
-            player.pos.xPos = playerPos.x;
-            player.pos.yPos = playerPos.y;
+            if(resetWorldUp)
+            {
+                player.pos.xPos = stairsDown.pos.xPos;
+                player.pos.yPos = stairsDown.pos.yPos;
+            }
+            else
+            {
+                player.pos.xPos = stairsUp.pos.xPos;
+                player.pos.yPos = stairsUp.pos.yPos;
+            }
+
             pcInv.RegenLoot();
 
             player.active = true;
