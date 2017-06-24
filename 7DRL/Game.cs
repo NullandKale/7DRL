@@ -138,10 +138,17 @@ namespace _7DRL
             worldOffsetX = 0;
             worldOffsetY = 0;
 
-            onLoad(true);
+            var type = GenerationType.Rooms;
+
+            if (seed % 3 == 0)
+            {
+                type = GenerationType.Caves;
+            }
+            
+            onLoad(true, type);
         }
 
-        public void onLoad(bool reset)
+        public void onLoad(bool reset, GenerationType type)
         {
             Console.CursorVisible = false;
 
@@ -150,7 +157,7 @@ namespace _7DRL
 
             running = true;
             stop = false;
-            ground = WorldManager.GenerateWorld(ground, worldSize, GenerationType.Rooms);
+            ground = WorldManager.GenerateWorld(ground, worldSize, type);
 
             ClearFrameBuffer();
             ClearWorld();

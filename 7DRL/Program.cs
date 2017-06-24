@@ -75,7 +75,7 @@ namespace _7DRL
             }
 
             Game game = new Game(6);
-            game.onLoad(false);
+            game.onLoad(false, Managers.GenerationType.Rooms);
 
             Timer updateTimer = new Timer(updateTime);
 
