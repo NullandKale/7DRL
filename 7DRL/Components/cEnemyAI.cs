@@ -16,13 +16,17 @@ namespace _7DRL.Components
 
         private bool getNewTargetPos;
 
-        private int maxHealth;
-        private int health;
-        private int damage;
-        private int range;
-        private int detectRange;
-        private double attackRange;
+        public int maxHealth;
+        public int health;
+        public int damage;
+        public int range;
+        public int detectRange;
+        public double attackRange;
         private int xpAmount;
+
+        public cEnemyAI()
+        {   
+        }
 
         public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range, int detectRange, double attackRange)
         {
@@ -56,7 +60,11 @@ namespace _7DRL.Components
             }
             else
             {
-                MoveTowards(new Point(player.pos.xPos, player.pos.yPos), d);
+                if (Point.dist(player.pos, d.pos) > attackRange)
+                {
+                    MoveTowards(new Point(player.pos.xPos, player.pos.yPos), d);
+                }
+
                 Attack(d);
             }
         }
@@ -71,22 +79,28 @@ namespace _7DRL.Components
         {
             if (Point.dist(d.pos, player.pos) < attackRange)
             {
-
                 playerStats.inCombat = true;
 
                 int attack = damage + Game.g.rng.Next(-range, range);
 
-                int whoseFirst = Game.g.rng.Next(0, 21);
-
-                if(whoseFirst < playerStats.dex)
+                if (Point.dist(player.pos, d.pos) > 1.5)
                 {
-                    Damage(playerStats.getAttack(), d, playerStats);
                     playerStats.Damage(attack);
                 }
                 else
-                {
-                    playerStats.Damage(attack);
-                    Damage(playerStats.getAttack(), d, playerStats);
+                { 
+                    int whoseFirst = Game.g.rng.Next(0, 21);
+
+                    if (whoseFirst < playerStats.dex)
+                    {
+                        Damage(playerStats.getAttack(), d, playerStats);
+                        playerStats.Damage(attack);
+                    }
+                    else
+                    {
+                        playerStats.Damage(attack);
+                        Damage(playerStats.getAttack(), d, playerStats);
+                    }
                 }
             }
         }

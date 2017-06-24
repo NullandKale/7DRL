@@ -29,7 +29,9 @@ namespace _7DRL.Components
         public int currentXP;
 
         public int healRate;
+        public int stamRate;
         public bool inCombat;
+        public bool outOfStam;
 
         public float carryWeight;
         public bool isEncumbered;
@@ -86,9 +88,6 @@ namespace _7DRL.Components
             {
                 PassiveHeal();
             }
-            
-            Game.g.AddUIElement(0, "Level: " + level + " XP: " + currentXP + "/" + NeededXP + " Gold: " + Game.g.pcInv.playerInv.currentGoldAmount);
-            Game.g.AddUIElement(1, "H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
         }
 
         public void RegenStats()
@@ -98,6 +97,7 @@ namespace _7DRL.Components
             maxStamina = dex * 20 + 5 * level;
 
             healRate = con / 6;
+            stamRate = dex / 6;
 
             NeededXP = 75 * level + 125;
 
@@ -113,6 +113,20 @@ namespace _7DRL.Components
                 if (((float)currentHealth / (float)maxHealth) < .40f)
                 {
                     Heal(healRate);
+                }
+
+                RegenStam(stamRate);
+                
+                if (outOfStam)
+                {
+                    if ((float)currentStamina > (float)maxStamina * 0.25f)
+                    {
+                        outOfStam = false;
+                    }
+                }
+                else if (currentStamina <= 0)
+                {
+                    outOfStam = true;
                 }
             }
             else
@@ -141,6 +155,18 @@ namespace _7DRL.Components
             else
             {
                 currentHealth += amount;
+            }
+        }
+
+        public void RegenStam(int amount)
+        {
+            if (currentStamina + amount > maxStamina)
+            {
+                currentStamina = maxStamina;
+            }
+            else
+            {
+                currentStamina += amount;
             }
         }
 

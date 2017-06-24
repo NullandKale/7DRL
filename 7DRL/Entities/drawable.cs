@@ -58,6 +58,16 @@ namespace _7DRL.Entities
             }
         }
 
+        public T GetComponent<T>() where T : Components.iComponent
+        {
+            if (components.Any(c => c.GetType() == typeof(T)))
+            {
+                return (T) components[components.IndexOf(components.Find(c => c.GetType() == typeof(T)))];
+            }
+
+            return default(T);
+        }
+
         public void setPos(int x, int y)
         {
             Game.g.world[pos.xPos, pos.yPos].collideable = false;

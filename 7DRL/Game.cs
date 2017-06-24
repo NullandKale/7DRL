@@ -1,4 +1,5 @@
-﻿using _7DRL.Managers;
+﻿using _7DRL.Components;
+using _7DRL.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -462,7 +463,7 @@ namespace _7DRL
                             enemy[i].tag = "Enemy";
                             enemy[i].active = true;
                             enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3));
+                                20 + (pcStats.level * 1), 3 + (pcStats.level), 1, 6 + (pcStats.level / 10), 2.5));
                             onUpdate.Add(enemy[i].update);
                         }
                         else
@@ -471,7 +472,7 @@ namespace _7DRL
                             enemy[i].tag = "Enemy";
                             enemy[i].active = true;
                             enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5));
+                                40 + (pcStats.level * 5), 6 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 3.5));
                             onUpdate.Add(enemy[i].update);
                         }
 
@@ -528,6 +529,13 @@ namespace _7DRL
 
         private void DrawInventory()
         {
+            AddUIElement(0, "Level: " + pcStats.level + " XP: " + pcStats.currentXP + "/" + pcStats.NeededXP + " Gold: " + pcInv.playerInv.currentGoldAmount);
+            string str = "H: " + pcStats.currentHealth + "/" + pcStats.maxHealth + " M: " + pcStats.currentMana + "/" + pcStats.maxMana + " S: " + pcStats.currentStamina + "/" + pcStats.maxStamina;
+            if (pcStats.outOfStam)
+            {
+                str += " Out of Stam";
+            }
+            AddUIElement(1, str);
             AddUIElement(2, "-------------< Inventory >--------------");
             AddUIElement(3, "1(" + (InvNum + 1) + ") " + pcInv.getItem(InvNum));
             AddUIElement(4, "2(" + (InvNum + 2) + ") " + pcInv.getItem(InvNum + 1));

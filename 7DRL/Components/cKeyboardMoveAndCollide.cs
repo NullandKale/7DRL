@@ -20,7 +20,8 @@ namespace _7DRL.Components
                 int moveX = 0;
                 int moveY = 0;
 
-                if(Game.input.isKeyHeld(OpenTK.Input.Key.ShiftLeft))
+                if(Game.input.isKeyHeld(OpenTK.Input.Key.ShiftLeft) && Game.g.pcStats.currentStamina > 0
+                    && !Game.g.pcStats.outOfStam)
                 {
                     if (Game.input.isKeyHeld(OpenTK.Input.Key.A))
                     {
@@ -44,6 +45,11 @@ namespace _7DRL.Components
                     {
                         moveY++;
                         Game.doTick = true;
+                    }
+
+                    if (moveX != 0 || moveY != 0)
+                    {
+                        Game.g.pcStats.currentStamina -= 5;
                     }
                 }
                 else
