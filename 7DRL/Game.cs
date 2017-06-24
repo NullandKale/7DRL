@@ -393,22 +393,27 @@ namespace _7DRL
                 pcInv = new InventoryManager(5);
                 player.texture = '@';
                 player.tag = "Player";
+                Utils.Point p = Utils.Point.getRandomPointInWorld();
+                player.pos.xPos = p.x;
+                player.pos.yPos = p.y;
                 player.active = true;
                 player.AddComponent(new Components.cKeyboardMoveAndCollide());
                 player.AddComponent(new Components.cCameraFollow(this));
                 player.AddComponent(pcStats);
                 onUpdate.Add(player.update);
             }
-
-            if(resetWorldUp)
-            {
-                player.pos.xPos = stairsDown.pos.xPos;
-                player.pos.yPos = stairsDown.pos.yPos;
-            }
             else
             {
-                player.pos.xPos = stairsUp.pos.xPos;
-                player.pos.yPos = stairsUp.pos.yPos;
+                if (resetWorldUp)
+                {
+                    player.pos.xPos = stairsDown.pos.xPos;
+                    player.pos.yPos = stairsDown.pos.yPos;
+                }
+                else
+                {
+                    player.pos.xPos = stairsUp.pos.xPos;
+                    player.pos.yPos = stairsUp.pos.yPos;
+                }
             }
 
             pcInv.RegenLoot();
@@ -418,75 +423,71 @@ namespace _7DRL
 
         private void InitializeEnemies(bool reset)
         {
-            if (!reset)
+            if (reset)
             {
-                enemy = new Entities.drawable[enemyCount];
-
-                for (int i = 0; i < enemyCount; i++)
+                for (int i = 0; i < enemyCount - 1; i++)
                 {
-                    enemy[i] = new Entities.drawable();
-                    Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
-                    enemy[i].pos.xPos = enemyPos.x;
-                    enemy[i].pos.yPos = enemyPos.y;
-
-                    var r = rng.NextDouble();
-                    if (r < 0.25)
+                    if (onUpdate.Contains(enemy[i].update))
                     {
-                        r = rng.NextDouble();
-
-                        if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
-                        {
-                            enemy[i].texture = 'e';
-                            enemy[i].tag = "Enemy";
-                            enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5));
-                            onUpdate.Add(enemy[i].update);
-                        }
-                        else
-                        {
-                            enemy[i].texture = 'E';
-                            enemy[i].tag = "Enemy";
-                            enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5));
-                            onUpdate.Add(enemy[i].update);
-                        }
-                    }
-                    else
-                    {
-                        r = rng.NextDouble();
-
-                        if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
-                        {
-                            enemy[i].texture = 's';
-                            enemy[i].tag = "Enemy";
-                            enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                20 + (pcStats.level * 1), 3 + (pcStats.level), 1, 6 + (pcStats.level / 10), 2.5));
-                            onUpdate.Add(enemy[i].update);
-                        }
-                        else
-                        {
-                            enemy[i].texture = 'S';
-                            enemy[i].tag = "Enemy";
-                            enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                40 + (pcStats.level * 5), 6 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 3.5));
-                            onUpdate.Add(enemy[i].update);
-                        }
-
+                        onUpdate.Remove(enemy[i].update);
                     }
                 }
             }
-            else
+            enemy = new Entities.drawable[enemyCount];
+
+            for (int i = 0; i < enemyCount; i++)
             {
-                for (int i = 0; i < enemyCount; i++)
+                enemy[i] = new Entities.drawable();
+                Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
+                enemy[i].pos.xPos = enemyPos.x;
+                enemy[i].pos.yPos = enemyPos.y;
+
+                var r = rng.NextDouble();
+                if (r < 0.25)
                 {
-                    Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
-                    enemy[i].pos.xPos = enemyPos.x;
-                    enemy[i].pos.yPos = enemyPos.y;
-                    enemy[i].active = true;
+                    r = rng.NextDouble();
+
+                    if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
+                    {
+                        enemy[i].texture = 'e';
+                        enemy[i].tag = "Enemy";
+                        enemy[i].active = true;
+                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                            40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5, 0.05));
+                        onUpdate.Add(enemy[i].update);
+                    }
+                    else
+                    {
+                        enemy[i].texture = 'E';
+                        enemy[i].tag = "Enemy";
+                        enemy[i].active = true;
+                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                            75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5, 0.10));
+                        onUpdate.Add(enemy[i].update);
+                    }
+                }
+                else
+                {
+                    r = rng.NextDouble();
+
+                    if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
+                    {
+                        enemy[i].texture = 's';
+                        enemy[i].tag = "Enemy";
+                        enemy[i].active = true;
+                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                            20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3, 0.05));
+                        onUpdate.Add(enemy[i].update);
+                    }
+                    else
+                    {
+                        enemy[i].texture = 'S';
+                        enemy[i].tag = "Enemy";
+                        enemy[i].active = true;
+                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                            40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5, 0.10));
+                        onUpdate.Add(enemy[i].update);
+                    }
                 }
             }
         }

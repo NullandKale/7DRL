@@ -23,12 +23,17 @@ namespace _7DRL.Components
         public int detectRange;
         public double attackRange;
         private int xpAmount;
+        private double lootChance;
 
+<<<<<<< HEAD
         public cEnemyAI()
         {   
         }
 
         public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range, int detectRange, double attackRange)
+=======
+        public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range, int detectRange, double attackRange, double lootChance)
+>>>>>>> 20aba3e65b107dce849bf003374254a1a5b7cbfc
         {
             player = pc;
             playerStats = pcStats;
@@ -38,6 +43,7 @@ namespace _7DRL.Components
             this.detectRange = detectRange;
             this.attackRange = attackRange;
             damage = attack;
+            this.lootChance = lootChance;
             xpAmount = (health + attack + ((int)attackRange * 3)) / 5;
         }
 
@@ -109,6 +115,10 @@ namespace _7DRL.Components
         {
             if(health - amount <= 0)
             {
+                if(Game.g.rng.NextDouble() < lootChance)
+                {
+                    Game.g.pcInv.SpawnLoot(d.pos.xPos, d.pos.yPos);
+                }
                 d.setPos(-1, -1);
                 d.active = false;
                 playerStats.GainXP(xpAmount);
