@@ -79,8 +79,8 @@ namespace _7DRL
 
             Timer updateTimer = new Timer(updateTime);
 
-            updateTimer.Elapsed += game.update;
-            updateTimer.Start();
+            //updateTimer.Elapsed += game.update;
+            //updateTimer.Start();
 
             while (game.running)
             {
@@ -89,6 +89,7 @@ namespace _7DRL
                     updateTimer.Stop();
                     //game.running = false;
                 }
+                game.update(null, null);
             }
         }
     }
