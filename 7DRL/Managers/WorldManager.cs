@@ -257,14 +257,13 @@
                 int connectedRoom = Game.g.rng.Next(0, rooms.Count);
                 while (badConnection)
                 {
-                    if (i != connectedRoom)
+                    double dist = Util.dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[connectedRoom].roomRect.X, rooms[connectedRoom].roomRect.Y);
+
+                    if (i != connectedRoom && dist < worldSize / 4.0f)
                     {
-                        double dist = Util.dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[connectedRoom].roomRect.X, rooms[connectedRoom].roomRect.Y);
-                        if(dist < worldSize / 4.0f)
-                        {
-                            badConnection = false;
-                        }
+                        badConnection = false;
                     }
+
                     connectedRoom = Game.g.rng.Next(0, rooms.Count);
                 }
 
