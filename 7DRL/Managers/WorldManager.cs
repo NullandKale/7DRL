@@ -192,7 +192,7 @@
 
             cellmap = drawRooms(rooms, cellmap);
 
-            cellmap = connectRooms(rooms, cellmap, 3);
+            cellmap = connectRooms(rooms, cellmap, 3, worldSize);
 
             cellmap = generateBorders(cellmap, worldSize);
 
@@ -249,14 +249,22 @@
             return cellmap;
         }
 
-        public static Tile[,] connectRooms(List<Room> rooms, Tile[,] cellmap, int hallWidth)
+        public static Tile[,] connectRooms(List<Room> rooms, Tile[,] cellmap, int hallWidth, int worldSize)
         {
             for(int i = 0; i < rooms.Count; i++)
             {
+                bool badConnection = true;
                 int connectedRoom = Game.g.rng.Next(0, rooms.Count);
-
-                if(i == connectedRoom)
+                while (badConnection)
                 {
+                    if (i != connectedRoom)
+                    {
+                        double dist = Util.dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[connectedRoom].roomRect.X, rooms[connectedRoom].roomRect.Y);
+                        if(dist < worldSize / 4.0f)
+                        {
+                            badConnection = false;
+                        }
+                    }
                     connectedRoom = Game.g.rng.Next(0, rooms.Count);
                 }
 

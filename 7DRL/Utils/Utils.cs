@@ -13,5 +13,13 @@ namespace _7DRL
             var v = Enum.GetValues(typeof(T));
             return (T)v.GetValue(Game.g.rng.Next(v.Length));
         }
+
+        public static double dist(int x1, int y1, int x2, int y2)
+        {
+            double x = Math.Pow(Math.Abs(x1 - x2), 2);
+            double y = Math.Pow(Math.Abs(y1 - y2), 2);
+
+            return Math.Sqrt(x + y);
+        }
     }
 }
