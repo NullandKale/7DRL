@@ -12,12 +12,15 @@ namespace _7DRL.Managers
         public Weapon equipedWeapon;
         public Armor equipedArmor;
 
-        public Utils.Point[] lootItems;
+        public List<Utils.Point> lootItems;
+        private int lootAmount;
 
         public InventoryManager(int lootAmount)
         {
             playerInv = new Inventory();
-            lootItems = new Utils.Point[lootAmount];
+
+            lootItems = new List<Utils.Point>();
+            this.lootAmount = lootAmount;
 
             RegenLoot();
             Game.g.onUpdate.Add(Update);
@@ -30,7 +33,7 @@ namespace _7DRL.Managers
 
         public void Draw()
         {
-            for (int i = 0; i < lootItems.Length; i++)
+            for (int i = 0; i < lootItems.Count; i++)
             {
                 if(lootItems[i].x != -10)
                 {
@@ -40,9 +43,15 @@ namespace _7DRL.Managers
             }
         }
 
+        public void SpawnLoot(int xPos, int yPos)
+        {
+            lootItems.Add(new Utils.Point(xPos, yPos));
+        }
+
         public void RegenLoot()
         {
-            for (int i = 0; i < lootItems.Length; i++)
+            lootItems.Clear();
+            for (int i = 0; i < lootAmount; i++)
             {
                 lootItems[i] = Utils.Point.getRandomPointInWorld();
             }
@@ -368,7 +377,18 @@ namespace _7DRL.Managers
 
         public Potion(PotionType p, int level)
         {
-
+            if(p == PotionType.Healing)
+            {
+                HealthIncrease += 100;
+            }
+            else if(p == PotionType.Mana)
+            {
+                ManaIncrease += 100;
+            }
+            else if (p == PotionType.Vigor)
+            {
+                StaminaIncrease += 100;
+            }
         }
 
         public override void OnEquip()
