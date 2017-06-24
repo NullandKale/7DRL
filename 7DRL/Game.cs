@@ -501,7 +501,7 @@ namespace _7DRL
                 stairsUp.texture = '>';
                 stairsUp.tag = "Stairs";
                 stairsUp.active = true;
-                stairsUp.AddComponent(new Components.cStair(player, true));
+                stairsUp.AddComponent(new Components.cStair(true));
                 onUpdate.Add(stairsUp.update);
 
                 stairsDown = new Entities.drawable();
@@ -511,7 +511,7 @@ namespace _7DRL
                 stairsDown.texture = '<';
                 stairsDown.tag = "Stairs";
                 stairsDown.active = true;
-                stairsDown.AddComponent(new Components.cStair(player, false));
+                stairsDown.AddComponent(new Components.cStair(false));
                 onUpdate.Add(stairsDown.update);
             }
             else
