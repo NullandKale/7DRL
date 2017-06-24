@@ -423,7 +423,7 @@ namespace _7DRL
                     var r = rng.NextDouble();
                     if (r < 0.25)
                     {
-                        var r = rng.NextDouble();
+                        r = rng.NextDouble();
 
                         if (r < 0.6)
                         {
@@ -444,7 +444,7 @@ namespace _7DRL
                     }
                     else
                     {
-                        var r = rng.NextDouble();
+                        r = rng.NextDouble();
 
                         if (r < 0.6)
                         {
