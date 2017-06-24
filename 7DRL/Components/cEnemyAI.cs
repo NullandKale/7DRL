@@ -24,16 +24,12 @@ namespace _7DRL.Components
         public double attackRange;
         private int xpAmount;
         private double lootChance;
-
-<<<<<<< HEAD
+        
         public cEnemyAI()
         {   
         }
 
-        public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range, int detectRange, double attackRange)
-=======
         public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range, int detectRange, double attackRange, double lootChance)
->>>>>>> 20aba3e65b107dce849bf003374254a1a5b7cbfc
         {
             player = pc;
             playerStats = pcStats;
