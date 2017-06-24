@@ -53,7 +53,7 @@ namespace _7DRL.Managers
             lootItems.Clear();
             for (int i = 0; i < lootAmount; i++)
             {
-                lootItems[i] = Utils.Point.getRandomPointInWorld();
+                lootItems.Add(Utils.Point.getRandomPointInWorld());
             }
         }
 
@@ -71,7 +71,7 @@ namespace _7DRL.Managers
 
         public void AddLootItem(int level, int lootPosX, int lootPosY)
         {
-            for (int i = 0; i < lootItems.Length; i++)
+            for (int i = 0; i < lootItems.Count; i++)
             {
                 if(lootItems[i].x == lootPosX && lootItems[i].y == lootPosY)
                 {

@@ -422,79 +422,74 @@ namespace _7DRL
 
         private void InitializeEnemies(bool reset)
         {
-            if (!reset)
+            if(reset)
             {
-                enemy = new Entities.drawable[enemyCount];
-
-                for (int i = 0; i < enemyCount; i++)
+                for (int i = 0; i < enemyCount - 1; i++)
                 {
-                    enemy[i] = new Entities.drawable();
-                    Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
-                    enemy[i].pos.xPos = enemyPos.x;
-                    enemy[i].pos.yPos = enemyPos.y;
-
-                    var r = rng.NextDouble();
-                    if (r < 0.25)
+                    if (onUpdate.Contains(enemy[i].update))
                     {
-                        r = rng.NextDouble();
+                        onUpdate.Remove(enemy[i].update);
+                    }
+                }
+            }
+            enemy = new Entities.drawable[enemyCount];
 
-                        if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
-                        {
-                            enemy[i].texture = 'e';
-                            enemy[i].tag = "Enemy";
-                            enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5));
-                            onUpdate.Add(enemy[i].update);
-                        }
-                        else
-                        {
-                            enemy[i].texture = 'E';
-                            enemy[i].tag = "Enemy";
-                            enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5));
-                            onUpdate.Add(enemy[i].update);
-                        }
+            for (int i = 0; i < enemyCount; i++)
+            {
+                enemy[i] = new Entities.drawable();
+                Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
+                enemy[i].pos.xPos = enemyPos.x;
+                enemy[i].pos.yPos = enemyPos.y;
+
+                var r = rng.NextDouble();
+                if (r < 0.25)
+                {
+                    r = rng.NextDouble();
+
+                    if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
+                    {
+                        enemy[i].texture = 'e';
+                        enemy[i].tag = "Enemy";
+                        enemy[i].active = true;
+                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                            40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5, 0.05));
+                        onUpdate.Add(enemy[i].update);
                     }
                     else
                     {
-                        r = rng.NextDouble();
+                        enemy[i].texture = 'E';
+                        enemy[i].tag = "Enemy";
+                        enemy[i].active = true;
+                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                            75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5, 0.10));
+                        onUpdate.Add(enemy[i].update);
+                    }
+                }
+                else
+                {
+                    r = rng.NextDouble();
 
-                        if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
-                        {
-                            enemy[i].texture = 's';
-                            enemy[i].tag = "Enemy";
-                            enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3));
-                            onUpdate.Add(enemy[i].update);
-                        }
-                        else
-                        {
-                            enemy[i].texture = 'S';
-                            enemy[i].tag = "Enemy";
-                            enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
-                                40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5));
-                            onUpdate.Add(enemy[i].update);
-                        }
-
+                    if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
+                    {
+                        enemy[i].texture = 's';
+                        enemy[i].tag = "Enemy";
+                        enemy[i].active = true;
+                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                            20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3, 0.05));
+                        onUpdate.Add(enemy[i].update);
+                    }
+                    else
+                    {
+                        enemy[i].texture = 'S';
+                        enemy[i].tag = "Enemy";
+                        enemy[i].active = true;
+                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                            40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5, 0.10));
+                        onUpdate.Add(enemy[i].update);
                     }
                 }
             }
-            else
-            {
-                for (int i = 0; i < enemyCount; i++)
-                {
-                    Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
-                    enemy[i].pos.xPos = enemyPos.x;
-                    enemy[i].pos.yPos = enemyPos.y;
-                    enemy[i].active = true;
-                }
-            }
         }
-
         private void InitializeStairs(bool reset)
         {
             if (!reset)
