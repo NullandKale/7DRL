@@ -71,6 +71,9 @@ namespace _7DRL.Components
         {
             if (Point.dist(d.pos, player.pos) < attackRange)
             {
+
+                playerStats.inCombat = true;
+
                 int attack = damage + Game.g.rng.Next(-range, range);
 
                 int whoseFirst = Game.g.rng.Next(0, 21);

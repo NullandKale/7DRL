@@ -356,6 +356,28 @@ namespace _7DRL.Managers
         }
     }
 
+    public class Potion : Item
+    {
+        int HealthIncrease;
+        int StaminaIncrease;
+        int ManaIncrease;
+
+        public Potion(PotionType p, int level)
+        {
+
+        }
+
+        public override void OnEquip()
+        {
+            
+        }
+
+        public override void OnUnequip()
+        {
+            
+        }
+    }
+
     public class Armor : Item
     {
         public int damageReduct;
@@ -449,7 +471,14 @@ namespace _7DRL.Managers
         strength,
         speed,
         poison,
-        hardening
+        hardening,
+    }
+
+    public enum PotionType
+    {
+        Healing,
+        Vigor,
+        Mana,
     }
 
     public enum ItemType
@@ -457,6 +486,7 @@ namespace _7DRL.Managers
         Gold,
         Weapon,
         Armor,
+        Potion,
         //Ring,
         //Amulet,
         //Ingredient

@@ -29,6 +29,7 @@ namespace _7DRL.Components
         public int currentXP;
 
         public int healRate;
+        public bool inCombat;
 
         public float carryWeight;
         public bool isEncumbered;
@@ -107,9 +108,16 @@ namespace _7DRL.Components
 
         private void PassiveHeal()
         {
-            if(((float)currentHealth / (float)maxHealth) < .40f)
+            if (!inCombat)
             {
-                Heal(healRate);
+                if (((float)currentHealth / (float)maxHealth) < .40f)
+                {
+                    Heal(healRate);
+                }
+            }
+            else
+            {
+                inCombat = false;
             }
         }
 
