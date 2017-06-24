@@ -74,7 +74,6 @@ namespace _7DRL.Components
                                 int yPos = d.pos.yPos + y;
                                 if (Game.g.world[xPos, yPos].Visual == 'L')
                                 {
-                                    Game.g.world[xPos, yPos].Visual = ' ';
                                     Game.g.pcInv.AddLootItem(Game.g.pcStats.level, xPos, yPos);
                                 }
                             }

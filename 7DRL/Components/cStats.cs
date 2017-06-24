@@ -82,7 +82,7 @@ namespace _7DRL.Components
                 PassiveHeal();
             }
             
-            Game.g.AddUIElement(0, "Level: " + level + " XP: " + currentXP + "/" + NeededXP);
+            Game.g.AddUIElement(0, "Level: " + level + " XP: " + currentXP + "/" + NeededXP + " Gold: " + Game.g.pcInv.playerInv.currentGoldAmount);
             Game.g.AddUIElement(1, "H: " + currentHealth + "/" + maxHealth + " M: " + currentMana + "/" + maxMana + " S: " + currentStamina + "/" + maxStamina);
         }
 
