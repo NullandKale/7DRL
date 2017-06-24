@@ -392,22 +392,27 @@ namespace _7DRL
                 pcInv = new InventoryManager(5);
                 player.texture = '@';
                 player.tag = "Player";
+                Utils.Point p = Utils.Point.getRandomPointInWorld();
+                player.pos.xPos = p.x;
+                player.pos.yPos = p.y;
                 player.active = true;
                 player.AddComponent(new Components.cKeyboardMoveAndCollide());
                 player.AddComponent(new Components.cCameraFollow(this));
                 player.AddComponent(pcStats);
                 onUpdate.Add(player.update);
             }
-
-            if(resetWorldUp)
-            {
-                player.pos.xPos = stairsDown.pos.xPos;
-                player.pos.yPos = stairsDown.pos.yPos;
-            }
             else
             {
-                player.pos.xPos = stairsUp.pos.xPos;
-                player.pos.yPos = stairsUp.pos.yPos;
+                if (resetWorldUp)
+                {
+                    player.pos.xPos = stairsDown.pos.xPos;
+                    player.pos.yPos = stairsDown.pos.yPos;
+                }
+                else
+                {
+                    player.pos.xPos = stairsUp.pos.xPos;
+                    player.pos.yPos = stairsUp.pos.yPos;
+                }
             }
 
             pcInv.RegenLoot();

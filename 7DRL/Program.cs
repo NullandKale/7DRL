@@ -89,7 +89,10 @@ namespace _7DRL
                     updateTimer.Stop();
                     //game.running = false;
                 }
-                game.update(null, null);
+                else
+                {
+                    game.update(null, null);
+                }
             }
         }
     }

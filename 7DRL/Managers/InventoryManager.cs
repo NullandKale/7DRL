@@ -254,7 +254,7 @@ namespace _7DRL.Managers
 
         public override string ToString()
         {
-            return (name + " " + weight + "lb " + value + " g");
+            return (name + " " + weight + "lb");
         }
 
         public abstract void OnEquip();
@@ -282,9 +282,13 @@ namespace _7DRL.Managers
             {
                 name = w.ToString();
             }
-            else
+            else if(level < 2)
             {
                 name = w.ToString() + " of " + e.ToString();
+            }
+            else
+            {
+                name = w.ToString() + " of " + e.ToString() + " Lv." + level;
             }
 
             maxStackSize = 1;
