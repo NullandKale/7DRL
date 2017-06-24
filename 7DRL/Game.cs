@@ -425,12 +425,13 @@ namespace _7DRL
                     {
                         r = rng.NextDouble();
 
-                        if (r < 0.6)
+                        if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
                         {
                             enemy[i].texture = 'e';
                             enemy[i].tag = "Enemy";
                             enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 40, 10, 5, 6, 1.5));
+                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
+                                40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5));
                             onUpdate.Add(enemy[i].update);
                         }
                         else
@@ -438,7 +439,8 @@ namespace _7DRL
                             enemy[i].texture = 'E';
                             enemy[i].tag = "Enemy";
                             enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 75, 20, 10, 4, 1.5));
+                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
+                                75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5));
                             onUpdate.Add(enemy[i].update);
                         }
                     }
@@ -446,12 +448,13 @@ namespace _7DRL
                     {
                         r = rng.NextDouble();
 
-                        if (r < 0.6)
+                        if (r < 0.6 - Math.Max(-0.6, pcStats.level * -0.01))
                         {
                             enemy[i].texture = 's';
                             enemy[i].tag = "Enemy";
                             enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 20, 4, 1, 6, 3));
+                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
+                                20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3));
                             onUpdate.Add(enemy[i].update);
                         }
                         else
@@ -459,7 +462,8 @@ namespace _7DRL
                             enemy[i].texture = 'S';
                             enemy[i].tag = "Enemy";
                             enemy[i].active = true;
-                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 40, 8, 1, 4, 4.5));
+                            enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats, 
+                                40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5));
                             onUpdate.Add(enemy[i].update);
                         }
 
