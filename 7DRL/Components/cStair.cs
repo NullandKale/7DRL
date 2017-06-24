@@ -22,10 +22,13 @@ namespace _7DRL.Components
 
         public void Run(drawable d)
         {
-            if (Point.dist(d.pos, player.pos) < 1.5)
+            if(Game.input.isKeyHeld(OpenTK.Input.Key.Space))
             {
-                Game.g.resetWorld = true;
-                Game.g.resetWorldUp = up;
+                if (Point.dist(d.pos, player.pos) < 1.5)
+                {
+                    Game.g.resetWorld = true;
+                    Game.g.resetWorldUp = up;
+                }
             }
         }
     }

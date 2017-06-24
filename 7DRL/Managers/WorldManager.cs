@@ -174,9 +174,9 @@
 
         public static Tile[,] GenerateRooms(Tile[,] cellmap, int worldSize)
         {
-            int numberRooms = 20;
+            int numberRooms = 30;
             int maxRoomSize = 30;
-            int minRoomSize = 5;
+            int minRoomSize = 10;
 
             cellmap = doSimulationStep(cellmap, worldSize);
             cellmap = clearMap(cellmap, worldSize);
