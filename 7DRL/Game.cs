@@ -473,12 +473,12 @@ namespace _7DRL
 
         private void DrawInventory()
         {
-            AddUIElement(2, "-------------< inventory >--------------");
-            AddUIElement(3, "1(" + InvNum + ")." + pcInv.getItem(InvNum));
-            AddUIElement(4, "2(" + (InvNum + 1) + ")." + pcInv.getItem(InvNum + 1));
-            AddUIElement(5, "3(" + (InvNum + 2) + ")." + pcInv.getItem(InvNum + 2));
-            AddUIElement(6, "4(" + (InvNum + 3) + ")." + pcInv.getItem(InvNum + 3));
-            AddUIElement(7, "5(" + (InvNum + 4) + ")." + pcInv.getItem(InvNum + 4));
+            AddUIElement(2, "-------------< Inventory >--------------");
+            AddUIElement(3, "1(" + InvNum + ") " + pcInv.getItem(InvNum));
+            AddUIElement(4, "2(" + (InvNum + 1) + ") " + pcInv.getItem(InvNum + 1));
+            AddUIElement(5, "3(" + (InvNum + 2) + ") " + pcInv.getItem(InvNum + 2));
+            AddUIElement(6, "4(" + (InvNum + 3) + ") " + pcInv.getItem(InvNum + 3));
+            AddUIElement(7, "5(" + (InvNum + 4) + ") " + pcInv.getItem(InvNum + 4));
             if (input.isKeyRising(OpenTK.Input.Key.Period))
             {
                 InvNum++;
@@ -491,23 +491,23 @@ namespace _7DRL
                     InvNum--;
                 }
             }
-            AddUIElement(8, "-------------< equipment >--------------");
+            AddUIElement(8, "-------------< Equipment >--------------");
             if (pcInv.equipedWeapon != null)
             {
-                AddUIElement(9, "Weapon:" + pcInv.equipedWeapon.ToString());
+                AddUIElement(9, "W:" + pcInv.equipedWeapon.ToString());
             }
             else
             {
-                AddUIElement(9, "Weapon: ");
+                AddUIElement(9, "W: ");
             }
 
             if (pcInv.equipedArmor != null)
             {
-                AddUIElement(10, "Armor:" + pcInv.equipedArmor.ToString());
+                AddUIElement(10, "A:" + pcInv.equipedArmor.ToString());
             }
             else
             {
-                AddUIElement(10, "Armor: ");
+                AddUIElement(10, "A: ");
             }
 
             UseItem(OpenTK.Input.Key.Number1, InvNum);
