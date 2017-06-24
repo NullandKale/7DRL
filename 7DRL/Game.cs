@@ -379,7 +379,7 @@ namespace _7DRL
             {
                 player = new Entities.drawable();
                 pcStats = new Components.cStats(false, 100);
-                pcInv = new InventoryManager();
+                pcInv = new InventoryManager(10);
                 pcInv.playerInv.addItem(Weapon.GenerateWeapon(1));
                 player.texture = '@';
                 player.tag = "Player";

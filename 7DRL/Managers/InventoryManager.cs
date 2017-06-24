@@ -12,9 +12,40 @@ namespace _7DRL.Managers
         public Weapon equipedWeapon;
         public Armor equipedArmor;
 
-        public InventoryManager()
+        public Utils.Point[] lootItems;
+
+        public InventoryManager(int lootAmount)
         {
             playerInv = new Inventory();
+            lootItems = new Utils.Point[lootAmount];
+
+            RegenLoot();
+            Game.g.onUpdate.Add(Update);
+        }
+
+        public void Update()
+        {
+            Draw();
+        }
+
+        public void Draw()
+        {
+            for (int i = 0; i < lootItems.Length; i++)
+            {
+                if(lootItems[i].x != -10)
+                {
+                    Game.g.world[lootItems[i].x, lootItems[i].y].Visual = 'L';
+                    Game.g.world[lootItems[i].x, lootItems[i].y].collideable = false;
+                }
+            }
+        }
+
+        public void RegenLoot()
+        {
+            for (int i = 0; i < lootItems.Length; i++)
+            {
+                lootItems[i] = Utils.Point.getRandomPointInWorld();
+            }
         }
 
         public string getItem(int num)
@@ -27,6 +58,36 @@ namespace _7DRL.Managers
             {
                 return string.Empty;
             }
+        }
+
+        public void AddLootItem(int level, int lootPosX, int lootPosY)
+        {
+            for (int i = 0; i < lootItems.Length; i++)
+            {
+                if(lootItems[i].x == lootPosX && lootItems[i].y == lootPosY)
+                {
+                    lootItems[i].x = -10;
+                    lootItems[i].y = -10;
+                }
+            }
+
+
+            ItemType temp = Util.RandomEnumValue<ItemType>();
+
+            if(temp == ItemType.Gold)
+            {
+                int goldAmount = Game.g.rng.Next(10, 10 + (int)(level * 3.653));
+                playerInv.currentGoldAmount += goldAmount;
+            }
+            else if(temp == ItemType.Weapon)
+            {
+                playerInv.addItem(Weapon.GenerateWeapon(level));
+            }
+            else if(temp == ItemType.Armor)
+            {
+                playerInv.addItem(Armor.GenerateArmor(level));
+            }
+            //Add for new ItemTypes
         }
 
         public bool EquipWeapon(int itemLoc)
@@ -378,11 +439,12 @@ namespace _7DRL.Managers
 
     public enum ItemType
     {
+        Gold,
         Weapon,
         Armor,
-        Ring,
-        Amulet,
-        Ingredient
+        //Ring,
+        //Amulet,
+        //Ingredient
     }
 
     public enum WeaponType
