@@ -73,6 +73,45 @@ namespace _7DRL.Managers
             }
         }
 
+        public void Buy(int level)
+        {
+            if(playerInv.currentGoldAmount >= 100)
+            {
+                playerInv.currentGoldAmount -= 100;
+
+                ItemType temp = Util.Choose(
+                            new ItemType[] { ItemType.Gold, ItemType.Weapon, ItemType.Armor, ItemType.Potion, ItemType.Ring, ItemType.Amulet, ItemType.Tome },
+                            new float[] { 0.0f, 0.15f, 0.15f, 0.3f, 0.15f, 0.15f, 0.10f }, Game.g.rng);
+
+                level = Util.Choose(new int[] { level, level + 1 }, new float[] { 0.95f, 0.05f }, Game.g.rng);
+
+                if (temp == ItemType.Weapon)
+                {
+                    playerInv.addItem(Weapon.GenerateWeapon(level));
+                }
+                else if (temp == ItemType.Armor)
+                {
+                    playerInv.addItem(Armor.GenerateArmor(level));
+                }
+                else if (temp == ItemType.Ring)
+                {
+                    playerInv.addItem(Ring.GenerateRing(level));
+                }
+                else if (temp == ItemType.Amulet)
+                {
+                    playerInv.addItem(Amulet.GenerateAmulet(level));
+                }
+                else if (temp == ItemType.Potion)
+                {
+                    playerInv.addItem(Potion.GeneratePotion(level));
+                }
+                else if (temp == ItemType.Tome)
+                {
+                    playerInv.addItem(Tome.GenerateTome(level));
+                }
+            }
+        }
+
         public void AddLootItem(int level, int lootPosX, int lootPosY)
         {
             for (int i = 0; i < lootItems.Count; i++)
@@ -210,6 +249,15 @@ namespace _7DRL.Managers
             else
             {
                 return false;
+            }
+        }
+
+        public void Sell(int itemLoc)
+        {
+            if(itemLoc < playerInv.items.Count)
+            {
+                playerInv.currentGoldAmount += playerInv.items[itemLoc].value;
+                playerInv.removeItem(itemLoc, 1);
             }
         }
 
