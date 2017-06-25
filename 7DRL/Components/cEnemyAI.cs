@@ -47,7 +47,7 @@ namespace _7DRL.Components
         {
             if (Point.dist(player.pos, d.pos) > detectRange)
             {
-                if(targetPos == null || getNewTargetPos)
+                if(targetPos == null || getNewTargetPos || EnemiesInRange(d))
                 {
                     targetPos = GenerateTarget();
                 }
@@ -123,6 +123,28 @@ namespace _7DRL.Components
             {
                 health -= amount;
             }
+        }
+
+        private bool EnemiesInRange(drawable d)
+        {
+            for(int i = -4; i <= 4; i++)
+            {
+                for (int j = -4; j <= 4; j++)
+                {
+                    if(Game.isInWorld(d.pos.xPos + i, d.pos.yPos + j))
+                    {
+                        if (Game.g.world[d.pos.xPos + i, d.pos.yPos + j].Visual == 'e' ||
+                            Game.g.world[d.pos.xPos + i, d.pos.yPos + j].Visual == 'E' ||
+                            Game.g.world[d.pos.xPos + i, d.pos.yPos + j].Visual == 's' ||
+                            Game.g.world[d.pos.xPos + i, d.pos.yPos + j].Visual == 'S')
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void MoveTowards(Point target, drawable d)

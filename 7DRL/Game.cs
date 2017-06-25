@@ -50,7 +50,7 @@ namespace _7DRL
         public Entities.drawable stairsDown;
 
         private Entities.drawable[] enemy;
-        private int enemyCount = 50;
+        private int enemyCount;
         
         private Dictionary<int, string> guiItem = new Dictionary<int, string>();
 
@@ -69,6 +69,8 @@ namespace _7DRL
             rng = new Random(seed);
 
             input = new nullEngine.Managers.InputManager();
+
+            enemyCount = 35;
 
             worldSize = 100;
             screenX = 119;

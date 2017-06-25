@@ -39,7 +39,7 @@ namespace _7DRL.Managers
             {
                 if(lootItems[i].x != -10)
                 {
-                    Game.g.world[lootItems[i].x, lootItems[i].y].color = ConsoleColor.Yellow;
+                    Game.g.world[lootItems[i].x, lootItems[i].y].color = ConsoleColor.DarkYellow;
                     Game.g.world[lootItems[i].x, lootItems[i].y].Visual = 'L';
                     Game.g.world[lootItems[i].x, lootItems[i].y].collideable = false;
                 }
