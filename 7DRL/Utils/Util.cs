@@ -87,7 +87,7 @@ namespace _7DRL
                             badpoints.Add(new Point(a.x, a.y - 1));
                         }
 
-                        if (!points.Contains(new Point(a.x + 1, a.y)) && map[a.x, a.y + 1].Visual == ' '
+                        if (!points.Contains(new Point(a.x, a.y + 1)) && map[a.x, a.y + 1].Visual == ' '
                             && !pixels.Contains(new Point(a.x, a.y + 1)) && !badpoints.Contains(new Point(a.x, a.y + 1)))
                         {
                             pixels.Push(new Point(a.x, a.y + 1));
