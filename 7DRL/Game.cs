@@ -42,7 +42,6 @@ namespace _7DRL
         public List<string> CombatLog = new List<string>();
 
         private Tile[,] lastFrame;
-        private ConsoleColor lastColor;
 
         public Entities.drawable player;
         public Components.cStats pcStats;
@@ -53,10 +52,20 @@ namespace _7DRL
 
         private Entities.drawable[] enemy;
         private int enemyCount;
-        
+
+        private int floor;
+
+        private int Pstr;
+        private int Pdex;
+        private int Pcon;
+        private int Pintel;
+        private int Pwis;
+        private int Pcha;
+        public string PName;
+
         private Dictionary<int, string> guiItem = new Dictionary<int, string>();
 
-        public Game(int seed)
+        public Game(int seed, int Pstr, int Pdex, int Pcon, int Pintel, int Pwis, int Pcha, string playerName)
         {
             if (g == null)
             {
@@ -73,12 +82,21 @@ namespace _7DRL
             input = new nullEngine.Managers.InputManager();
 
             enemyCount = 35;
+            floor = 1;
 
             worldSize = 100;
             screenX = 119;
             screenY = 28;
 
             gameX = 79;
+
+            this.Pstr = Pstr;
+            this.Pdex = Pdex;
+            this.Pcon = Pcon;
+            this.Pintel = Pintel;
+            this.Pwis = Pwis;
+            this.Pcha = Pcha;
+            PName = playerName;
 
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
@@ -197,10 +215,12 @@ namespace _7DRL
                     if (resetWorldUp)
                     {
                         ResetWorld(seed + 1);
+                        floor++;
                     }
                     else
                     {
                         ResetWorld(seed - 1);
+                        floor--;
                     }
                     resetWorld = false;
                 }
@@ -398,7 +418,7 @@ namespace _7DRL
             if (!reset)
             {
                 player = new Entities.drawable();
-                pcStats = new cStats(false, 100);
+                pcStats = new cStats(Pstr, Pdex, Pcon, Pintel, Pwis, Pcha);
                 pcInv = new InventoryManager(5);
                 player.texture = '@';
                 player.color = ConsoleColor.Blue;
@@ -507,8 +527,9 @@ namespace _7DRL
         {
             if (!reset)
             {
+                Utils.Point stairPos;
                 stairsUp = new Entities.drawable();
-                Utils.Point stairPos = Utils.Point.getRandomPointInWorld();
+                stairPos = Utils.Point.getRandomPointInWorld();
                 stairsUp.pos.xPos = stairPos.x;
                 stairsUp.pos.yPos = stairPos.y;
                 stairsUp.texture = '>';
@@ -543,7 +564,7 @@ namespace _7DRL
 
         private void DrawInventory()
         {
-            AddUIElement(0, "Level: " + pcStats.level + " XP: " + pcStats.currentXP + "/" + pcStats.NeededXP + " Gold: " + pcInv.playerInv.currentGoldAmount);
+            AddUIElement(0, PName + " Lvl: " + pcStats.level + " XP: " + pcStats.currentXP + "/" + pcStats.NeededXP + " " + pcInv.playerInv.currentGoldAmount + "g Floor: " + floor);
             string str = "H: " + pcStats.currentHealth + "/" + pcStats.maxHealth + " M: " + pcStats.currentMana + "/" + pcStats.maxMana + " S: " + pcStats.currentStamina + "/" + pcStats.maxStamina;
             if (pcStats.outOfStam)
             {
