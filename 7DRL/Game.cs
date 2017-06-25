@@ -404,7 +404,6 @@ namespace _7DRL
                 princess.texture = 'P';
                 princess.color = ConsoleColor.Gray;
                 princess.tag = "Princess";
-                princess.active = true;
                 onUpdate.Add(princess.update);
             }
             if(floor % 10 == 0 && floor != 0)
@@ -418,6 +417,7 @@ namespace _7DRL
                 princess.pos.xPos = -1;
                 princess.pos.yPos = -1;
             }
+            princess.active = true;
         }
 
         private void InitializePlayer(bool reset)

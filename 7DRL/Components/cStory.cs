@@ -69,6 +69,7 @@ namespace _7DRL.Components
                                 {
                                     Game.g.LogCombat(endThoughts[k]);
                                 }
+                                Game.g.princess.active = false;
                             }
                         }
                     }
