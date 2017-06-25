@@ -70,21 +70,28 @@ namespace _7DRL
                             && !pixels.Contains(new Point(a.x - 1, a.y)) && !badpoints.Contains(new Point(a.x - 1, a.y)))
                         {
                             pixels.Push(new Point(a.x - 1, a.y));
+                            badpoints.Add(new Point(a.x - 1, a.y));
                         }
+
                         if (!points.Contains(new Point(a.x + 1, a.y)) && map[a.x + 1, a.y].Visual == ' '
                             && !pixels.Contains(new Point(a.x + 1, a.y)) && !badpoints.Contains(new Point(a.x + 1, a.y)))
                         {
                             pixels.Push(new Point(a.x + 1, a.y));
+                            badpoints.Add(new Point(a.x + 1, a.y));
                         }
+
                         if (!points.Contains(new Point(a.x, a.y - 1)) && map[a.x, a.y - 1].Visual == ' '
                             && !pixels.Contains(new Point(a.x, a.y - 1)) && !badpoints.Contains(new Point(a.x, a.y - 1)))
                         {
                             pixels.Push(new Point(a.x, a.y - 1));
+                            badpoints.Add(new Point(a.x, a.y - 1));
                         }
+
                         if (!points.Contains(new Point(a.x + 1, a.y)) && map[a.x, a.y + 1].Visual == ' '
                             && !pixels.Contains(new Point(a.x, a.y + 1)) && !badpoints.Contains(new Point(a.x, a.y + 1)))
                         {
                             pixels.Push(new Point(a.x, a.y + 1));
+                            badpoints.Add(new Point(a.x, a.y + 1));
                         }
                     }
                     else
@@ -92,7 +99,7 @@ namespace _7DRL
                         badpoints.Add(a);
                     }
                 }
-                Console.WriteLine("Generating Map " + pixels.Peek().x + ", " + pixels.Peek().y);
+                //Console.WriteLine("Generating Map " + pixels.Peek().x + ", " + pixels.Peek().y);
             }
 
             return points;

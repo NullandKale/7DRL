@@ -22,6 +22,26 @@ namespace _7DRL.Utils
             this.y = y;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Point)
+            {
+                Point p = (Point)obj;
+                if (p.x == x && p.y == y)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static double dist(Point p1, Point p2)
         {
             double x = Math.Pow(Math.Abs(p1.x - p2.x), 2);
@@ -63,10 +83,10 @@ namespace _7DRL.Utils
 
         public static Point getRandomDoorPoint(Point pos)
         {
-            Point p = getRandomPoint(Util.FloodFill(Game.g.world, pos, Game.g.worldSize));
+            Point p = getRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));
             if (!Managers.CollisionManager.CheckCollision(p.x, p.y))
             {
-                return getRandomPoint(Util.FloodFill(Game.g.world, pos, Game.g.worldSize));
+                return getRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));
             }
             else
             {
