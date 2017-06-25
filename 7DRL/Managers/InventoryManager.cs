@@ -13,6 +13,7 @@ namespace _7DRL.Managers
         public Armor equipedArmor;
         public Ring equipedRing;
         public Amulet equipedAmulet;
+        public Tome equipedTome;
 
         public List<Utils.Point> lootItems;
         private int lootAmount;
@@ -84,8 +85,8 @@ namespace _7DRL.Managers
             }
 
             ItemType temp = Util.Choose(
-                new ItemType[] { ItemType.Gold, ItemType.Weapon, ItemType.Armor, ItemType.Potion, ItemType.Ring, ItemType.Amulet },
-                new float[] { 0.2f, 0.15f, 0.15f, 0.2f, 0.15f, 0.15f }, Game.g.rng);
+                new ItemType[] { ItemType.Gold, ItemType.Weapon, ItemType.Armor, ItemType.Potion, ItemType.Ring, ItemType.Amulet, ItemType.Tome },
+                new float[] { 0.2f, 0.15f, 0.15f, 0.2f, 0.15f, 0.1f, 0.05f }, Game.g.rng);
 
             level = Util.Choose(new int[] { level, level + 1 }, new float[] { 0.95f, 0.05f }, Game.g.rng);
 
@@ -117,6 +118,10 @@ namespace _7DRL.Managers
             else if (temp == ItemType.Potion)
             {
                 playerInv.addItem(Potion.GeneratePotion(level));
+            }
+            else if (temp == ItemType.Tome)
+            {
+                playerInv.addItem(Tome.GenerateTome(level));
             }
             //Add for new ItemTypes
 
@@ -232,6 +237,43 @@ namespace _7DRL.Managers
             {
                 return false;
             }
+        }
+
+        public bool EquipTome(int itemLoc)
+        {
+            if (playerInv.items[itemLoc] is Tome)
+            {
+                if (equipedTome == null)
+                {
+                    equipedTome = (Tome)playerInv.items[itemLoc];
+                    playerInv.removeItem(itemLoc, 1);
+                    equipedTome.OnEquip();
+                }
+                else
+                {
+                    playerInv.addItem(equipedTome);
+                    equipedTome.OnUnequip();
+                    equipedTome = (Tome)playerInv.items[itemLoc];
+                    equipedTome.OnEquip();
+                    playerInv.removeItem(itemLoc, 1);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool UseTome()
+        {
+            if (equipedTome == null)
+            {
+                equipedTome.use();
+                return true;
+            }
+
+            return false;
         }
 
         public bool UsePotion(int itemLoc)
@@ -435,7 +477,11 @@ namespace _7DRL.Managers
 
         public override void OnUnequip()
         {
+        }
 
+        public static Tome GenerateTome(int level)
+        {
+            return new Tome(Util.RandomEnumValue<TomeEffect>(), level);
         }
     }
 
@@ -943,7 +989,8 @@ namespace _7DRL.Managers
         Armor,
         Potion,
         Ring,
-        Amulet
+        Amulet,
+        Tome
     }
 
     public enum WeaponType

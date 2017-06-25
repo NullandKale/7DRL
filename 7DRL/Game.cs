@@ -615,47 +615,61 @@ namespace _7DRL
                     InvNum--;
                 }
             }
-            AddUIElement(8, "-------------< Equipment >--------------");
+            AddUIElement(9, "-------------< Equipment >--------------");
             if (pcInv.equipedWeapon != null)
             {
-                AddUIElement(9, "W:" + pcInv.equipedWeapon.ToString());
+                AddUIElement(10, "W:" + pcInv.equipedWeapon.ToString());
             }
             else
             {
-                AddUIElement(9, "W: ");
+                AddUIElement(10, "W: ");
             }
 
             if (pcInv.equipedArmor != null)
             {
-                AddUIElement(10, "A:" + pcInv.equipedArmor.ToString());
+                AddUIElement(11, "A:" + pcInv.equipedArmor.ToString());
             }
             else
             {
-                AddUIElement(10, "A: ");
+                AddUIElement(11, "A: ");
             }
 
             if (pcInv.equipedRing != null)
             {
-                AddUIElement(11, "R:" + pcInv.equipedRing.ToString());
+                AddUIElement(12, "R:" + pcInv.equipedRing.ToString());
             }
             else
             {
-                AddUIElement(11, "R: ");
+                AddUIElement(12, "R: ");
             }
 
             if (pcInv.equipedAmulet != null)
             {
-                AddUIElement(12, "a:" + pcInv.equipedAmulet.ToString());
+                AddUIElement(13, "a:" + pcInv.equipedAmulet.ToString());
             }
             else
             {
-                AddUIElement(12, "a: ");
+                AddUIElement(13, "a: ");
             }
 
-            AddUIElement(13, "----------------< Log >-----------------");
-            for (var i = 0; i < 14; i++)
+            if (pcInv.equipedTome != null)
             {
-                AddUIElement(14 + i, CombatLog.Count > i ? CombatLog[i] : string.Empty);
+                AddUIElement(14, "T:" + pcInv.equipedTome.ToString());
+
+                if (input.isKeyFalling(OpenTK.Input.Key.E))
+                {
+                    pcInv.UseTome();
+                }
+            }
+            else
+            {
+                AddUIElement(14, "T: ");
+            }
+
+            AddUIElement(15, "----------------< Log >-----------------");
+            for (var i = 0; i < 12; i++)
+            {
+                AddUIElement(16 + i, CombatLog.Count > i ? CombatLog[i] : string.Empty);
             }
 
             UseItem(OpenTK.Input.Key.Number1, InvNum);
@@ -667,7 +681,7 @@ namespace _7DRL
 
         public void LogCombat(string combat)
         {
-            if (CombatLog.Count >= 14)
+            if (CombatLog.Count >= 12)
             {
                 CombatLog.RemoveAt(0);
             }
@@ -700,6 +714,10 @@ namespace _7DRL
                     else if (pcInv.playerInv.items[num] is Potion)
                     {
                         pcInv.UsePotion(num);
+                    }
+                    else if (pcInv.playerInv.items[num] is Tome)
+                    {
+                        pcInv.EquipTome(num);
                     }
                 }
             }
