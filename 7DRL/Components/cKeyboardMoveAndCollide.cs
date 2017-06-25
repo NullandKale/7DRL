@@ -133,9 +133,9 @@ namespace _7DRL.Components
                     d.setPosRelative(0, moveY);
                 }
 
-                frame++;
-                Console.SetCursorPosition(0, 29);
-                Console.Write("[" + d.pos.xPos + "," + d.pos.yPos + "] " + frame);
+                //frame++;
+                //Console.SetCursorPosition(0, 29);
+                //Console.Write("[" + d.pos.xPos + "," + d.pos.yPos + "] " + frame);
             }
         }
     }

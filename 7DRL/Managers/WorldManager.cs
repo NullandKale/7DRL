@@ -175,8 +175,8 @@
         public static Tile[,] GenerateRooms(Tile[,] cellmap, int worldSize)
         {
             int numberRooms = 30;
-            int maxRoomSize = 30;
-            int minRoomSize = 10;
+            int maxRoomSize = 25;
+            int minRoomSize = 5;
 
             cellmap = doSimulationStep(cellmap, worldSize);
             cellmap = clearMap(cellmap, worldSize);
@@ -251,28 +251,24 @@
 
         public static Tile[,] connectRooms(List<Room> rooms, Tile[,] cellmap, int hallWidth, int worldSize)
         {
-            for(int i = 0; i < rooms.Count; i++)
+            double distprecentage = 4.0;
+
+            for (int i = 0; i < rooms.Count; i++)
             {
-                bool badConnection = true;
-                int connectedRoom = Game.g.rng.Next(0, rooms.Count);
-                double distprecentage = 4.0;
-                while (badConnection)
+                for(int j = 0; j < rooms.Count; j++)
                 {
-                    double dist = Util.dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[connectedRoom].roomRect.X, rooms[connectedRoom].roomRect.Y);
+                    double dist = Util.dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[j].roomRect.X, rooms[j].roomRect.Y);
 
-                    if (i != connectedRoom && dist < worldSize / distprecentage)
+                    if (i != j && dist < worldSize / distprecentage)
                     {
-                        badConnection = false;
+                        rooms[i].connectedRoom = rooms[j];
+                        break;
                     }
-                    else
+                    else if(j == rooms.Count - 1)
                     {
-                        distprecentage -= 0.1;
+                        rooms[i].connectedRoom = rooms[j];
                     }
-
-                    connectedRoom = Game.g.rng.Next(0, rooms.Count);
                 }
-
-                rooms[i].connectedRoom = rooms[connectedRoom];
             }
 
             for (int i = 0; i < rooms.Count; i++)

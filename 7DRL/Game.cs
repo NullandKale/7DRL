@@ -69,7 +69,7 @@ namespace _7DRL
 
             input = new nullEngine.Managers.InputManager();
 
-            worldSize = 150;
+            worldSize = 100;
             screenX = 119;
             screenY = 28;
 
@@ -389,7 +389,7 @@ namespace _7DRL
             if (!reset)
             {
                 player = new Entities.drawable();
-                pcStats = new Components.cStats(false, 100);
+                pcStats = new cStats(false, 100);
                 pcInv = new InventoryManager(5);
                 player.texture = '@';
                 player.tag = "Player";
@@ -453,7 +453,7 @@ namespace _7DRL
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
                         enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
-                            40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5, 0.05));
+                            40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5, 0.10));
                         onUpdate.Add(enemy[i].update);
                     }
                     else
@@ -462,7 +462,7 @@ namespace _7DRL
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
                         enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
-                            75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5, 0.10));
+                            75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5, 0.25));
                         onUpdate.Add(enemy[i].update);
                     }
                 }
@@ -476,7 +476,7 @@ namespace _7DRL
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
                         enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
-                            20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3, 0.05));
+                            20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3, 0.10));
                         onUpdate.Add(enemy[i].update);
                     }
                     else
@@ -485,7 +485,7 @@ namespace _7DRL
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
                         enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
-                            40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5, 0.10));
+                            40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5, 0.25));
                         onUpdate.Add(enemy[i].update);
                     }
                 }
@@ -534,7 +534,7 @@ namespace _7DRL
             string str = "H: " + pcStats.currentHealth + "/" + pcStats.maxHealth + " M: " + pcStats.currentMana + "/" + pcStats.maxMana + " S: " + pcStats.currentStamina + "/" + pcStats.maxStamina;
             if (pcStats.outOfStam)
             {
-                str += " Out of Stam";
+                str += " tired";
             }
             AddUIElement(1, str);
             AddUIElement(2, "-------------< Inventory >--------------");
