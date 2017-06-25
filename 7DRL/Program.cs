@@ -386,6 +386,17 @@ namespace _7DRL
                                         Total -= amount;
                                     }
                                 }
+                                else if(selection == "GOD")
+                                {
+                                    str = 10;
+                                    dex = 10;
+                                    con = 10;
+                                    intel = 10;
+                                    wis = 10;
+                                    cha = 10;
+
+                                    cont = false;
+                                }
                             }
                         }
                     }
