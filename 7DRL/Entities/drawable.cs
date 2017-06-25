@@ -17,6 +17,7 @@ namespace _7DRL.Entities
 
         public drawable()
         {
+            color = ConsoleColor.Green;
             components = new List<Components.iComponent>();
             pos = new transform();
         }
