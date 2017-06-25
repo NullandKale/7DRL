@@ -217,37 +217,20 @@ namespace _7DRL
 
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
+
                         if(Console.ForegroundColor != world[x + worldOffsetX, y + worldOffsetY].color)
                         {
                             Console.ForegroundColor = world[x + worldOffsetX, y + worldOffsetY].color;
                         }
-                        //if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.Blue;
-                        //}
-                        //else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E'                            
-                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 'e'
-                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 'S'
-                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 's')
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.Red;
-                        //}
-                        //else if (world[x + worldOffsetX, y + worldOffsetY].Visual == '<'
-                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == '>')
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.Gray;
-                        //}
-                        //else if(world[x + worldOffsetX, y + worldOffsetY].Visual == 'L')
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        //}
 
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
+
                     }
                     else if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
+
                         if (ground[x + worldOffsetX, y + worldOffsetY].Visual == (char)0x2588)
                         {
                             Console.ForegroundColor = ConsoleColor.DarkGray;

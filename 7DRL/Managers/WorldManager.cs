@@ -177,7 +177,7 @@
             int numberRooms = 20;
             int maxRoomSize = 20;
             int minRoomSize = 5;
-            int hallSize = 1;
+            int hallSize = 2;
 
             cellmap = doSimulationStep(cellmap, worldSize);
             cellmap = clearMap(cellmap, worldSize);
