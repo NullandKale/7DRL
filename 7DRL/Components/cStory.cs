@@ -12,13 +12,15 @@ namespace _7DRL.Components
 
         private int currentSet;
 
-        List<string> randomThoughts;
+        List<string> genericRandomToughts;
+        List<List<string>> randomThoughtSet;
         List<string> startThoughts;
         List<List<string>> endThoughtSet;
 
         public cStory(int endLevel)
         {
-            randomThoughts = new List<string>();
+            
+            randomThoughtSet = new List<List<string>>();
             startThoughts = new List<string>();
             endThoughtSet = new List<List<string>>();
 
@@ -33,14 +35,45 @@ namespace _7DRL.Components
                 Game.g.LogCombat(startThoughts[i]);
             }
 
-            randomThoughts.Add("You stub your toe.");
-            randomThoughts.Add("You hear the beating of giant wings.");
-            randomThoughts.Add("\"Have I been here before?\"");
-            randomThoughts.Add("\"I must save her.\"");
-            randomThoughts.Add("\"How long have I been searching?\"");
-            randomThoughts.Add("\"Just one more floor.\"");
-            randomThoughts.Add("\"When was the last time I ate?\"");
-            randomThoughts.Add("\"Why am I doing this?\"");
+            genericRandomToughts = new List<string>
+            {
+                "You stub your toe.",
+                "\"Just one more floor.\"",
+                "\"When was the last time I ate?\"",
+                "You hear the beating of giant wings.",
+                "\"Have I been here before?\"",
+                "\"These walls are familiar.\"",
+                "\"How long have I been searching?\"",
+                "You hear a faint call... " + Game.g.PName + "!",
+                "\"Why am I doing this?\"",
+                "\"What is this place?\"",
+                "\"How did I get here?\""
+            };
+            List<string> randomset1 = new List<string>
+            {
+                "\"I must save her.\""
+            };
+            List<string> randomset2 = new List<string>
+            {
+                "\"What did she mean?\"",
+                "\"Who was that?\"",
+                "\"Where did she go?\""
+            };
+            List<string> randomset3 = new List<string>
+            {
+                "\"Where did she go?\"",
+                "\"I must not forget.\"",
+                "\"How do I save her?\"",
+                "\"Why does she fade?\""
+            };
+            List<string> randomset4 = new List<string>
+            {
+                "\"Where did she go?\""
+            };
+            randomThoughtSet.Add(randomset1);
+            randomThoughtSet.Add(randomset2);
+            randomThoughtSet.Add(randomset3);
+            randomThoughtSet.Add(randomset4);
 
             List<string> set1 = new List<string>
             {
@@ -70,10 +103,21 @@ namespace _7DRL.Components
                 "As you walk towards the princess,",
                 "she fades away"
             };
+            List<string> set4 = new List<string>
+            {
+                "\"I found you,\"" +
+                "\" and I didn't forget!\"",
+                " P - \"You did.\"",
+                " P - \"... and you will again.\"",
+                "\"What do you mean?\"",
+                "As you walk towards the princess,",
+                "she fades away"
+            };
 
             endThoughtSet.Add(set1);
             endThoughtSet.Add(set2);
             endThoughtSet.Add(set3);
+            endThoughtSet.Add(set4);
         }
 
         public void Run(Entities.drawable d)
@@ -82,7 +126,11 @@ namespace _7DRL.Components
             {
                 if(Game.g.rng.Next(0,100) <= 5)
                 {
-                    var thought = randomThoughts[Game.g.rng.Next(randomThoughts.Count)];
+                    List<string> set = new List<string>();
+                    set.AddRange(randomThoughtSet[currentSet]);
+                    set.AddRange(genericRandomToughts);
+
+                    var thought = set[Game.g.rng.Next(set.Count)];
                     if (lastThought != thought)
                     {
                         Game.g.LogCombat(thought);
