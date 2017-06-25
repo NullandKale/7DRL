@@ -75,45 +75,350 @@ namespace _7DRL
             }
 
             Console.WriteLine("Welcome to ________");
-            Console.WriteLine("(0) Play");
-            Console.WriteLine("(1) Quit");
-            string c = string.Empty;
-            while (c != "0" && c != "1")
-            {
-                c = Console.ReadLine();
+            Console.WriteLine("(0) New Game");
+            Console.WriteLine("(1) Load Game -- NOT IMPLEMENTED");
+            Console.WriteLine("(2) Quit");
 
-                if (c != "0" && c != "1")
+            bool inputValid = false;
+
+            while (!inputValid)
+            {
+                string c = Console.ReadLine();
+
+                int input = -1;
+
+                try
                 {
-                    Console.WriteLine("Invalid");
+                    input = int.Parse(c);
                 }
-            }
-
-            if (c == "0")
-            {
-                Game game = new Game(6);
-                game.onLoad(false, Managers.GenerationType.Rooms);
-
-                Timer updateTimer = new Timer(updateTime);
-
-                //updateTimer.Elapsed += game.update;
-                //updateTimer.Start();
-
-                while (game.running)
+                catch
                 {
-                    if (game.stop)
+
+                }
+
+                if(input == -1)
+                {
+                    Console.WriteLine("Invalid Input");
+                }
+                else if(input == 0)
+                {
+                    //STAT ROLL MENU
+
+                    Console.Write("Enter Your Name!: ");
+
+                    string playerName = Console.ReadLine();
+
+                    Console.Write("Press Enter to select stats or type \"R\" to roll stats ");
+
+                    int str = 1;
+                    int dex = 1;
+                    int con = 1;
+                    int intel = 1;
+                    int wis = 1;
+                    int cha = 1;
+
+                    if (Console.ReadLine() == "R")
                     {
-                        updateTimer.Stop();
-                        //game.running = false;
+                        Console.SetCursorPosition(0, 6);
+                        Console.WriteLine("Rolling Stats for " + playerName);
+
+                        bool cont = true;
+                        Random rng = new Random();
+
+                        while (cont)
+                        {
+                            int Total = 0;
+
+                            str = rng.Next(1, 10);
+                            Total += str;
+
+                            dex = rng.Next(1, 10);
+                            Total += dex;
+
+                            con = rng.Next(1, 10);
+                            Total += con;
+
+                            intel = rng.Next(1, 10);
+                            Total += intel;
+
+                            wis = rng.Next(1, 10);
+                            Total += wis;
+
+                            cha = rng.Next(1, 10);
+                            Total += cha;
+
+                            Console.WriteLine("Strength: " + str);
+                            Console.WriteLine("Dexterity: " + dex);
+                            Console.WriteLine("Constitution: " + con);
+                            Console.WriteLine("Inteligence: " + intel);
+                            Console.WriteLine("Wisdom: " + wis);
+                            Console.WriteLine("Charisma: " + cha);
+                            Console.WriteLine("Total: " + Total);
+                            Console.WriteLine("Enter (Y) to accept and ANYTHING ELSE to ReRoll");
+
+                            if (Console.ReadLine() == "Y")
+                            {
+                                cont = false;
+                            }
+                        }
                     }
                     else
                     {
-                        game.update(null, null);
+                        bool cont = true;
+                        Random rng = new Random();
+
+                        int Total = 29;
+
+                        while (cont)
+                        {
+                            Console.WriteLine("(S) Strength: " + str);
+                            Console.WriteLine("(D) Dexterity: " + dex);
+                            Console.WriteLine("(C) Constitution: " + con);
+                            Console.WriteLine("(I) Inteligence: " + intel);
+                            Console.WriteLine("(W) Wisdom: " + wis);
+                            Console.WriteLine("(H) Charisma: " + cha);
+                            Console.WriteLine("    Left: " + Total);
+
+                            if (Total == 0)
+                            {
+                                Console.WriteLine("If you are satisfied enter (Y), otherwise enter ANYTHING ELSE");
+                                if (Console.ReadLine().ToUpper() == "Y")
+                                {
+                                    cont = false;
+                                }
+                            }
+
+                            if (cont)
+                            {
+                                Console.Write("Enter a letter to select stat: ");
+
+                                string selection = Console.ReadLine().ToUpper();
+
+                                if (selection == "S")
+                                {
+                                    Console.Write("Amount?: ");
+
+                                    string read = Console.ReadLine();
+
+                                    int amount = 0;
+
+                                    try
+                                    {
+                                        amount = int.Parse(read);
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                    if (amount > 10 || str + amount > 10)
+                                    {
+                                        Console.WriteLine("Amount too big");
+                                    }
+                                    else
+                                    {
+                                        if (Total - amount < 0)
+                                        {
+                                            amount = Total;
+                                        }
+
+                                        str += amount;
+                                        Total -= amount;
+                                    }
+                                }
+                                else if (selection == "D")
+                                {
+                                    Console.Write("Amount?: ");
+
+                                    string read = Console.ReadLine();
+
+                                    int amount = 0;
+
+                                    try
+                                    {
+                                        amount = int.Parse(read);
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                    if (amount > 10 || dex + amount > 10)
+                                    {
+                                        Console.WriteLine("Amount too big");
+                                    }
+                                    else
+                                    {
+                                        if (Total - amount < 0)
+                                        {
+                                            amount = Total;
+                                        }
+
+                                        dex += amount;
+                                        Total -= amount;
+                                    }
+                                }
+                                else if (selection == "C")
+                                {
+                                    Console.Write("Amount?: ");
+
+                                    string read = Console.ReadLine();
+
+                                    int amount = 0;
+
+                                    try
+                                    {
+                                        amount = int.Parse(read);
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                    if (amount > 10 || con + amount > 10)
+                                    {
+                                        Console.WriteLine("Amount too big");
+                                    }
+                                    else
+                                    {
+                                        if (Total - amount < 0)
+                                        {
+                                            amount = Total;
+                                        }
+
+                                        con += amount;
+                                        Total -= amount;
+                                    }
+                                }
+                                else if (selection == "I")
+                                {
+                                    Console.Write("Amount?: ");
+
+                                    string read = Console.ReadLine();
+
+                                    int amount = 0;
+
+                                    try
+                                    {
+                                        amount = int.Parse(read);
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                    if (amount > 10 || intel + amount > 10)
+                                    {
+                                        Console.WriteLine("Amount too big");
+                                    }
+                                    else
+                                    {
+                                        if (Total - amount < 0)
+                                        {
+                                            amount = Total;
+                                        }
+
+                                        intel += amount;
+                                        Total -= amount;
+                                    }
+                                }
+                                else if (selection == "W")
+                                {
+                                    Console.Write("Amount?: ");
+
+                                    string read = Console.ReadLine();
+
+                                    int amount = 0;
+
+                                    try
+                                    {
+                                        amount = int.Parse(read);
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                    if (amount > 10 || wis + amount > 10)
+                                    {
+                                        Console.WriteLine("Amount too big");
+                                    }
+                                    else
+                                    {
+                                        if (Total - amount < 0)
+                                        {
+                                            amount = Total;
+                                        }
+
+                                        wis += amount;
+                                        Total -= amount;
+                                    }
+                                }
+                                else if (selection == "H")
+                                {
+                                    Console.Write("Amount?: ");
+
+                                    string read = Console.ReadLine();
+
+                                    int amount = 0;
+
+                                    try
+                                    {
+                                        amount = int.Parse(read);
+                                    }
+                                    catch
+                                    {
+
+                                    }
+
+                                    if (amount > 10 || cha + amount > 10)
+                                    {
+                                        Console.WriteLine("Amount too big");
+                                    }
+                                    else
+                                    {
+                                        if (Total - amount < 0)
+                                        {
+                                            amount = Total;
+                                        }
+
+                                        cha += amount;
+                                        Total -= amount;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                        
+                    Game game = new Game(6, str, dex, con, intel, wis, cha);
+                    game.onLoad(false, Managers.GenerationType.Rooms);
+
+                    Timer updateTimer = new Timer(updateTime);
+
+                    //updateTimer.Elapsed += game.update;
+                    //updateTimer.Start();
+
+                    while (game.running)
+                    {
+                        if (game.stop)
+                        {
+                            updateTimer.Stop();
+                            //game.running = false;
+                        }
+                        else
+                        {
+                            game.update(null, null);
+                        }
                     }
                 }
-            }
-            else
-            {
-                Console.WriteLine("Thanks for playing!");
+                else if(input == 1)
+                {
+                    Console.WriteLine("We can't do that yet");
+                }
+                else
+                {
+                    Console.WriteLine("Thanks for playing!");
+                }
             }
         }
     }

@@ -42,28 +42,17 @@ namespace _7DRL.Components
 
         private bool debug;
 
-        public cStats(bool random, int maxStat)
+        public cStats(int Pstr, int Pdex, int Pcon, int Pintel, int Pwis, int Pcha)
         {
             level = 1;
             currentXP = 0;
-            if(random)
-            {
-                str = Game.g.rng.Next(1, maxStat);
-                dex = Game.g.rng.Next(1, maxStat);
-                con = Game.g.rng.Next(1, maxStat);
-                intel = Game.g.rng.Next(1, maxStat);
-                wis = Game.g.rng.Next(1, maxStat);
-                cha = Game.g.rng.Next(1, maxStat);
-            }
-            else
-            {
-                str = 10;
-                dex = 10;
-                con = 10;
-                intel = 10;
-                wis = 10;
-                cha = 10;
-            }
+
+            str = Pstr;
+            dex = Pdex;
+            con = Pcon;
+            intel = Pintel;
+            wis = Pwis;
+            cha = Pcha;
 
             isEncumbered = false;
             weaponDamage = 0;
