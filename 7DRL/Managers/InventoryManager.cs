@@ -165,7 +165,7 @@ namespace _7DRL.Managers
         {
             if (playerInv.items[itemLoc] is Ring)
             {
-                if (equipedArmor == null)
+                if (equipedRing == null)
                 {
                     equipedRing = (Ring)playerInv.items[itemLoc];
                     playerInv.removeItem(itemLoc, 1);
@@ -341,7 +341,7 @@ namespace _7DRL.Managers
         public int dexBuff;
         public int ConBuff;
 
-        public Weapon(WeaponType w, EffectType e, int level)
+        public Weapon(WeaponType w, WeaponEffectType e, int level)
         {
             int strBuff = 0;
             int dexBuff = 0;
@@ -349,7 +349,7 @@ namespace _7DRL.Managers
 
             texture = 'W';
 
-            if(e == EffectType.none)
+            if(e == WeaponEffectType.none)
             {
                 name = w.ToString();
             }
@@ -359,7 +359,7 @@ namespace _7DRL.Managers
             }
             else
             {
-                name = w.ToString() + " of " + e.ToString() + " Lv." + level;
+                name = w.ToString() + " of " + e.ToString() + " +" + level;
             }
 
             maxStackSize = 1;
@@ -385,23 +385,22 @@ namespace _7DRL.Managers
                 weight = 5f;
             }
 
-            if (e == EffectType.strength)
+            if (e == WeaponEffectType.strength)
             {
                 strBuff += 1 * level;
             }
-            else if (e == EffectType.speed)
+            else if (e == WeaponEffectType.speed)
             {
                 dexBuff += 1 * level;
             }
-            else if (e == EffectType.poison)
+            else if (e == WeaponEffectType.poison)
             {
                 damage += 5 * level;
             }
-            else if (e == EffectType.hardening)
+            else if (e == WeaponEffectType.hardening)
             {
                 ConBuff += 1 * level;
             }
-
         }
 
 
@@ -427,7 +426,7 @@ namespace _7DRL.Managers
 
         public static Weapon GenerateWeapon(int level)
         {
-           return new Weapon(Util.RandomEnumValue<WeaponType>(), Util.RandomEnumValue<EffectType>(), level);
+           return new Weapon(Util.RandomEnumValue<WeaponType>(), Util.RandomEnumValue<WeaponEffectType>(), level);
         }
     }
 
@@ -472,7 +471,7 @@ namespace _7DRL.Managers
         public int dexBuff;
         public int ConBuff;
 
-        public Armor(MaterialType m, EffectType e, int level)
+        public Armor(MaterialType m, ArmorEffectType e, int level)
         {
             int strBuff = 0;
             int dexBuff = 0;
@@ -480,13 +479,17 @@ namespace _7DRL.Managers
 
             texture = 'A';
 
-            if (e == EffectType.none)
+            if (e == ArmorEffectType.none)
             {
                 name = m.ToString() + " Armor";
             }
-            else
+            else if (level < 2)
             {
                 name = m.ToString() + " Armor of " + e.ToString();
+            }
+            else
+            {
+                name = m.ToString() + " Armor of " + e.ToString() + " +" + level;
             }
 
             maxStackSize = 1;
@@ -507,19 +510,15 @@ namespace _7DRL.Managers
                 damageReduct = 15 * level;
             }
 
-            if (e == EffectType.strength)
+            if (e == ArmorEffectType.strength)
             {
                 strBuff += 1 * level;
             }
-            else if (e == EffectType.speed)
+            else if (e == ArmorEffectType.speed)
             {
                 dexBuff += 1 * level;
             }
-            else if (e == EffectType.poison)
-            {
-                dexBuff += 1 * level;
-            }
-            else if (e == EffectType.hardening)
+            else if (e == ArmorEffectType.hardening)
             {
                 ConBuff += 1 * level;
             }
@@ -547,7 +546,7 @@ namespace _7DRL.Managers
 
         public static Armor GenerateArmor(int level)
         {
-            return new Armor(Util.RandomEnumValue<MaterialType>(), Util.RandomEnumValue<EffectType>(), level);
+            return new Armor(Util.RandomEnumValue<MaterialType>(), Util.RandomEnumValue<ArmorEffectType>(), level);
         }
     }
 
@@ -558,6 +557,8 @@ namespace _7DRL.Managers
         public int strBuff;
         public int dexBuff;
         public int ConBuff;
+        public int WisBuff;
+        public int IntelBuff;
 
         private int effectMulitplier;
 
@@ -575,7 +576,7 @@ namespace _7DRL.Managers
             }
             else
             {
-                name = r.ToString() + " Ring of " + e.ToString() + " Lv." + level;
+                name = r.ToString() + " Ring of " + e.ToString() + " +" + level;
             }
 
             maxStackSize = 1;
@@ -611,6 +612,14 @@ namespace _7DRL.Managers
             {
                 ConBuff += (1 + effectMulitplier) * level;
             }
+            else if (e == JewelleryType.Wisdom)
+            {
+                WisBuff += (1 + effectMulitplier) * level;
+            }
+            else if (e == JewelleryType.Intelligence)
+            {
+                IntelBuff += (1 + effectMulitplier) * level;
+            }
         }
         
         public override void OnEquip()
@@ -619,6 +628,8 @@ namespace _7DRL.Managers
             Game.g.pcStats.str += strBuff;
             Game.g.pcStats.dex += dexBuff;
             Game.g.pcStats.con += ConBuff;
+            Game.g.pcStats.wis += WisBuff;
+            Game.g.pcStats.intel += IntelBuff;
 
             Game.g.pcStats.RegenStats();
         }
@@ -629,6 +640,8 @@ namespace _7DRL.Managers
             Game.g.pcStats.str -= strBuff;
             Game.g.pcStats.dex -= dexBuff;
             Game.g.pcStats.con -= ConBuff;
+            Game.g.pcStats.wis -= WisBuff;
+            Game.g.pcStats.intel -= IntelBuff;
 
             Game.g.pcStats.RegenStats();
         }
@@ -646,6 +659,8 @@ namespace _7DRL.Managers
         public int strBuff;
         public int dexBuff;
         public int ConBuff;
+        public int WisBuff;
+        public int IntelBuff;
 
         private int effectMulitplier;
 
@@ -663,7 +678,7 @@ namespace _7DRL.Managers
             }
             else
             {
-                name = r.ToString() + " Amulet of " + e.ToString() + " Lv." + level;
+                name = r.ToString() + " Amulet of " + e.ToString() + " +" + level;
             }
 
             maxStackSize = 1;
@@ -699,6 +714,14 @@ namespace _7DRL.Managers
             {
                 ConBuff += (3 + effectMulitplier) * level;
             }
+            else if (e == JewelleryType.Wisdom)
+            {
+                WisBuff += (1 + effectMulitplier) * level;
+            }
+            else if (e == JewelleryType.Intelligence)
+            {
+                IntelBuff += (1 + effectMulitplier) * level;
+            }
         }
 
         public override void OnEquip()
@@ -707,6 +730,8 @@ namespace _7DRL.Managers
             Game.g.pcStats.str += strBuff;
             Game.g.pcStats.dex += dexBuff;
             Game.g.pcStats.con += ConBuff;
+            Game.g.pcStats.wis += WisBuff;
+            Game.g.pcStats.intel += IntelBuff;
 
             Game.g.pcStats.RegenStats();
         }
@@ -717,6 +742,8 @@ namespace _7DRL.Managers
             Game.g.pcStats.str -= strBuff;
             Game.g.pcStats.dex -= dexBuff;
             Game.g.pcStats.con -= ConBuff;
+            Game.g.pcStats.wis -= WisBuff;
+            Game.g.pcStats.intel -= IntelBuff;
 
             Game.g.pcStats.RegenStats();
         }
@@ -727,12 +754,20 @@ namespace _7DRL.Managers
         }
     }
 
-    public enum EffectType
+    public enum WeaponEffectType
     {
         none,
         strength,
         speed,
         poison,
+        hardening,
+    }
+
+    public enum ArmorEffectType
+    {
+        none,
+        strength,
+        speed,
         hardening,
     }
 
@@ -747,7 +782,9 @@ namespace _7DRL.Managers
     {
         Strength,
         Dexterity,
-        Constitution
+        Constitution,
+        Wisdom,
+        Intelligence
     }
 
     public enum ItemType
