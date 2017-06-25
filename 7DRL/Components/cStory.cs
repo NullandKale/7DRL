@@ -54,6 +54,7 @@ namespace _7DRL.Components
                 {
                     Game.g.LogCombat(randomThoughts[Game.g.rng.Next(randomThoughts.Count)]);
                 }
+
                 if(Game.g.floor % 10 == 0 && Game.g.floor != 0)
                 {
                     for(int i = -1; i <= 1; i++)

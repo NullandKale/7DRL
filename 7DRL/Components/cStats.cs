@@ -93,6 +93,53 @@ namespace _7DRL.Components
                 }
             }
 
+            Console.SetCursorPosition(0, 29);
+            Console.Write("HP:");
+            Console.ForegroundColor = ConsoleColor.Red;
+            
+            for(int i = 0; i < 10; i++)
+            {
+                if ((float)currentHealth / (float)maxHealth > (float)i / 10f)
+                {
+                    Console.Write((char)0x2588);
+                }
+                else
+                {
+                    Console.Write(" ");
+                }
+            }
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" Mana:");
+            Console.ForegroundColor = ConsoleColor.Blue;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if ((float)currentMana / (float)maxMana > (float)i / 10f)
+                {
+                    Console.Write((char)0x2588);
+                }
+                else
+                {
+                    Console.Write(" ");
+                }
+            }
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" Stam:");
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if ((float)currentStamina / (float)maxStamina > (float)i / 10f)
+                {
+                    Console.Write((char)0x2588);
+                }
+                else
+                {
+                    Console.Write(" ");
+                }
+            }
         }
 
         public void RegenStats()
