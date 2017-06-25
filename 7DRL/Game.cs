@@ -245,26 +245,6 @@ namespace _7DRL
                         {
                             Console.ForegroundColor = world[x + worldOffsetX, y + worldOffsetY].color;
                         }
-                        //if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.Blue;
-                        //}
-                        //else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E'                            
-                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 'e'
-                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 'S'
-                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 's')
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.Red;
-                        //}
-                        //else if (world[x + worldOffsetX, y + worldOffsetY].Visual == '<'
-                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == '>')
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.Gray;
-                        //}
-                        //else if(world[x + worldOffsetX, y + worldOffsetY].Visual == 'L')
-                        //{
-                        //    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        //}
 
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
@@ -428,6 +408,7 @@ namespace _7DRL
                 player.pos.yPos = p.y;
                 player.active = true;
                 player.AddComponent(new Components.cKeyboardMoveAndCollide());
+                player.AddComponent(new Components.cStory(10));
                 player.AddComponent(new Components.cCameraFollow(this));
                 player.AddComponent(pcStats);
                 onUpdate.Add(player.update);

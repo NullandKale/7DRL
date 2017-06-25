@@ -80,6 +80,7 @@
     <Compile Include="Components\cKeyboardMoveAndCollide.cs" />
     <Compile Include="Components\cStats.cs" />
     <Compile Include="Components\cStair.cs" />
+    <Compile Include="Components\cStory.cs" />
     <Compile Include="Components\iComponent.cs" />
     <Compile Include="Entities\drawable.cs" />
     <Compile Include="Extensions\IntExtensions.cs" />
