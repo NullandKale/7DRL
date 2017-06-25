@@ -430,6 +430,7 @@ namespace _7DRL.Managers
     {
         public int healAmount;
         public int fireballDamage;
+        public int manacost;
 
         TomeEffect effect;
 
@@ -445,10 +446,12 @@ namespace _7DRL.Managers
             if(t == TomeEffect.Fireball)
             {
                 fireballDamage = (10 + Game.g.pcStats.intel) * level;
+                manacost = 100 * level;
             }
             else if(t == TomeEffect.Healing)
             {
                 healAmount = (10 + Game.g.pcStats.intel) * level;
+                manacost = (int)(healAmount * 1.5f);
             }
         }
 
@@ -461,16 +464,24 @@ namespace _7DRL.Managers
         {
             if (effect == TomeEffect.Healing)
             {
-                Game.g.pcStats.Heal(healAmount);
+                if(Game.g.pcStats.currentMana - manacost >= 0)
+                {
+                    Game.g.pcStats.Heal(healAmount);
+                    Game.g.pcStats.currentMana -= manacost;
+                }
             }
             else if (effect == TomeEffect.Fireball)
             {
-                for (int i = 0; i < Game.g.enemy.Length; i++)
+                if (Game.g.pcStats.currentMana - manacost >= 0)
                 {
-                    if (Utils.Point.dist(Game.g.player.pos, Game.g.enemy[i].pos) < 5)
+                    for (int i = 0; i < Game.g.enemy.Length; i++)
                     {
-                        Game.g.enemyAI[i].getHurt(Game.g.enemy[i]);
+                        if (Utils.Point.dist(Game.g.player.pos, Game.g.enemy[i].pos) < 5)
+                        {
+                            Game.g.enemyAI[i].getHurt(Game.g.enemy[i]);
+                        }
                     }
+                    Game.g.pcStats.currentMana -= manacost;
                 }
             }
         }
@@ -649,7 +660,7 @@ namespace _7DRL.Managers
         }
 
         public override void OnUnequip()
-        {            
+        {
         }
 
         public static Potion GeneratePotion(int level)
