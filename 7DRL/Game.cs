@@ -61,10 +61,11 @@ namespace _7DRL
         private int Pintel;
         private int Pwis;
         private int Pcha;
+        public string PName;
 
         private Dictionary<int, string> guiItem = new Dictionary<int, string>();
 
-        public Game(int seed, int Pstr, int Pdex, int Pcon, int Pintel, int Pwis, int Pcha)
+        public Game(int seed, int Pstr, int Pdex, int Pcon, int Pintel, int Pwis, int Pcha, string playerName)
         {
             if (g == null)
             {
@@ -95,6 +96,7 @@ namespace _7DRL
             this.Pintel = Pintel;
             this.Pwis = Pwis;
             this.Pcha = Pcha;
+            PName = playerName;
 
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
@@ -562,7 +564,7 @@ namespace _7DRL
 
         private void DrawInventory()
         {
-            AddUIElement(0, "Lvl: " + pcStats.level + " XP: " + pcStats.currentXP + "/" + pcStats.NeededXP + " " + pcInv.playerInv.currentGoldAmount + "g Floor: " + floor);
+            AddUIElement(0, PName + " Lvl: " + pcStats.level + " XP: " + pcStats.currentXP + "/" + pcStats.NeededXP + " " + pcInv.playerInv.currentGoldAmount + "g Floor: " + floor);
             string str = "H: " + pcStats.currentHealth + "/" + pcStats.maxHealth + " M: " + pcStats.currentMana + "/" + pcStats.maxMana + " S: " + pcStats.currentStamina + "/" + pcStats.maxStamina;
             if (pcStats.outOfStam)
             {

@@ -103,10 +103,23 @@ namespace _7DRL
                 else if(input == 0)
                 {
                     //STAT ROLL MENU
+                    bool getName = true;
+                    string playerName = "";
 
-                    Console.Write("Enter Your Name!: ");
+                    while (getName)
+                    {
+                        Console.Write("Enter Your Name!: ");
+                        playerName = Console.ReadLine();
 
-                    string playerName = Console.ReadLine();
+                        if (playerName == "" || playerName.Count() > 21)
+                        {
+                            Console.WriteLine("Your name must be 1 - 20 characters long");
+                        }
+                        else
+                        {
+                            getName = false;
+                        }
+                    }
 
                     Console.Write("Press Enter to select stats or type \"R\" to roll stats ");
 
@@ -117,7 +130,7 @@ namespace _7DRL
                     int wis = 1;
                     int cha = 1;
 
-                    if (Console.ReadLine() == "R")
+                    if (Console.ReadLine().ToUpper() == "R")
                     {
                         Console.SetCursorPosition(0, 6);
                         Console.WriteLine("Rolling Stats for " + playerName);
@@ -401,7 +414,7 @@ namespace _7DRL
                         }
                     }
                         
-                    Game game = new Game(6, str, dex, con, intel, wis, cha);
+                    Game game = new Game(6, str, dex, con, intel, wis, cha, playerName);
                     game.onLoad(false, Managers.GenerationType.Rooms);
 
                     Timer updateTimer = new Timer(updateTime);
