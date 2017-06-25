@@ -267,7 +267,7 @@ namespace _7DRL.Managers
 
         public bool UseTome()
         {
-            if (equipedTome == null)
+            if (equipedTome != null)
             {
                 equipedTome.use();
                 return true;
