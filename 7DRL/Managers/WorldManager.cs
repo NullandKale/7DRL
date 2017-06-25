@@ -174,9 +174,10 @@
 
         public static Tile[,] GenerateRooms(Tile[,] cellmap, int worldSize)
         {
-            int numberRooms = 30;
-            int maxRoomSize = 25;
-            int minRoomSize = 3;
+            int numberRooms = 20;
+            int maxRoomSize = 20;
+            int minRoomSize = 5;
+            int hallSize = 1;
 
             cellmap = doSimulationStep(cellmap, worldSize);
             cellmap = clearMap(cellmap, worldSize);
@@ -192,7 +193,7 @@
 
             cellmap = drawRooms(rooms, cellmap);
 
-            cellmap = connectRooms(rooms, cellmap, 3, worldSize);
+            cellmap = connectRooms(rooms, cellmap, hallSize, worldSize);
 
             cellmap = generateBorders(cellmap, worldSize);
 
@@ -289,6 +290,34 @@
                     }
                 }
             }
+
+            List<Room> connectedRooms = new List<Room>();
+
+            for(int i = 0; i < 100; i++)
+            {
+                Room temp = WalkRooms(i, rooms[1]);
+
+                if (!connectedRooms.Contains(temp))
+                {
+                    connectedRooms.Add(temp);
+                }
+            }
+
+            for(int i = 0; i < rooms.Count; i++)
+            {
+                if (!connectedRooms.Contains(rooms[i]))
+                {
+                    for(int j = 0; j < rooms.Count; j++)
+                    {
+                        if(!rooms[j].twoConnectedRooms && rooms[j] != rooms[i] && rooms[i] != rooms[j].connectedRoom0)
+                        {
+                            rooms[j].twoConnectedRooms = true;
+                            rooms[j].connectedRoom1 = rooms[i];
+                        }
+                    }
+                }
+            }
+
 
             for (int i = 0; i < rooms.Count; i++)
             {
@@ -433,81 +462,16 @@
             return cellmap;
         }
 
-        public static List<List<Utils.Point>> CountRegions(Tile[,] cellMap)
+        private static Room WalkRooms(int roomNumber, Room currentRoom)
         {
-            List<List<Utils.Point>> regions = new List<List<Utils.Point>>();
-
-            bool uncountedTiles = true;
-            Utils.Point workingPoint = new Utils.Point(1, 1);
-
-            while(uncountedTiles)
+            if(roomNumber <= 1)
             {
-                bool flooded = false;
-                List<Utils.Point> WorkingRegion = new List<Utils.Point>();
-
-                bool lookingForRegionStart = true;
-
-                while (lookingForRegionStart)
-                {
-                    if(cellMap[workingPoint.x, workingPoint.y].Visual == air)
-                    {
-                        for (int i = 0; i < regions.Count; i++)
-                        {
-                            if (!regions[i].Contains(workingPoint))
-                            {
-                                lookingForRegionStart = false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        workingPoint.x++;
-                        if(workingPoint.x >= cellMap.GetLength(0))
-                        {
-                            workingPoint.x = 0;
-                            workingPoint.y ++;
-                            if(workingPoint.y >= cellMap.GetLength(1))
-                            {
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                while(!flooded)
-                {
-                    //if the working point goes off the right edge reset to 1 and go down one chaxel
-                    if(workingPoint.x >= cellMap.GetLength(0))
-                    {
-                        workingPoint.x = 1;
-                        workingPoint.y++;
-                    }
-                    //if the working point goes off the bottom of the cellmap end flood fill
-                    if (workingPoint.y > cellMap.GetLength(1))
-                    {
-                        flooded = true;
-                    }
-
-                    if(cellMap[workingPoint.x,workingPoint.y].Visual != wall)
-                    {
-                        bool inOtherRegion = false;
-                        for (int i = 0; i < regions.Count; i++)
-                        {
-                            if (regions[i].Contains(workingPoint))
-                            {
-                                inOtherRegion = true;
-                            }
-                        }
-
-                        if(!inOtherRegion)
-                        {
-                            WorkingRegion.Add(workingPoint);
-                        }
-                    }
-                }
-
+                return currentRoom.connectedRoom0;
             }
-            return regions;
+            else
+            {
+                return WalkRooms(roomNumber - 1, currentRoom.connectedRoom0);
+            }
         }
     }
 
