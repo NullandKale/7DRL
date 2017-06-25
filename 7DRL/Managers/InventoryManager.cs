@@ -11,6 +11,8 @@ namespace _7DRL.Managers
         public Inventory playerInv;
         public Weapon equipedWeapon;
         public Armor equipedArmor;
+        public Ring equipedRing;
+        public Amulet equipedAmulet;
 
         public List<Utils.Point> lootItems;
         private int lootAmount;
@@ -37,6 +39,7 @@ namespace _7DRL.Managers
             {
                 if(lootItems[i].x != -10)
                 {
+                    Game.g.world[lootItems[i].x, lootItems[i].y].color = ConsoleColor.Yellow;
                     Game.g.world[lootItems[i].x, lootItems[i].y].Visual = 'L';
                     Game.g.world[lootItems[i].x, lootItems[i].y].collideable = false;
                 }
@@ -80,7 +83,6 @@ namespace _7DRL.Managers
                 }
             }
 
-
             ItemType temp = Util.RandomEnumValue<ItemType>();
 
             if(temp == ItemType.Gold)
@@ -95,6 +97,14 @@ namespace _7DRL.Managers
             else if(temp == ItemType.Armor)
             {
                 playerInv.addItem(Armor.GenerateArmor(level));
+            }
+            else if (temp == ItemType.Ring)
+            {
+                playerInv.addItem(Ring.GenerateRing(level));
+            }
+            else if (temp == ItemType.Amulet)
+            {
+                playerInv.addItem(Amulet.GenerateAmulet(level));
             }
             //Add for new ItemTypes
         }
@@ -141,6 +151,58 @@ namespace _7DRL.Managers
                     equipedArmor.OnUnequip();
                     equipedArmor = (Armor)playerInv.items[itemLoc];
                     equipedArmor.OnEquip();
+                    playerInv.removeItem(itemLoc, 1);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool EquipRing(int itemLoc)
+        {
+            if (playerInv.items[itemLoc] is Ring)
+            {
+                if (equipedArmor == null)
+                {
+                    equipedRing = (Ring)playerInv.items[itemLoc];
+                    playerInv.removeItem(itemLoc, 1);
+                    equipedRing.OnEquip();
+                }
+                else
+                {
+                    playerInv.addItem(equipedRing);
+                    equipedRing.OnUnequip();
+                    equipedRing = (Ring)playerInv.items[itemLoc];
+                    equipedRing.OnEquip();
+                    playerInv.removeItem(itemLoc, 1);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool EquipAmulet(int itemLoc)
+        {
+            if (playerInv.items[itemLoc] is Amulet)
+            {
+                if (equipedAmulet == null)
+                {
+                    equipedAmulet = (Amulet)playerInv.items[itemLoc];
+                    playerInv.removeItem(itemLoc, 1);
+                    equipedAmulet.OnEquip();
+                }
+                else
+                {
+                    playerInv.addItem(equipedAmulet);
+                    equipedAmulet.OnUnequip();
+                    equipedAmulet = (Amulet)playerInv.items[itemLoc];
+                    equipedAmulet.OnEquip();
                     playerInv.removeItem(itemLoc, 1);
                 }
                 return true;
@@ -489,6 +551,182 @@ namespace _7DRL.Managers
         }
     }
 
+    public class Ring : Item
+    {
+        public int damage;
+
+        public int strBuff;
+        public int dexBuff;
+        public int ConBuff;
+
+        private int effectMulitplier;
+
+        public Ring(RingMaterialType r, JewelleryType e, int level)
+        {
+            int strBuff = 0;
+            int dexBuff = 0;
+            int ConBuff = 0;
+
+            texture = 'R';
+
+            if (level < 2)
+            {
+                name = r.ToString() + " Ring of " + e.ToString();
+            }
+            else
+            {
+                name = r.ToString() + " Ring of " + e.ToString() + " Lv." + level;
+            }
+
+            maxStackSize = 1;
+            currentStackSize = 1;
+
+            value = 0;
+
+            if (r == RingMaterialType.Copper)
+            {
+                effectMulitplier = 1;
+                weight = 0.3f;
+            }
+            else if (r == RingMaterialType.Silver)
+            {
+                effectMulitplier = 2;
+                weight = 0.3f;
+            }
+            else if (r == RingMaterialType.Gold)
+            {
+                effectMulitplier = 3;
+                weight = 0.3f;
+            }
+
+            if (e == JewelleryType.Strength)
+            {
+                strBuff += (1 + effectMulitplier) * level;
+            }
+            else if (e == JewelleryType.Dexterity)
+            {
+                dexBuff += (1 + effectMulitplier) * level;
+            }
+            else if (e == JewelleryType.Constitution)
+            {
+                ConBuff += (1 + effectMulitplier) * level;
+            }
+        }
+        
+        public override void OnEquip()
+        {
+            Game.g.pcStats.weaponDamage = damage;
+            Game.g.pcStats.str += strBuff;
+            Game.g.pcStats.dex += dexBuff;
+            Game.g.pcStats.con += ConBuff;
+
+            Game.g.pcStats.RegenStats();
+        }
+
+        public override void OnUnequip()
+        {
+            Game.g.pcStats.weaponDamage = 0;
+            Game.g.pcStats.str -= strBuff;
+            Game.g.pcStats.dex -= dexBuff;
+            Game.g.pcStats.con -= ConBuff;
+
+            Game.g.pcStats.RegenStats();
+        }
+
+        public static Ring GenerateRing(int level)
+        {
+            return new Ring(Util.RandomEnumValue<RingMaterialType>(), Util.RandomEnumValue<JewelleryType>(), level);
+        }
+    }
+
+    public class Amulet : Item
+    {
+        public int damage;
+
+        public int strBuff;
+        public int dexBuff;
+        public int ConBuff;
+
+        private int effectMulitplier;
+
+        public Amulet(RingMaterialType r, JewelleryType e, int level)
+        {
+            int strBuff = 0;
+            int dexBuff = 0;
+            int ConBuff = 0;
+
+            texture = 'a';
+
+            if (level < 2)
+            {
+                name = r.ToString() + " Amulet of " + e.ToString();
+            }
+            else
+            {
+                name = r.ToString() + " Amulet of " + e.ToString() + " Lv." + level;
+            }
+
+            maxStackSize = 1;
+            currentStackSize = 1;
+
+            value = 0;
+
+            if (r == RingMaterialType.Copper)
+            {
+                effectMulitplier = 1;
+                weight = 0.3f;
+            }
+            else if (r == RingMaterialType.Silver)
+            {
+                effectMulitplier = 2;
+                weight = 0.3f;
+            }
+            else if (r == RingMaterialType.Gold)
+            {
+                effectMulitplier = 3;
+                weight = 0.3f;
+            }
+
+            if (e == JewelleryType.Strength)
+            {
+                strBuff += (3 + effectMulitplier) * level;
+            }
+            else if (e == JewelleryType.Dexterity)
+            {
+                dexBuff += (3 + effectMulitplier) * level;
+            }
+            else if (e == JewelleryType.Constitution)
+            {
+                ConBuff += (3 + effectMulitplier) * level;
+            }
+        }
+
+        public override void OnEquip()
+        {
+            Game.g.pcStats.weaponDamage = damage;
+            Game.g.pcStats.str += strBuff;
+            Game.g.pcStats.dex += dexBuff;
+            Game.g.pcStats.con += ConBuff;
+
+            Game.g.pcStats.RegenStats();
+        }
+
+        public override void OnUnequip()
+        {
+            Game.g.pcStats.weaponDamage = 0;
+            Game.g.pcStats.str -= strBuff;
+            Game.g.pcStats.dex -= dexBuff;
+            Game.g.pcStats.con -= ConBuff;
+
+            Game.g.pcStats.RegenStats();
+        }
+
+        public static Amulet GenerateAmulet(int level)
+        {
+            return new Amulet(Util.RandomEnumValue<RingMaterialType>(), Util.RandomEnumValue<JewelleryType>(), level);
+        }
+    }
+
     public enum EffectType
     {
         none,
@@ -505,14 +743,21 @@ namespace _7DRL.Managers
         Mana,
     }
 
+    public enum JewelleryType
+    {
+        Strength,
+        Dexterity,
+        Constitution
+    }
+
     public enum ItemType
     {
         Gold,
         Weapon,
         Armor,
         Potion,
-        //Ring,
-        //Amulet,
+        Ring,
+        Amulet
         //Ingredient
     }
 
@@ -528,5 +773,12 @@ namespace _7DRL.Managers
         Leather,
         Iron,
         Steel
+    }
+
+    public enum RingMaterialType
+    {
+        Copper,
+        Gold,
+        Silver
     }
 }
