@@ -48,7 +48,7 @@ namespace _7DRL
             IntPtr handle = GetConsoleWindow();
             IntPtr sysMenu = GetSystemMenu(handle, false);
             int mode = 0;
-            
+
             if (handle != IntPtr.Zero)
             {
                 DeleteMenu(sysMenu, SC_MAXIMIZE, MF_BYCOMMAND);
@@ -74,25 +74,46 @@ namespace _7DRL
                 // error setting console mode.
             }
 
-            Game game = new Game(6);
-            game.onLoad(false, Managers.GenerationType.Rooms);
-
-            Timer updateTimer = new Timer(updateTime);
-
-            //updateTimer.Elapsed += game.update;
-            //updateTimer.Start();
-
-            while (game.running)
+            Console.WriteLine("Welcome to ________");
+            Console.WriteLine("(0) Play");
+            Console.WriteLine("(1) Quit");
+            string c = string.Empty;
+            while (c != "0" && c != "1")
             {
-                if(game.stop)
+                c = Console.ReadLine();
+
+                if (c != "0" && c != "1")
                 {
-                    updateTimer.Stop();
-                    //game.running = false;
+                    Console.WriteLine("Invalid");
                 }
-                else
+            }
+
+            if (c == "0")
+            {
+                Game game = new Game(6);
+                game.onLoad(false, Managers.GenerationType.Rooms);
+
+                Timer updateTimer = new Timer(updateTime);
+
+                //updateTimer.Elapsed += game.update;
+                //updateTimer.Start();
+
+                while (game.running)
                 {
-                    game.update(null, null);
+                    if (game.stop)
+                    {
+                        updateTimer.Stop();
+                        //game.running = false;
+                    }
+                    else
+                    {
+                        game.update(null, null);
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine("Thanks for playing!");
             }
         }
     }
