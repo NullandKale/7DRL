@@ -486,9 +486,32 @@ namespace _7DRL.Managers
 
         public override void OnEquip()
         {
-            Game.g.pcStats.currentHealth += HealthIncrease;
-            Game.g.pcStats.currentMana += ManaIncrease;
-            Game.g.pcStats.currentStamina += StaminaIncrease;
+            if(Game.g.pcStats.currentHealth + HealthIncrease > Game.g.pcStats.maxHealth)
+            {
+                Game.g.pcStats.currentHealth = Game.g.pcStats.maxHealth;
+            }
+            else
+            {
+                Game.g.pcStats.currentHealth += HealthIncrease;
+            }
+
+            if (Game.g.pcStats.currentMana + ManaIncrease > Game.g.pcStats.maxMana)
+            {
+                Game.g.pcStats.currentMana = Game.g.pcStats.maxMana;
+            }
+            else
+            {
+                Game.g.pcStats.currentMana += ManaIncrease;
+            }
+
+            if (Game.g.pcStats.currentStamina + StaminaIncrease > Game.g.pcStats.maxStamina)
+            {
+                Game.g.pcStats.currentStamina = Game.g.pcStats.maxStamina;
+            }
+            else
+            {
+                Game.g.pcStats.currentStamina += StaminaIncrease;
+            }
         }
 
         public override void OnUnequip()
