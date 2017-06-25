@@ -45,6 +45,11 @@ namespace _7DRL.Managers
                     Game.g.world[lootItems[i].x, lootItems[i].y].collideable = false;
                 }
             }
+
+            if(Game.input.isKeyFalling(OpenTK.Input.Key.B))
+            {
+                Buy(Game.g.pcStats.level);
+            }
         }
 
         public void SpawnLoot(int xPos, int yPos)
@@ -345,8 +350,8 @@ namespace _7DRL.Managers
 
         public int currentGoldAmount;
 
-        float currentWeight;
-        float MaxWeight;
+        public float currentWeight;
+        public float MaxWeight;
 
         public Item this[int index]
         {
@@ -495,7 +500,7 @@ namespace _7DRL.Managers
             {
                 name = "Tome of " + t.ToString() + " +" + level;
             }
-            value = 10;
+            value = 10 * level;
             maxStackSize = 1;
             currentStackSize = 1;
             effect = t;
@@ -503,17 +508,17 @@ namespace _7DRL.Managers
             if(t == TomeEffect.FireStorm)
             {
                 fireballDamage = (10 + Game.g.pcStats.intel) * level;
-                manacost = 100 * level;
+                manacost = 50;
             }
             else if(t == TomeEffect.Healing)
             {
                 healAmount = (10 + Game.g.pcStats.intel) * level;
-                manacost = (int)(healAmount * 1.5f);
+                manacost = (int)(healAmount * .75f);
             }
             else if(t== TomeEffect.Vigor)
             {
                 vigorAmount = (10 + Game.g.pcStats.intel) * level;
-                manacost = (int)(vigorAmount * 1.5f);
+                manacost = (int)(vigorAmount * .75f);
             }
         }
 
@@ -598,41 +603,47 @@ namespace _7DRL.Managers
             maxStackSize = 1;
             currentStackSize = 1;
 
-            value = 0;
+            weight = 10;
+            value = 10 * level;
 
             if(w == WeaponType.Dagger)
             {
                 damage = 5 * level;
                 dexBuff += 1 * level;
-                weight = 2f;
+                weight -= 5;
+                value -= 5 * level;
             }
             else if (w == WeaponType.Sword)
             {
                 damage = 10 * level;
-                weight = 3f;
             }
             else if (w == WeaponType.Axe)
             {
                 damage = 15 * level;
                 dexBuff -= 1 * level;
-                weight = 5f;
+                weight += 5;
+                value += 5 * level;
             }
 
             if (e == WeaponEffectType.strength)
             {
                 strBuff += 1 * level;
+                value += 5 * level;
             }
             else if (e == WeaponEffectType.speed)
             {
                 dexBuff += 1 * level;
+                value += 5 * level;
             }
             else if (e == WeaponEffectType.poison)
             {
                 damage += 5 * level;
+                value += 5 * level;
             }
             else if (e == WeaponEffectType.hardening)
             {
                 ConBuff += 1 * level;
+                value += 5 * level;
             }
         }
 
@@ -675,6 +686,9 @@ namespace _7DRL.Managers
 
             maxStackSize = 5;
             currentStackSize = 1;
+
+            value = 10 * level;
+            weight = 2;
 
             if (level < 2)
             {
@@ -771,11 +785,14 @@ namespace _7DRL.Managers
             maxStackSize = 1;
             currentStackSize = 1;
 
-            value = 0;
+            value = 10 * level;
+            weight = 20;
 
             if(m == MaterialType.Leather)
             {
                 damageReduct = 5 * level;
+                value -= 5 * level;
+                weight -= 5;
             }
             else if(m == MaterialType.Iron)
             {
@@ -784,19 +801,24 @@ namespace _7DRL.Managers
             else if(m == MaterialType.Steel)
             {
                 damageReduct = 15 * level;
+                value += 5 * level;
+                weight += 10;
             }
 
             if (e == ArmorEffectType.strength)
             {
                 strBuff += 1 * level;
+                value += 5 * level;
             }
             else if (e == ArmorEffectType.speed)
             {
                 dexBuff += 1 * level;
+                value += 5 * level;
             }
             else if (e == ArmorEffectType.hardening)
             {
                 ConBuff += 1 * level;
+                value += 5 * level;
             }
         }
 
@@ -858,12 +880,13 @@ namespace _7DRL.Managers
             maxStackSize = 1;
             currentStackSize = 1;
 
-            value = 0;
+            value = 20;
 
             if (r == RingMaterialType.Copper)
             {
                 effectMulitplier = 1;
                 weight = 0.3f;
+                value -= 10 * level;
             }
             else if (r == RingMaterialType.Silver)
             {
@@ -874,6 +897,7 @@ namespace _7DRL.Managers
             {
                 effectMulitplier = 3;
                 weight = 0.3f;
+                value += 10 * level;
             }
 
             if (e == JewelleryType.Str)
@@ -960,12 +984,13 @@ namespace _7DRL.Managers
             maxStackSize = 1;
             currentStackSize = 1;
 
-            value = 0;
+            value = 25;
 
             if (r == RingMaterialType.Copper)
             {
                 effectMulitplier = 1;
                 weight = 0.3f;
+                value -= 15 * level;
             }
             else if (r == RingMaterialType.Silver)
             {
@@ -976,6 +1001,7 @@ namespace _7DRL.Managers
             {
                 effectMulitplier = 3;
                 weight = 0.3f;
+                value += 15 * level;
             }
 
             if (e == JewelleryType.Str)
