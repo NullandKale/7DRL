@@ -384,6 +384,61 @@ namespace _7DRL.Managers
 
     }
 
+    public class Tome : Item
+    {
+        public int healAmount;
+        public int fireballDamage;
+
+        TomeEffect effect;
+
+        public Tome(TomeEffect t, int level)
+        {
+            weight = 1;
+            name = "Tome of " + t.ToString();
+            value = 10;
+            maxStackSize = 1;
+            currentStackSize = 1;
+            effect = t;
+
+            if(t == TomeEffect.Fireball)
+            {
+                fireballDamage = (10 + Game.g.pcStats.intel) * level;
+            }
+            else if(t == TomeEffect.Healing)
+            {
+                healAmount = (10 + Game.g.pcStats.intel) * level;
+            }
+        }
+
+        public override void OnEquip()
+        {
+
+        }
+
+        public void use()
+        {
+            if (effect == TomeEffect.Healing)
+            {
+                Game.g.pcStats.Heal(healAmount);
+            }
+            else if (effect == TomeEffect.Fireball)
+            {
+                for (int i = 0; i < Game.g.enemy.Length; i++)
+                {
+                    if (Utils.Point.dist(Game.g.player.pos, Game.g.enemy[i].pos) < 5)
+                    {
+                        Game.g.enemyAI[i].getHurt(Game.g.enemy[i]);
+                    }
+                }
+            }
+        }
+
+        public override void OnUnequip()
+        {
+
+        }
+    }
+
     public class Weapon : Item
     {
         public int damage;
@@ -910,5 +965,11 @@ namespace _7DRL.Managers
         Copper,
         Gold,
         Silver
+    }
+
+    public enum TomeEffect
+    {
+        Healing,
+        Fireball,
     }
 }

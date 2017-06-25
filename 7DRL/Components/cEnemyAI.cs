@@ -8,7 +8,7 @@ using _7DRL.Utils;
 
 namespace _7DRL.Components
 {
-    class cEnemyAI : iComponent
+    public class cEnemyAI : iComponent
     {
         private Point targetPos;
         private drawable player;
@@ -107,6 +107,11 @@ namespace _7DRL.Components
                     }
                 }
             }
+        }
+
+        public void getHurt(drawable enemy)
+        {
+            Game.g.LogCombat("You did " + Damage(playerStats.getAttack(), enemy, playerStats) + " damage to " + enemyName);
         }
 
         private int Damage(int amount, drawable d, cStats playerStats)
