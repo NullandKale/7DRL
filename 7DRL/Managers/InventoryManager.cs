@@ -76,19 +76,27 @@ namespace _7DRL.Managers
         {
             for (int i = 0; i < lootItems.Count; i++)
             {
-                if(lootItems[i].x == lootPosX && lootItems[i].y == lootPosY)
+                if (lootItems[i].x == lootPosX && lootItems[i].y == lootPosY)
                 {
                     lootItems[i].x = -10;
                     lootItems[i].y = -10;
                 }
             }
 
-            ItemType temp = Util.RandomEnumValue<ItemType>();
+            ItemType temp = Util.Choose(
+                new ItemType[] { ItemType.Gold, ItemType.Weapon, ItemType.Armor, ItemType.Potion, ItemType.Ring, ItemType.Amulet },
+                new float[] { 0.2f, 0.15f, 0.15f, 0.2f, 0.15f, 0.15f }, Game.g.rng);
+
+            level = Util.Choose(new int[] { level, level + 1 }, new float[] { 0.95f, 0.05f }, Game.g.rng);
+
+            int goldAmount = 0;
+            bool gotGold = false;
 
             if (temp == ItemType.Gold)
             {
-                int goldAmount = Game.g.rng.Next(10, 10 + (int)(level * 3.653));
+                goldAmount = Game.g.rng.Next(10, 10 + (int)(level * 3.653));
                 playerInv.currentGoldAmount += goldAmount;
+                gotGold = true;
             }
             else if (temp == ItemType.Weapon)
             {
@@ -111,6 +119,15 @@ namespace _7DRL.Managers
                 playerInv.addItem(Potion.GeneratePotion(level));
             }
             //Add for new ItemTypes
+
+            if (!gotGold)
+            {
+                Game.g.LogCombat("Picked up " + playerInv[playerInv.Count - 1]);
+            }
+            else
+            {
+                Game.g.LogCombat("Picked up " + goldAmount + " gold");
+            }
         }
 
         public bool EquipWeapon(int itemLoc)
@@ -240,6 +257,22 @@ namespace _7DRL.Managers
 
         float currentWeight;
         float MaxWeight;
+
+        public Item this[int index]
+        {
+            get
+            {
+                return items[index];
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                return items.Count;
+            }
+        }
 
         public Inventory()
         {
@@ -443,7 +476,7 @@ namespace _7DRL.Managers
         }
 
         public static Weapon GenerateWeapon(int level)
-        {
+        {            
            return new Weapon(Util.RandomEnumValue<WeaponType>(), Util.RandomEnumValue<WeaponEffectType>(), level);
         }
     }

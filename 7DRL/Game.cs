@@ -637,7 +637,7 @@ namespace _7DRL
                 AddUIElement(12, "a: ");
             }
 
-            AddUIElement(13, "-------------< Combat Log >-------------");
+            AddUIElement(13, "----------------< Log >-----------------");
             for (var i = 0; i < 14; i++)
             {
                 AddUIElement(14 + i, CombatLog.Count > i ? CombatLog[i] : string.Empty);

@@ -8,6 +8,28 @@ namespace _7DRL
 {
     class Util
     {
+        public static T Choose<T>(T[] keys, float[] weights, Random rng)
+        {
+            var ran = rng.Next();
+
+            var max = 0f;
+
+            var target = 0;
+
+            for (var i = 0; i < keys.Length; i++)
+            {
+                max += weights[i];
+
+                if (ran < max)
+                {
+                    target = i;
+                    break;
+                }
+            }
+
+            return keys[target];
+        }
+
         public static T RandomEnumValue<T>()
         {
             var v = Enum.GetValues(typeof(T));
