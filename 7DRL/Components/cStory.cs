@@ -42,23 +42,38 @@ namespace _7DRL.Components
             randomThoughts.Add("\"When was the last time I ate?\"");
             randomThoughts.Add("\"Why am I doing this?\"");
 
-            var set1 = new List<string>();
-            set1.Add("\"I found you!\"");
-            set1.Add(" P - \"You did.\"");
-            set1.Add(" P - \"... and you will again.\"");
-            set1.Add("\"What do you mean?\"");
-            set1.Add("As you walk towards the princess,");
-            set1.Add("she fades away");
-
-            var set2 = new List<string>();
-            set2.Add("\"I found you!\"");
-            set2.Add(" P - \"You did.\"");
-            set2.Add(" P - \"... and you will again.\"");
-            set2.Add("\"What do you mean?\"");
-            set2.Add("As you walk towards the princess,");
-            set2.Add("she fades away");
+            List<string> set1 = new List<string>
+            {
+                "\"I found you!\"",
+                " P - \"You did.\"",
+                " P - \"... and you will again.\"",
+                "\"What do you mean?\"",
+                "As you walk towards the princess,",
+                "she fades away"
+            };
+            List<string> set2 = new List<string>
+            {
+                "\"I found you again!\"",
+                " P - \"You did.\"",
+                " P - \"... and you'll forget again.\"",
+                "\"What do you mean?\"",
+                "As you walk towards the princess,",
+                "she fades away"
+            };
+            List<string> set3 = new List<string>
+            {
+                "\"I found you,\"" +
+                "\" and I didn't forget!\"",
+                " P - \"You did.\"",
+                " P - \"... and you will again.\"",
+                "\"What do you mean?\"",
+                "As you walk towards the princess,",
+                "she fades away"
+            };
 
             endThoughtSet.Add(set1);
+            endThoughtSet.Add(set2);
+            endThoughtSet.Add(set3);
         }
 
         public void Run(Entities.drawable d)
