@@ -152,7 +152,7 @@ namespace _7DRL.Components
             manaRate = intel / 4;
             stamRate = dex / 2;
 
-            NeededXP = 75 * level + 125;
+            NeededXP = 150 * level + 125;
 
             carryWeight = str * 2 + 20;
 

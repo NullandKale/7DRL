@@ -579,7 +579,7 @@ namespace _7DRL
         private void DrawInventory()
         {
             AddUIElement(0, PName + " Lvl: " + pcStats.level + " XP needed: " + (pcStats.NeededXP - pcStats.currentXP));
-            AddUIElement(1, pcInv.playerInv.currentGoldAmount + "g Floor: " + floor);
+            AddUIElement(1, pcInv.playerInv.currentGoldAmount + "g lbs: " + pcInv.playerInv.currentWeight + "/"+ pcStats.carryWeight + " Floor: " + floor);
             string str = "H: " + pcStats.currentHealth + "/" + pcStats.maxHealth + " M: " + pcStats.currentMana + "/" + pcStats.maxMana + " S: " + pcStats.currentStamina + "/" + pcStats.maxStamina;
             if (pcStats.outOfStam)
             {
