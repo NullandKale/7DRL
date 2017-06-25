@@ -693,31 +693,41 @@ namespace _7DRL
         {
             if (input.isKeyRising(key))
             {
-                if (pcInv.playerInv.items.Count > num)
+                if(input.isKeyHeld(OpenTK.Input.Key.ControlLeft))
                 {
-                    if (pcInv.playerInv.items[num] is Weapon)
+                    if (pcInv.playerInv.items.Count > num)
                     {
-                        pcInv.EquipWeapon(num);
+                        pcInv.Sell(num);
                     }
-                    else if (pcInv.playerInv.items[num] is Armor)
+                }
+                else
+                {
+                    if (pcInv.playerInv.items.Count > num)
                     {
-                        pcInv.EquipArmor(num);
-                    }
-                    else if (pcInv.playerInv.items[num] is Ring)
-                    {
-                        pcInv.EquipRing(num);
-                    }
-                    else if (pcInv.playerInv.items[num] is Amulet)
-                    {
-                        pcInv.EquipAmulet(num);
-                    }
-                    else if (pcInv.playerInv.items[num] is Potion)
-                    {
-                        pcInv.UsePotion(num);
-                    }
-                    else if (pcInv.playerInv.items[num] is Tome)
-                    {
-                        pcInv.EquipTome(num);
+                        if (pcInv.playerInv.items[num] is Weapon)
+                        {
+                            pcInv.EquipWeapon(num);
+                        }
+                        else if (pcInv.playerInv.items[num] is Armor)
+                        {
+                            pcInv.EquipArmor(num);
+                        }
+                        else if (pcInv.playerInv.items[num] is Ring)
+                        {
+                            pcInv.EquipRing(num);
+                        }
+                        else if (pcInv.playerInv.items[num] is Amulet)
+                        {
+                            pcInv.EquipAmulet(num);
+                        }
+                        else if (pcInv.playerInv.items[num] is Potion)
+                        {
+                            pcInv.UsePotion(num);
+                        }
+                        else if (pcInv.playerInv.items[num] is Tome)
+                        {
+                            pcInv.EquipTome(num);
+                        }
                     }
                 }
             }
