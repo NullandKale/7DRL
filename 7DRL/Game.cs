@@ -661,6 +661,10 @@ namespace _7DRL
                     {
                         pcInv.EquipAmulet(num);
                     }
+                    else if (pcInv.playerInv.items[num] is Potion)
+                    {
+                        pcInv.UsePotion(num);
+                    }
                 }
             }
         }

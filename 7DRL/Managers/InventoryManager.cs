@@ -85,16 +85,16 @@ namespace _7DRL.Managers
 
             ItemType temp = Util.RandomEnumValue<ItemType>();
 
-            if(temp == ItemType.Gold)
+            if (temp == ItemType.Gold)
             {
                 int goldAmount = Game.g.rng.Next(10, 10 + (int)(level * 3.653));
                 playerInv.currentGoldAmount += goldAmount;
             }
-            else if(temp == ItemType.Weapon)
+            else if (temp == ItemType.Weapon)
             {
                 playerInv.addItem(Weapon.GenerateWeapon(level));
             }
-            else if(temp == ItemType.Armor)
+            else if (temp == ItemType.Armor)
             {
                 playerInv.addItem(Armor.GenerateArmor(level));
             }
@@ -105,6 +105,10 @@ namespace _7DRL.Managers
             else if (temp == ItemType.Amulet)
             {
                 playerInv.addItem(Amulet.GenerateAmulet(level));
+            }
+            else if (temp == ItemType.Potion)
+            {
+                playerInv.addItem(Potion.GeneratePotion(level));
             }
             //Add for new ItemTypes
         }
@@ -205,6 +209,20 @@ namespace _7DRL.Managers
                     equipedAmulet.OnEquip();
                     playerInv.removeItem(itemLoc, 1);
                 }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool UsePotion(int itemLoc)
+        {
+            if (playerInv.items[itemLoc] is Potion)
+            {
+                ((Potion)playerInv.items[itemLoc]).OnEquip();
+                playerInv.removeItem(itemLoc, 1);
                 return true;
             }
             else
@@ -438,28 +456,48 @@ namespace _7DRL.Managers
 
         public Potion(PotionType p, int level)
         {
-            if(p == PotionType.Healing)
+            texture = 'P';
+
+            maxStackSize = 5;
+            currentStackSize = 1;
+
+            if (level < 2)
             {
-                HealthIncrease += 100;
+                name = "Potion of " + p.ToString();
+            }
+            else
+            {
+                name = "Potion of " + p.ToString() + " +" + level;
+            }
+
+            if (p == PotionType.Healing)
+            {
+                HealthIncrease += 100 * level;
             }
             else if(p == PotionType.Mana)
             {
-                ManaIncrease += 100;
+                ManaIncrease += 100 * level;
             }
             else if (p == PotionType.Vigor)
             {
-                StaminaIncrease += 100;
+                StaminaIncrease += 100 * level;
             }
         }
 
         public override void OnEquip()
         {
-            
+            Game.g.pcStats.currentHealth += HealthIncrease;
+            Game.g.pcStats.currentMana += ManaIncrease;
+            Game.g.pcStats.currentStamina += StaminaIncrease;
         }
 
         public override void OnUnequip()
+        {            
+        }
+
+        public static Potion GeneratePotion(int level)
         {
-            
+            return new Potion(Util.RandomEnumValue<PotionType>(),  level);
         }
     }
 
@@ -600,23 +638,23 @@ namespace _7DRL.Managers
                 weight = 0.3f;
             }
 
-            if (e == JewelleryType.Strength)
+            if (e == JewelleryType.Str)
             {
                 strBuff += (1 + effectMulitplier) * level;
             }
-            else if (e == JewelleryType.Dexterity)
+            else if (e == JewelleryType.Dex)
             {
                 dexBuff += (1 + effectMulitplier) * level;
             }
-            else if (e == JewelleryType.Constitution)
+            else if (e == JewelleryType.Con)
             {
                 ConBuff += (1 + effectMulitplier) * level;
             }
-            else if (e == JewelleryType.Wisdom)
+            else if (e == JewelleryType.Wis)
             {
                 WisBuff += (1 + effectMulitplier) * level;
             }
-            else if (e == JewelleryType.Intelligence)
+            else if (e == JewelleryType.Int)
             {
                 IntelBuff += (1 + effectMulitplier) * level;
             }
@@ -702,23 +740,23 @@ namespace _7DRL.Managers
                 weight = 0.3f;
             }
 
-            if (e == JewelleryType.Strength)
+            if (e == JewelleryType.Str)
             {
                 strBuff += (3 + effectMulitplier) * level;
             }
-            else if (e == JewelleryType.Dexterity)
+            else if (e == JewelleryType.Dex)
             {
                 dexBuff += (3 + effectMulitplier) * level;
             }
-            else if (e == JewelleryType.Constitution)
+            else if (e == JewelleryType.Con)
             {
                 ConBuff += (3 + effectMulitplier) * level;
             }
-            else if (e == JewelleryType.Wisdom)
+            else if (e == JewelleryType.Wis)
             {
                 WisBuff += (1 + effectMulitplier) * level;
             }
-            else if (e == JewelleryType.Intelligence)
+            else if (e == JewelleryType.Int)
             {
                 IntelBuff += (1 + effectMulitplier) * level;
             }
@@ -780,11 +818,11 @@ namespace _7DRL.Managers
 
     public enum JewelleryType
     {
-        Strength,
-        Dexterity,
-        Constitution,
-        Wisdom,
-        Intelligence
+        Str,
+        Dex,
+        Con,
+        Wis,
+        Int
     }
 
     public enum ItemType
@@ -795,7 +833,6 @@ namespace _7DRL.Managers
         Potion,
         Ring,
         Amulet
-        //Ingredient
     }
 
     public enum WeaponType
