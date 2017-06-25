@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using _7DRL.Extensions;
 
 namespace _7DRL
 {
@@ -10,7 +11,7 @@ namespace _7DRL
     {
         public static T Choose<T>(T[] keys, float[] weights, Random rng)
         {
-            var ran = rng.NextDouble();
+            var ran = ((float)rng.NextDouble()).Normalize(0, 1, 0, weights.Sum());
 
             var max = 0f;
 

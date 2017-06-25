@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace _7DRL.Extensions
 {
-    public static class IntExtensions
+    public static class FloatExtensions
     {
-        public static int Clamp(this int self, int lowerBound, int upperBound)
+        public static float Clamp(this float self, float lowerBound, float upperBound)
         {
             if (self < lowerBound) self = lowerBound;
             if (self > upperBound) self = upperBound;
@@ -16,7 +16,7 @@ namespace _7DRL.Extensions
             return self;
         }
 
-        public static int Normalize(this int self, int lowerBound, int upperBound, int minNum, int maxNum)
+        public static float Normalize(this float self, float lowerBound, float upperBound, float minNum, float maxNum)
         {
             var num = self;
 
@@ -27,7 +27,7 @@ namespace _7DRL.Extensions
             return num;
         }
 
-        public static int NormalizeClampless(this int self, int lowerBound, int upperBound, int minNum, int maxNum)
+        public static float NormalizeClampless(this float self, float lowerBound, float upperBound, float minNum, float maxNum)
         {
             var num = self;
 

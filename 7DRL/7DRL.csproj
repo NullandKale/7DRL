@@ -83,6 +83,7 @@
     <Compile Include="Components\cStory.cs" />
     <Compile Include="Components\iComponent.cs" />
     <Compile Include="Entities\drawable.cs" />
+    <Compile Include="Extensions\FloatExtensions.cs" />
     <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Managers\CollisionManager.cs" />
