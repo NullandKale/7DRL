@@ -8,15 +8,19 @@ namespace _7DRL.Components
 {
     class cStory : iComponent
     {
+        private string lastThought;
+
+        private int currentSet;
+
         List<string> randomThoughts;
         List<string> startThoughts;
-        List<string> endThoughts;
+        List<List<string>> endThoughtSet;
 
         public cStory(int endLevel)
         {
             randomThoughts = new List<string>();
             startThoughts = new List<string>();
-            endThoughts = new List<string>();
+            endThoughtSet = new List<List<string>>();
 
             startThoughts.Add("You awaken in a dungeon.");
             startThoughts.Add("You feel a beckoning down,");
@@ -38,12 +42,23 @@ namespace _7DRL.Components
             randomThoughts.Add("\"When was the last time I ate?\"");
             randomThoughts.Add("\"Why am I doing this?\"");
 
-            endThoughts.Add("\"I found you!\"");
-            endThoughts.Add(" P - \"You did.\"");
-            endThoughts.Add(" P - \"... and you will again.\"");
-            endThoughts.Add("\"What do you mean?\"");
-            endThoughts.Add("As you walk towards the princess,");
-            endThoughts.Add("she fades away");
+            var set1 = new List<string>();
+            set1.Add("\"I found you!\"");
+            set1.Add(" P - \"You did.\"");
+            set1.Add(" P - \"... and you will again.\"");
+            set1.Add("\"What do you mean?\"");
+            set1.Add("As you walk towards the princess,");
+            set1.Add("she fades away");
+
+            var set2 = new List<string>();
+            set2.Add("\"I found you!\"");
+            set2.Add(" P - \"You did.\"");
+            set2.Add(" P - \"... and you will again.\"");
+            set2.Add("\"What do you mean?\"");
+            set2.Add("As you walk towards the princess,");
+            set2.Add("she fades away");
+
+            endThoughtSet.Add(set1);
         }
 
         public void Run(Entities.drawable d)
@@ -52,7 +67,12 @@ namespace _7DRL.Components
             {
                 if(Game.g.rng.Next(0,100) <= 5)
                 {
-                    Game.g.LogCombat(randomThoughts[Game.g.rng.Next(randomThoughts.Count)]);
+                    var thought = randomThoughts[Game.g.rng.Next(randomThoughts.Count)];
+                    if (lastThought != thought)
+                    {
+                        Game.g.LogCombat(thought);
+                        lastThought = thought;
+                    }
                 }
 
                 if(Game.g.floor % 10 == 0 && Game.g.floor != 0)
@@ -66,11 +86,15 @@ namespace _7DRL.Components
 
                             if(Game.g.world[xPos, yPos].Visual == 'P')
                             {
-                                for(int k = 0; k < endThoughts.Count; k++)
+                                for(int k = 0; k < endThoughtSet[currentSet].Count; k++)
                                 {
-                                    Game.g.LogCombat(endThoughts[k]);
+                                    Game.g.LogCombat(endThoughtSet[currentSet][k]);
                                 }
                                 Game.g.princess.active = false;
+                                if (currentSet < endThoughtSet.Count)
+                                {
+                                    currentSet++;
+                                }
                             }
                         }
                     }
