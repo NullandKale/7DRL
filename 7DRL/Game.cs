@@ -38,7 +38,7 @@ namespace _7DRL
         public int gameX;
 
         public int InvNum;
-
+        
         private Tile[,] lastFrame;
         private ConsoleColor lastColor;
 
@@ -583,11 +583,29 @@ namespace _7DRL
                 AddUIElement(10, "A: ");
             }
 
+            if (pcInv.equipedRing != null)
+            {
+                AddUIElement(11, "R:" + pcInv.equipedRing.ToString());
+            }
+            else
+            {
+                AddUIElement(11, "R: ");
+            }
+
+            if (pcInv.equipedAmulet != null)
+            {
+                AddUIElement(12, "a:" + pcInv.equipedAmulet.ToString());
+            }
+            else
+            {
+                AddUIElement(12, "a: ");
+            }
+
             UseItem(OpenTK.Input.Key.Number1, InvNum);
             UseItem(OpenTK.Input.Key.Number2, InvNum + 1);
             UseItem(OpenTK.Input.Key.Number3, InvNum + 2);
             UseItem(OpenTK.Input.Key.Number4, InvNum + 3);
-            UseItem(OpenTK.Input.Key.Number5, InvNum + 4);
+            UseItem(OpenTK.Input.Key.Number5, InvNum + 4);            
         }
 
         private void UseItem(OpenTK.Input.Key key, int num)
@@ -603,6 +621,14 @@ namespace _7DRL
                     else if (pcInv.playerInv.items[num] is Armor)
                     {
                         pcInv.EquipArmor(num);
+                    }
+                    else if (pcInv.playerInv.items[num] is Ring)
+                    {
+                        pcInv.EquipRing(num);
+                    }
+                    else if (pcInv.playerInv.items[num] is Amulet)
+                    {
+                        pcInv.EquipAmulet(num);
                     }
                 }
             }
