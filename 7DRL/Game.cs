@@ -1,5 +1,6 @@
 ﻿using _7DRL.Components;
 using _7DRL.Managers;
+using _7DRL.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -541,9 +542,9 @@ namespace _7DRL
         {
             if (!reset)
             {
-                Utils.Point stairPos;
+                Point stairPos;
                 stairsUp = new Entities.drawable();
-                stairPos = Utils.Point.getRandomPointInWorld();
+                stairPos = Point.getRandomPointInWorld();
                 stairsUp.pos.xPos = stairPos.x;
                 stairsUp.pos.yPos = stairPos.y;
                 stairsUp.texture = '>';
@@ -554,7 +555,7 @@ namespace _7DRL
                 onUpdate.Add(stairsUp.update);
 
                 stairsDown = new Entities.drawable();
-                stairPos = Utils.Point.getRandomPointInWorld();
+                stairPos = Point.getRandomDoorPoint(new Point(stairsUp.pos.xPos, stairsUp.pos.yPos));
                 stairsDown.pos.xPos = stairPos.x;
                 stairsDown.pos.yPos = stairPos.y;
                 stairsDown.texture = '<';
@@ -566,11 +567,11 @@ namespace _7DRL
             }
             else
             {
-                Utils.Point stairPos = Utils.Point.getRandomPointInWorld();
+                Utils.Point stairPos = Point.getRandomPointInWorld();
                 stairsUp.pos.xPos = stairPos.x;
                 stairsUp.pos.yPos = stairPos.y;
 
-                stairPos = Utils.Point.getRandomPointInWorld();
+                stairPos = Point.getRandomDoorPoint(new Point(stairsUp.pos.xPos, stairsUp.pos.yPos));
                 stairsDown.pos.xPos = stairPos.x;
                 stairsDown.pos.yPos = stairPos.y;
             }

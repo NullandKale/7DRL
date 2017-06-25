@@ -38,6 +38,11 @@ namespace _7DRL.Utils
             return Math.Sqrt(x + y);
         }
 
+        public static Point getRandomPoint(List<Point> points)
+        {
+            return points[Game.g.rng.Next(0, points.Count)];
+        }
+
         public static Point getRandomPoint(int max)
         {
             return new Point(Game.g.rng.Next(0, max), Game.g.rng.Next(0, max));
@@ -49,6 +54,19 @@ namespace _7DRL.Utils
             if(!Managers.CollisionManager.CheckCollision(p.x, p.y))
             {
                 return getRandomPointInWorld();
+            }
+            else
+            {
+                return p;
+            }
+        }
+
+        public static Point getRandomDoorPoint(Point pos)
+        {
+            Point p = getRandomPoint(Util.FloodFill(Game.g.world, pos, Game.g.worldSize));
+            if (!Managers.CollisionManager.CheckCollision(p.x, p.y))
+            {
+                return getRandomPoint(Util.FloodFill(Game.g.world, pos, Game.g.worldSize));
             }
             else
             {
