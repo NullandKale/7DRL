@@ -74,6 +74,7 @@ namespace _7DRL.Components
                         lastThought = thought;
                     }
                 }
+
                 if(Game.g.floor % 10 == 0 && Game.g.floor != 0)
                 {
                     for(int i = -1; i <= 1; i++)
