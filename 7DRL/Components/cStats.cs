@@ -40,6 +40,8 @@ namespace _7DRL.Components
 
         private bool statsChanged;
 
+        private bool debug;
+
         public cStats(bool random, int maxStat)
         {
             level = 1;
@@ -88,6 +90,19 @@ namespace _7DRL.Components
             {
                 PassiveHeal();
             }
+
+            if (Game.input.isKeyRising(OpenTK.Input.Key.Tilde))
+            {
+                if (debug)
+                {
+                    debug = false;
+                }
+                else
+                {
+                    debug = true;
+                }
+            }
+
         }
 
         public void RegenStats()
@@ -108,6 +123,12 @@ namespace _7DRL.Components
 
         private void PassiveHeal()
         {
+            if(debug)
+            {
+                Heal(100);
+                RegenStam(100);
+            }
+
             if (!inCombat)
             {
                 if (((float)currentHealth / (float)maxHealth) < .40f)

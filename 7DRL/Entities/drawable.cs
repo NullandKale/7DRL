@@ -9,6 +9,7 @@ namespace _7DRL.Entities
     public class drawable
     {
         public char texture;
+        public ConsoleColor color;
         public transform pos;
         public List<Components.iComponent> components;
         public bool active = true;
@@ -86,7 +87,9 @@ namespace _7DRL.Entities
         {
             if (pos.xPos != -1 && pos.yPos != -1)
             {
+
                 Game.g.world[pos.xPos, pos.yPos].Visual = texture;
+                Game.g.world[pos.xPos, pos.yPos].color = color;
                 Game.g.world[pos.xPos, pos.yPos].collideable = true;
             }
         }

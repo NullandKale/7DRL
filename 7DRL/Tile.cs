@@ -10,5 +10,6 @@ namespace _7DRL
     {
         public char Visual;
         public bool collideable;
+        public ConsoleColor color;
     }
 }

@@ -176,7 +176,7 @@
         {
             int numberRooms = 30;
             int maxRoomSize = 25;
-            int minRoomSize = 5;
+            int minRoomSize = 3;
 
             cellmap = doSimulationStep(cellmap, worldSize);
             cellmap = clearMap(cellmap, worldSize);
@@ -261,20 +261,39 @@
 
                     if (i != j && dist < worldSize / distprecentage)
                     {
-                        rooms[i].connectedRoom = rooms[j];
+                        rooms[i].connectedRoom0 = rooms[j];
                         break;
                     }
                     else if(j == rooms.Count - 1)
                     {
-                        rooms[i].connectedRoom = rooms[j];
+                        rooms[i].connectedRoom0 = rooms[j];
+                    }
+                }
+
+                if(i % 4 == 0)
+                {
+                    rooms[i].twoConnectedRooms = true;
+                    for (int j = 0; j < rooms.Count; j++)
+                    {
+                        double dist = Util.dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[j].roomRect.X, rooms[j].roomRect.Y);
+
+                        if (i != j && rooms[i].connectedRoom0 != rooms[j] && dist < worldSize / distprecentage)
+                        {
+                            rooms[i].connectedRoom1 = rooms[j];
+                            break;
+                        }
+                        else if (j == rooms.Count - 1)
+                        {
+                            rooms[i].connectedRoom1 = rooms[j];
+                        }
                     }
                 }
             }
 
             for (int i = 0; i < rooms.Count; i++)
             {
-                int xDiff = rooms[i].roomRect.X - rooms[i].connectedRoom.roomRect.X;
-                int yDiff = rooms[i].roomRect.Y - rooms[i].connectedRoom.roomRect.Y;
+                int xDiff = rooms[i].roomRect.X - rooms[i].connectedRoom0.roomRect.X;
+                int yDiff = rooms[i].roomRect.Y - rooms[i].connectedRoom0.roomRect.Y;
 
                 Rectangle drill = new Rectangle(rooms[i].roomRect.X + 1, rooms[i].roomRect.Y + 1, hallWidth, hallWidth);
 
@@ -296,11 +315,11 @@
 
                         int xPos = drill.X;
 
-                        if (rooms[i].roomRect.X > rooms[i].connectedRoom.roomRect.X)
+                        if (rooms[i].roomRect.X > rooms[i].connectedRoom0.roomRect.X)
                         {
                             xPos--;
                         }
-                        else if(rooms[i].roomRect.X < rooms[i].connectedRoom.roomRect.X)
+                        else if(rooms[i].roomRect.X < rooms[i].connectedRoom0.roomRect.X)
                         {
                             xPos++;
                         }
@@ -326,11 +345,11 @@
 
                     int yPos = drill.Y;
 
-                    if (rooms[i].roomRect.Y > rooms[i].connectedRoom.roomRect.Y)
+                    if (rooms[i].roomRect.Y > rooms[i].connectedRoom0.roomRect.Y)
                     {
                         yPos--;
                     }
-                    else if (rooms[i].roomRect.Y < rooms[i].connectedRoom.roomRect.Y)
+                    else if (rooms[i].roomRect.Y < rooms[i].connectedRoom0.roomRect.Y)
                     {
                         yPos++;
                     }
@@ -340,14 +359,164 @@
 
             }
 
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                if(rooms[i].twoConnectedRooms)
+                {
+                    int xDiff = rooms[i].roomRect.X - rooms[i].connectedRoom1.roomRect.X;
+                    int yDiff = rooms[i].roomRect.Y - rooms[i].connectedRoom1.roomRect.Y;
+
+                    Rectangle drill = new Rectangle(rooms[i].roomRect.X + 1, rooms[i].roomRect.Y + 1, hallWidth, hallWidth);
+
+                    for (int x = 0; x < Math.Abs(xDiff); x++)
+                    {
+                        for (int j = 0; j < drill.Width; j++)
+                        {
+                            for (int k = 0; k < drill.Height; k++)
+                            {
+                                int PosX = j + drill.X;
+                                int PosY = k + drill.Y;
+                                if (Game.isInWorld(PosX, PosY))
+                                {
+                                    cellmap[PosX, PosY].Visual = air;
+                                    cellmap[PosX, PosY].collideable = false;
+                                }
+                            }
+                        }
+
+                        int xPos = drill.X;
+
+                        if (rooms[i].roomRect.X > rooms[i].connectedRoom1.roomRect.X)
+                        {
+                            xPos--;
+                        }
+                        else if (rooms[i].roomRect.X < rooms[i].connectedRoom1.roomRect.X)
+                        {
+                            xPos++;
+                        }
+
+                        drill.X = xPos;
+                    }
+
+                    for (int y = 0; y < Math.Abs(yDiff); y++)
+                    {
+                        for (int j = 0; j < drill.Width; j++)
+                        {
+                            for (int k = 0; k < drill.Height; k++)
+                            {
+                                int PosX = j + drill.X;
+                                int PosY = k + drill.Y;
+                                if (Game.isInWorld(PosX, PosY))
+                                {
+                                    cellmap[PosX, PosY].Visual = air;
+                                    cellmap[PosX, PosY].collideable = false;
+                                }
+                            }
+                        }
+
+                        int yPos = drill.Y;
+
+                        if (rooms[i].roomRect.Y > rooms[i].connectedRoom1.roomRect.Y)
+                        {
+                            yPos--;
+                        }
+                        else if (rooms[i].roomRect.Y < rooms[i].connectedRoom1.roomRect.Y)
+                        {
+                            yPos++;
+                        }
+
+                        drill.Y = yPos;
+                    }
+                }
+            }
+
             return cellmap;
+        }
+
+        public static List<List<Utils.Point>> CountRegions(Tile[,] cellMap)
+        {
+            List<List<Utils.Point>> regions = new List<List<Utils.Point>>();
+
+            bool uncountedTiles = true;
+            Utils.Point workingPoint = new Utils.Point(1, 1);
+
+            while(uncountedTiles)
+            {
+                bool flooded = false;
+                List<Utils.Point> WorkingRegion = new List<Utils.Point>();
+
+                bool lookingForRegionStart = true;
+
+                while (lookingForRegionStart)
+                {
+                    if(cellMap[workingPoint.x, workingPoint.y].Visual == air)
+                    {
+                        for (int i = 0; i < regions.Count; i++)
+                        {
+                            if (!regions[i].Contains(workingPoint))
+                            {
+                                lookingForRegionStart = false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        workingPoint.x++;
+                        if(workingPoint.x >= cellMap.GetLength(0))
+                        {
+                            workingPoint.x = 0;
+                            workingPoint.y ++;
+                            if(workingPoint.y >= cellMap.GetLength(1))
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                while(!flooded)
+                {
+                    //if the working point goes off the right edge reset to 1 and go down one chaxel
+                    if(workingPoint.x >= cellMap.GetLength(0))
+                    {
+                        workingPoint.x = 1;
+                        workingPoint.y++;
+                    }
+                    //if the working point goes off the bottom of the cellmap end flood fill
+                    if (workingPoint.y > cellMap.GetLength(1))
+                    {
+                        flooded = true;
+                    }
+
+                    if(cellMap[workingPoint.x,workingPoint.y].Visual != wall)
+                    {
+                        bool inOtherRegion = false;
+                        for (int i = 0; i < regions.Count; i++)
+                        {
+                            if (regions[i].Contains(workingPoint))
+                            {
+                                inOtherRegion = true;
+                            }
+                        }
+
+                        if(!inOtherRegion)
+                        {
+                            WorkingRegion.Add(workingPoint);
+                        }
+                    }
+                }
+
+            }
+            return regions;
         }
     }
 
     public class Room
     {
         public Rectangle roomRect;
-        public Room connectedRoom;
+        public Room connectedRoom0;
+        public Room connectedRoom1;
+        public bool twoConnectedRooms;
     }
 
     public enum GenerationType

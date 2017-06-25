@@ -40,6 +40,7 @@ namespace _7DRL
         public int InvNum;
 
         private Tile[,] lastFrame;
+        private ConsoleColor lastColor;
 
         public Entities.drawable player;
         public Components.cStats pcStats;
@@ -216,26 +217,30 @@ namespace _7DRL
 
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
-                        if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
+                        if(Console.ForegroundColor != world[x + worldOffsetX, y + worldOffsetY].color)
                         {
-                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.ForegroundColor = world[x + worldOffsetX, y + worldOffsetY].color;
                         }
-                        else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E'                            
-                            || world[x + worldOffsetX, y + worldOffsetY].Visual == 'e'
-                            || world[x + worldOffsetX, y + worldOffsetY].Visual == 'S'
-                            || world[x + worldOffsetX, y + worldOffsetY].Visual == 's')
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                        }
-                        else if (world[x + worldOffsetX, y + worldOffsetY].Visual == '<'
-                            || world[x + worldOffsetX, y + worldOffsetY].Visual == '>')
-                        {
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                        }
-                        else if(world[x + worldOffsetX, y + worldOffsetY].Visual == 'L')
-                        {
-                            Console.ForegroundColor = ConsoleColor.DarkYellow;
-                        }
+                        //if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.Blue;
+                        //}
+                        //else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E'                            
+                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 'e'
+                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 'S'
+                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 's')
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.Red;
+                        //}
+                        //else if (world[x + worldOffsetX, y + worldOffsetY].Visual == '<'
+                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == '>')
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.Gray;
+                        //}
+                        //else if(world[x + worldOffsetX, y + worldOffsetY].Visual == 'L')
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        //}
 
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
@@ -392,6 +397,7 @@ namespace _7DRL
                 pcStats = new cStats(false, 100);
                 pcInv = new InventoryManager(5);
                 player.texture = '@';
+                player.color = ConsoleColor.Blue;
                 player.tag = "Player";
                 Utils.Point p = Utils.Point.getRandomPointInWorld();
                 player.pos.xPos = p.x;
@@ -438,6 +444,7 @@ namespace _7DRL
             for (int i = 0; i < enemyCount; i++)
             {
                 enemy[i] = new Entities.drawable();
+                enemy[i].color = ConsoleColor.Red;
                 Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
                 enemy[i].pos.xPos = enemyPos.x;
                 enemy[i].pos.yPos = enemyPos.y;
@@ -501,6 +508,7 @@ namespace _7DRL
                 stairsUp.pos.xPos = stairPos.x;
                 stairsUp.pos.yPos = stairPos.y;
                 stairsUp.texture = '>';
+                stairsUp.color = ConsoleColor.White;
                 stairsUp.tag = "Stairs";
                 stairsUp.active = true;
                 stairsUp.AddComponent(new Components.cStair(true));
@@ -511,6 +519,7 @@ namespace _7DRL
                 stairsDown.pos.xPos = stairPos.x;
                 stairsDown.pos.yPos = stairPos.y;
                 stairsDown.texture = '<';
+                stairsDown.color = ConsoleColor.White;
                 stairsDown.tag = "Stairs";
                 stairsDown.active = true;
                 stairsDown.AddComponent(new Components.cStair(false));
