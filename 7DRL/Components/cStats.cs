@@ -208,7 +208,7 @@ namespace _7DRL.Components
             }
         }
 
-        public void Damage(int attackAmount)
+        public int Damage(int attackAmount)
         {
             attackAmount = attackAmount - damageReduction;
             if(currentHealth - attackAmount < 0)
@@ -225,6 +225,8 @@ namespace _7DRL.Components
             {
                 currentHealth -= attackAmount;
             }
+
+            return attackAmount;
         }
 
         public int getAttack()

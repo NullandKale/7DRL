@@ -38,7 +38,9 @@ namespace _7DRL
         public int gameX;
 
         public int InvNum;
-        
+
+        public List<string> CombatLog = new List<string>();
+
         private Tile[,] lastFrame;
         private ConsoleColor lastColor;
 
@@ -461,7 +463,7 @@ namespace _7DRL
                         enemy[i].texture = 'e';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                        enemy[i].AddComponent(new cEnemyAI(player, pcStats, "Rats",
                             40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5, 0.10));
                         onUpdate.Add(enemy[i].update);
                     }
@@ -470,7 +472,7 @@ namespace _7DRL
                         enemy[i].texture = 'E';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                        enemy[i].AddComponent(new cEnemyAI(player, pcStats, "Skeleton",
                             75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5, 0.25));
                         onUpdate.Add(enemy[i].update);
                     }
@@ -484,7 +486,7 @@ namespace _7DRL
                         enemy[i].texture = 's';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                        enemy[i].AddComponent(new cEnemyAI(player, pcStats, "Hornet",
                             20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3, 0.10));
                         onUpdate.Add(enemy[i].update);
                     }
@@ -493,7 +495,7 @@ namespace _7DRL
                         enemy[i].texture = 'S';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                        enemy[i].AddComponent(new cEnemyAI(player, pcStats, "Archer",
                             40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5, 0.25));
                         onUpdate.Add(enemy[i].update);
                     }
@@ -513,7 +515,7 @@ namespace _7DRL
                 stairsUp.color = ConsoleColor.White;
                 stairsUp.tag = "Stairs";
                 stairsUp.active = true;
-                stairsUp.AddComponent(new Components.cStair(true));
+                stairsUp.AddComponent(new cStair(true));
                 onUpdate.Add(stairsUp.update);
 
                 stairsDown = new Entities.drawable();
@@ -524,7 +526,7 @@ namespace _7DRL
                 stairsDown.color = ConsoleColor.White;
                 stairsDown.tag = "Stairs";
                 stairsDown.active = true;
-                stairsDown.AddComponent(new Components.cStair(false));
+                stairsDown.AddComponent(new cStair(false));
                 onUpdate.Add(stairsDown.update);
             }
             else
@@ -550,7 +552,7 @@ namespace _7DRL
             AddUIElement(1, str);
             if (pcInv.playerInv.items.Count < 10)
             {
-                AddUIElement(2, "------------< Inventory " + pcInv.playerInv.items.Count + " >-------------");
+                AddUIElement(2, "-----------< Inventory " + pcInv.playerInv.items.Count + " >--------------");
             }
             else
             {
@@ -614,11 +616,27 @@ namespace _7DRL
                 AddUIElement(12, "a: ");
             }
 
+            AddUIElement(13, "-------------< Combat Log >-------------");
+            for (var i = 0; i < 14; i++)
+            {
+                AddUIElement(14 + i, CombatLog.Count > i ? CombatLog[i] : string.Empty);
+            }
+
             UseItem(OpenTK.Input.Key.Number1, InvNum);
             UseItem(OpenTK.Input.Key.Number2, InvNum + 1);
             UseItem(OpenTK.Input.Key.Number3, InvNum + 2);
             UseItem(OpenTK.Input.Key.Number4, InvNum + 3);
             UseItem(OpenTK.Input.Key.Number5, InvNum + 4);            
+        }
+
+        public void LogCombat(string combat)
+        {
+            if (CombatLog.Count >= 14)
+            {
+                CombatLog.RemoveAt(0);
+            }
+
+            CombatLog.Add(combat);
         }
 
         private void UseItem(OpenTK.Input.Key key, int num)

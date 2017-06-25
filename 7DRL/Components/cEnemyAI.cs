@@ -16,6 +16,7 @@ namespace _7DRL.Components
 
         private bool getNewTargetPos;
 
+        public string enemyName;
         public int maxHealth;
         public int health;
         public int damage;
@@ -29,10 +30,11 @@ namespace _7DRL.Components
         {   
         }
 
-        public cEnemyAI(drawable pc, cStats pcStats, int health, int attack, int range, int detectRange, double attackRange, double lootChance)
+        public cEnemyAI(drawable pc, cStats pcStats, string enemyName, int health, int attack, int range, int detectRange, double attackRange, double lootChance)
         {
             player = pc;
             playerStats = pcStats;
+            this.enemyName = enemyName;
             this.health = health;
             this.maxHealth = health;
             this.range = range;
@@ -87,27 +89,27 @@ namespace _7DRL.Components
 
                 if (Point.dist(player.pos, d.pos) > 1.5)
                 {
-                    playerStats.Damage(attack);
+                    Game.g.LogCombat("You got " + playerStats.Damage(attack) + " damage from " + enemyName);
                 }
                 else
                 { 
                     int whoseFirst = Game.g.rng.Next(0, 21);
 
                     if (whoseFirst < playerStats.dex)
-                    {
-                        Damage(playerStats.getAttack(), d, playerStats);
-                        playerStats.Damage(attack);
+                    {             
+                        Game.g.LogCombat("You did " + Damage(playerStats.getAttack(), d, playerStats) + " damage to " + enemyName);
+                        Game.g.LogCombat("You got " + playerStats.Damage(attack) + " damage from " + enemyName);
                     }
                     else
                     {
-                        playerStats.Damage(attack);
-                        Damage(playerStats.getAttack(), d, playerStats);
+                        Game.g.LogCombat("You got " + playerStats.Damage(attack) + " damage from " + enemyName);
+                        Game.g.LogCombat("You did " + Damage(playerStats.getAttack(), d, playerStats) + " damage to " + enemyName);
                     }
                 }
             }
         }
 
-        private void Damage(int amount, drawable d, cStats playerStats)
+        private int Damage(int amount, drawable d, cStats playerStats)
         {
             if(health - amount <= 0)
             {
@@ -123,6 +125,8 @@ namespace _7DRL.Components
             {
                 health -= amount;
             }
+
+            return amount;
         }
 
         private bool EnemiesInRange(drawable d)
