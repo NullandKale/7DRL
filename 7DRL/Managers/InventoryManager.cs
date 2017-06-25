@@ -429,6 +429,7 @@ namespace _7DRL.Managers
     public class Tome : Item
     {
         public int healAmount;
+        public int vigorAmount;
         public int fireballDamage;
         public int manacost;
 
@@ -437,7 +438,15 @@ namespace _7DRL.Managers
         public Tome(TomeEffect t, int level)
         {
             weight = 1;
-            name = "Tome of " + t.ToString();
+
+            if(level < 2)
+            {
+                name = "Tome of " + t.ToString();
+            }
+            else
+            {
+                name = "Tome of " + t.ToString() + " +" + level;
+            }
             value = 10;
             maxStackSize = 1;
             currentStackSize = 1;
@@ -452,6 +461,11 @@ namespace _7DRL.Managers
             {
                 healAmount = (10 + Game.g.pcStats.intel) * level;
                 manacost = (int)(healAmount * 1.5f);
+            }
+            else if(t== TomeEffect.Vigor)
+            {
+                vigorAmount = (10 + Game.g.pcStats.intel) * level;
+                manacost = (int)(vigorAmount * 1.5f);
             }
         }
 
@@ -481,6 +495,14 @@ namespace _7DRL.Managers
                             Game.g.enemyAI[i].getHurt(Game.g.enemy[i]);
                         }
                     }
+                    Game.g.pcStats.currentMana -= manacost;
+                }
+            }
+            else if(effect == TomeEffect.Vigor)
+            {
+                if (Game.g.pcStats.currentMana - manacost >= 0)
+                {
+                    Game.g.pcStats.RegenStam(healAmount);
                     Game.g.pcStats.currentMana -= manacost;
                 }
             }
@@ -1029,5 +1051,6 @@ namespace _7DRL.Managers
     {
         Healing,
         FireStorm,
+        Vigor,
     }
 }
