@@ -443,7 +443,7 @@ namespace _7DRL.Managers
             currentStackSize = 1;
             effect = t;
 
-            if(t == TomeEffect.Fireball)
+            if(t == TomeEffect.FireStorm)
             {
                 fireballDamage = (10 + Game.g.pcStats.intel) * level;
                 manacost = 100 * level;
@@ -470,7 +470,7 @@ namespace _7DRL.Managers
                     Game.g.pcStats.currentMana -= manacost;
                 }
             }
-            else if (effect == TomeEffect.Fireball)
+            else if (effect == TomeEffect.FireStorm)
             {
                 if (Game.g.pcStats.currentMana - manacost >= 0)
                 {
@@ -1028,6 +1028,6 @@ namespace _7DRL.Managers
     public enum TomeEffect
     {
         Healing,
-        Fireball,
+        FireStorm,
     }
 }
