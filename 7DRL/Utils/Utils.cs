@@ -10,7 +10,7 @@ namespace _7DRL
     {
         public static T Choose<T>(T[] keys, float[] weights, Random rng)
         {
-            var ran = rng.Next();
+            var ran = rng.NextDouble();
 
             var max = 0f;
 

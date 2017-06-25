@@ -564,27 +564,28 @@ namespace _7DRL
 
         private void DrawInventory()
         {
-            AddUIElement(0, PName + " Lvl: " + pcStats.level + " XP: " + pcStats.currentXP + "/" + pcStats.NeededXP + " " + pcInv.playerInv.currentGoldAmount + "g Floor: " + floor);
+            AddUIElement(0, PName + " Lvl: " + pcStats.level + " XP needed: " + (pcStats.NeededXP - pcStats.currentXP));
+            AddUIElement(1, pcInv.playerInv.currentGoldAmount + "g Floor: " + floor);
             string str = "H: " + pcStats.currentHealth + "/" + pcStats.maxHealth + " M: " + pcStats.currentMana + "/" + pcStats.maxMana + " S: " + pcStats.currentStamina + "/" + pcStats.maxStamina;
             if (pcStats.outOfStam)
             {
                 str += " tired";
             }
-            AddUIElement(1, str);
+            AddUIElement(2, str);
             if (pcInv.playerInv.items.Count < 10)
             {
-                AddUIElement(2, "-----------< Inventory " + pcInv.playerInv.items.Count + " >--------------");
+                AddUIElement(3, "-----------< Inventory " + pcInv.playerInv.items.Count + " >--------------");
             }
             else
             {
-                AddUIElement(2, "-----------< Inventory " + pcInv.playerInv.items.Count + " >-------------");
+                AddUIElement(3, "-----------< Inventory " + pcInv.playerInv.items.Count + " >-------------");
 
             }
-            AddUIElement(3, "1(" + (InvNum + 1) + ") " + pcInv.getItem(InvNum));
-            AddUIElement(4, "2(" + (InvNum + 2) + ") " + pcInv.getItem(InvNum + 1));
-            AddUIElement(5, "3(" + (InvNum + 3) + ") " + pcInv.getItem(InvNum + 2));
-            AddUIElement(6, "4(" + (InvNum + 4) + ") " + pcInv.getItem(InvNum + 3));
-            AddUIElement(7, "5(" + (InvNum + 5) + ") " + pcInv.getItem(InvNum + 4));
+            AddUIElement(4, "1(" + (InvNum + 1) + ") " + pcInv.getItem(InvNum));
+            AddUIElement(5, "2(" + (InvNum + 2) + ") " + pcInv.getItem(InvNum + 1));
+            AddUIElement(6, "3(" + (InvNum + 3) + ") " + pcInv.getItem(InvNum + 2));
+            AddUIElement(7, "4(" + (InvNum + 4) + ") " + pcInv.getItem(InvNum + 3));
+            AddUIElement(8, "5(" + (InvNum + 5) + ") " + pcInv.getItem(InvNum + 4));
             if (input.isKeyRising(OpenTK.Input.Key.Period))
             {
                 if (InvNum + 4 < pcInv.playerInv.items.Count)
