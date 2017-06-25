@@ -38,7 +38,9 @@ namespace _7DRL
         public int gameX;
 
         public int InvNum;
-        
+
+        public List<string> CombatLog = new List<string>();
+
         private Tile[,] lastFrame;
 
         public Entities.drawable player;
@@ -237,20 +239,37 @@ namespace _7DRL
 
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
-
                         if(Console.ForegroundColor != world[x + worldOffsetX, y + worldOffsetY].color)
                         {
                             Console.ForegroundColor = world[x + worldOffsetX, y + worldOffsetY].color;
                         }
+                        //if (world[x + worldOffsetX, y + worldOffsetY].Visual == '@')
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.Blue;
+                        //}
+                        //else if (world[x + worldOffsetX, y + worldOffsetY].Visual == 'E'                            
+                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 'e'
+                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 'S'
+                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == 's')
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.Red;
+                        //}
+                        //else if (world[x + worldOffsetX, y + worldOffsetY].Visual == '<'
+                        //    || world[x + worldOffsetX, y + worldOffsetY].Visual == '>')
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.Gray;
+                        //}
+                        //else if(world[x + worldOffsetX, y + worldOffsetY].Visual == 'L')
+                        //{
+                        //    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        //}
 
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
-
                     }
                     else if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
-
                         if (ground[x + worldOffsetX, y + worldOffsetY].Visual == (char)0x2588)
                         {
                             Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -292,7 +311,7 @@ namespace _7DRL
                             {
                                 Console.SetCursorPosition(x, j);
                                 Console.Write(guiItem[j]);
-                                for (var i = gameX + 1 + guiItem[j].Length; i < screenX; i++)
+                                for (var i = gameX + 1 + guiItem[j].Length; i < screenX + 1; i++)
                                 {
                                     Console.Write(' ');
                                 }
@@ -462,7 +481,7 @@ namespace _7DRL
                         enemy[i].texture = 'e';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                        enemy[i].AddComponent(new cEnemyAI(player, pcStats, "Rats",
                             40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5, 0.10));
                         onUpdate.Add(enemy[i].update);
                     }
@@ -471,7 +490,7 @@ namespace _7DRL
                         enemy[i].texture = 'E';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                        enemy[i].AddComponent(new cEnemyAI(player, pcStats, "Skeleton",
                             75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5, 0.25));
                         onUpdate.Add(enemy[i].update);
                     }
@@ -485,7 +504,7 @@ namespace _7DRL
                         enemy[i].texture = 's';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                        enemy[i].AddComponent(new cEnemyAI(player, pcStats, "Hornet",
                             20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3, 0.10));
                         onUpdate.Add(enemy[i].update);
                     }
@@ -494,7 +513,7 @@ namespace _7DRL
                         enemy[i].texture = 'S';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemy[i].AddComponent(new Components.cEnemyAI(player, pcStats,
+                        enemy[i].AddComponent(new cEnemyAI(player, pcStats, "Archer",
                             40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5, 0.25));
                         onUpdate.Add(enemy[i].update);
                     }
@@ -515,7 +534,7 @@ namespace _7DRL
                 stairsUp.color = ConsoleColor.White;
                 stairsUp.tag = "Stairs";
                 stairsUp.active = true;
-                stairsUp.AddComponent(new Components.cStair(true));
+                stairsUp.AddComponent(new cStair(true));
                 onUpdate.Add(stairsUp.update);
 
                 stairsDown = new Entities.drawable();
@@ -526,7 +545,7 @@ namespace _7DRL
                 stairsDown.color = ConsoleColor.White;
                 stairsDown.tag = "Stairs";
                 stairsDown.active = true;
-                stairsDown.AddComponent(new Components.cStair(false));
+                stairsDown.AddComponent(new cStair(false));
                 onUpdate.Add(stairsDown.update);
             }
             else
@@ -550,7 +569,15 @@ namespace _7DRL
                 str += " tired";
             }
             AddUIElement(1, str);
-            AddUIElement(2, "-------------< Inventory >--------------");
+            if (pcInv.playerInv.items.Count < 10)
+            {
+                AddUIElement(2, "-----------< Inventory " + pcInv.playerInv.items.Count + " >--------------");
+            }
+            else
+            {
+                AddUIElement(2, "-----------< Inventory " + pcInv.playerInv.items.Count + " >-------------");
+
+            }
             AddUIElement(3, "1(" + (InvNum + 1) + ") " + pcInv.getItem(InvNum));
             AddUIElement(4, "2(" + (InvNum + 2) + ") " + pcInv.getItem(InvNum + 1));
             AddUIElement(5, "3(" + (InvNum + 3) + ") " + pcInv.getItem(InvNum + 2));
@@ -558,7 +585,10 @@ namespace _7DRL
             AddUIElement(7, "5(" + (InvNum + 5) + ") " + pcInv.getItem(InvNum + 4));
             if (input.isKeyRising(OpenTK.Input.Key.Period))
             {
-                InvNum++;
+                if (InvNum + 4 < pcInv.playerInv.items.Count)
+                {
+                    InvNum++;
+                }
             }
 
             if (input.isKeyRising(OpenTK.Input.Key.Comma))
@@ -605,11 +635,27 @@ namespace _7DRL
                 AddUIElement(12, "a: ");
             }
 
+            AddUIElement(13, "-------------< Combat Log >-------------");
+            for (var i = 0; i < 14; i++)
+            {
+                AddUIElement(14 + i, CombatLog.Count > i ? CombatLog[i] : string.Empty);
+            }
+
             UseItem(OpenTK.Input.Key.Number1, InvNum);
             UseItem(OpenTK.Input.Key.Number2, InvNum + 1);
             UseItem(OpenTK.Input.Key.Number3, InvNum + 2);
             UseItem(OpenTK.Input.Key.Number4, InvNum + 3);
             UseItem(OpenTK.Input.Key.Number5, InvNum + 4);            
+        }
+
+        public void LogCombat(string combat)
+        {
+            if (CombatLog.Count >= 14)
+            {
+                CombatLog.RemoveAt(0);
+            }
+
+            CombatLog.Add(combat);
         }
 
         private void UseItem(OpenTK.Input.Key key, int num)
@@ -633,6 +679,10 @@ namespace _7DRL
                     else if (pcInv.playerInv.items[num] is Amulet)
                     {
                         pcInv.EquipAmulet(num);
+                    }
+                    else if (pcInv.playerInv.items[num] is Potion)
+                    {
+                        pcInv.UsePotion(num);
                     }
                 }
             }

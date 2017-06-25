@@ -29,6 +29,7 @@ namespace _7DRL.Components
         public int currentXP;
 
         public int healRate;
+        public int manaRate;
         public int stamRate;
         public bool inCombat;
         public bool outOfStam;
@@ -101,7 +102,8 @@ namespace _7DRL.Components
             maxStamina = dex * 20 + 5 * level;
 
             healRate = con / 6;
-            stamRate = dex / 6;
+            manaRate = intel / 4;
+            stamRate = dex / 2;
 
             NeededXP = 75 * level + 125;
 
@@ -115,8 +117,11 @@ namespace _7DRL.Components
             if(debug)
             {
                 Heal(100);
+                RegenMana(100);
                 RegenStam(100);
             }
+
+            RegenMana(manaRate);
 
             if (!inCombat)
             {
@@ -137,7 +142,7 @@ namespace _7DRL.Components
                 else if (currentStamina <= 0)
                 {
                     outOfStam = true;
-                }
+                }                
             }
             else
             {
@@ -180,7 +185,19 @@ namespace _7DRL.Components
             }
         }
 
-        public void Damage(int attackAmount)
+        public void RegenMana(int amount)
+        {
+            if (currentMana + amount > maxMana)
+            {
+                currentMana = maxMana;
+            }
+            else
+            {
+                currentMana += amount;
+            }
+        }
+
+        public int Damage(int attackAmount)
         {
             attackAmount = attackAmount - damageReduction;
             if(currentHealth - attackAmount < 0)
@@ -197,6 +214,8 @@ namespace _7DRL.Components
             {
                 currentHealth -= attackAmount;
             }
+
+            return attackAmount;
         }
 
         public int getAttack()
@@ -205,7 +224,7 @@ namespace _7DRL.Components
 
             if(crit < dex)
             {
-                return str * 2 + weaponDamage;
+                return (str + weaponDamage) * 2;
             }
             else
             {
