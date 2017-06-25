@@ -38,15 +38,40 @@ namespace _7DRL.Components
             randomThoughts.Add("\"When was the last time I ate?\"");
             randomThoughts.Add("\"Why am I doing this?\"");
 
+            endThoughts.Add("\"I found you!\"");
+            endThoughts.Add(" P - \"You did.\"");
+            endThoughts.Add(" P - \"... and you will again.\"");
+            endThoughts.Add("\"What do you mean?\"");
+            endThoughts.Add("As you walk towards the princess,");
+            endThoughts.Add("she fades away");
         }
 
-        public void Run(Entities.drawable r)
+        public void Run(Entities.drawable d)
         {
             if(Game.doTick)
             {
                 if(Game.g.rng.Next(0,100) <= 5)
                 {
                     Game.g.LogCombat(randomThoughts[Game.g.rng.Next(randomThoughts.Count)]);
+                }
+                if(Game.g.floor % 10 == 0 && Game.g.floor != 0)
+                {
+                    for(int i = -1; i <= 1; i++)
+                    {
+                        for (int j = -1; j <= 1; j++)
+                        {
+                            int xPos = d.pos.xPos + i;
+                            int yPos = d.pos.yPos + j;
+
+                            if(Game.g.world[xPos, yPos].Visual == 'P')
+                            {
+                                for(int k = 0; k < endThoughts.Count; k++)
+                                {
+                                    Game.g.LogCombat(endThoughts[k]);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

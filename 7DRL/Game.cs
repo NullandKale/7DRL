@@ -43,6 +43,8 @@ namespace _7DRL
 
         private Tile[,] lastFrame;
 
+        public Entities.drawable princess;
+
         public Entities.drawable player;
         public Components.cStats pcStats;
         public InventoryManager pcInv;
@@ -53,7 +55,7 @@ namespace _7DRL
         private Entities.drawable[] enemy;
         private int enemyCount;
 
-        private int floor;
+        public int floor;
 
         private int Pstr;
         private int Pdex;
@@ -188,7 +190,8 @@ namespace _7DRL
 
             InitializeCollisionMap();
             InitializeStairs(reset);
-            InitializePlayer(reset);  
+            InitializePlayer(reset);
+            InintializePrincess(reset);
             InitializeEnemies(reset);
             
             lastFrameDone = true;
@@ -390,6 +393,30 @@ namespace _7DRL
                         ground[i, j].collideable = true;
                     }
                 }
+            }
+        }
+
+        private void InintializePrincess(bool reset)
+        {
+            if(!reset)
+            {
+                princess = new Entities.drawable();
+                princess.texture = 'P';
+                princess.color = ConsoleColor.Gray;
+                princess.tag = "Princess";
+                princess.active = true;
+                onUpdate.Add(princess.update);
+            }
+            if(floor % 10 == 0 && floor != 0)
+            {
+                Utils.Point p = Utils.Point.getRandomPointInWorld();
+                princess.pos.xPos = p.x;
+                princess.pos.yPos = p.y;
+            }
+            else if(floor % 10 != 0)
+            {
+                princess.pos.xPos = -1;
+                princess.pos.yPos = -1;
             }
         }
 

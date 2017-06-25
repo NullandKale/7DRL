@@ -200,15 +200,16 @@ namespace _7DRL.Components
         public int Damage(int attackAmount)
         {
             attackAmount = attackAmount - damageReduction;
-            if(currentHealth - attackAmount < 0)
+            if (attackAmount < 0)
+            {
+                return 0;
+            }
+            else if (currentHealth - attackAmount < 0)
             {
                 currentHealth -= attackAmount;
+                Game.g.LogCombat("You DIED");
                 Console.WriteLine(" GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER");
                 Game.g.stop = true;
-            }
-            else if(attackAmount < 0)
-            {
-                //Do nothing
             }
             else
             {
