@@ -75,8 +75,9 @@ namespace _7DRL.Components
             {
                 RegenStats();
             }
+            RegenStats();
 
-            if(Game.doTick)
+            if (Game.doTick)
             {
                 PassiveHeal();
             }

@@ -324,9 +324,15 @@
                 int xDiff = rooms[i].roomRect.X - rooms[i].connectedRoom0.roomRect.X;
                 int yDiff = rooms[i].roomRect.Y - rooms[i].connectedRoom0.roomRect.Y;
 
-                Rectangle drill = new Rectangle(rooms[i].roomRect.X + 1, rooms[i].roomRect.Y + 1, hallWidth, hallWidth);
+                Rectangle drill = new Rectangle(rooms[i].roomRect.X + (rooms[i].roomRect.Width / 2), rooms[i].roomRect.Y + (rooms[i].roomRect.Height / 2), hallWidth, hallWidth);
 
-                for(int x = 0; x < Math.Abs(xDiff); x++)
+                int roomRectMidX = rooms[i].roomRect.X + (rooms[i].roomRect.Width / 2);
+                int roomRectMidY = rooms[i].roomRect.Y + (rooms[i].roomRect.Height / 2);
+
+                int connectedRectMidX = rooms[i].connectedRoom0.roomRect.X + (rooms[i].connectedRoom0.roomRect.Width / 2);
+                int connectedRectMidY = rooms[i].connectedRoom0.roomRect.Y + (rooms[i].connectedRoom0.roomRect.Height / 2);
+
+                for (int x = 0; x < Math.Abs(xDiff); x++)
                 {
                         for (int j = 0; j < drill.Width; j++)
                         {
@@ -344,11 +350,11 @@
 
                         int xPos = drill.X;
 
-                        if (rooms[i].roomRect.X > rooms[i].connectedRoom0.roomRect.X)
+                        if (roomRectMidX > connectedRectMidX)
                         {
                             xPos--;
                         }
-                        else if(rooms[i].roomRect.X < rooms[i].connectedRoom0.roomRect.X)
+                        else if(roomRectMidY < connectedRectMidY)
                         {
                             xPos++;
                         }

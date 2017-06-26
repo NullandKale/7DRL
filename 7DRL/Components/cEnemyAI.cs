@@ -212,56 +212,8 @@ namespace _7DRL.Components
         private Point GenerateTarget(Point p, drawable d)
         {
             var temp = Point.getRandomPointNearbyInWorld(startingPosition);
-            //if (p != null)
-            //{
-            //    if (p.x > d.pos.xPos)
-            //    {
-            //        temp.x = -Math.Abs(temp.x);
-            //    }
-            //    else
-            //    {
-            //        temp.x = Math.Abs(temp.x);
-            //    }
-
-            //    if (p.y > d.pos.yPos)
-            //    {
-            //        temp.y = -Math.Abs(temp.y);
-            //    }
-            //    else
-            //    {
-            //        temp.y = Math.Abs(temp.y);
-            //    }
-            //}
-
-            //if (d.pos.xPos > Game.g.worldSize / 2)
-            //{
-            //    temp.x = 0;
-            //}
-            //else
-            //{
-            //    temp.x = Game.g.worldSize;
-            //}
-
-            //if (d.pos.yPos > Game.g.worldSize / 2)
-            //{
-            //    temp.y = 0;
-            //}
-            //else
-            //{
-            //    temp.y = Game.g.worldSize;
-            //}
-
-            Game.g.LogCombat(temp.x + ", " + temp.y);
+            //Game.g.LogCombat(temp.x + ", " + temp.y);
             return temp;
-            /*
-            if (Managers.CollisionManager.CheckCollision(p.x, p.y))
-            {
-                return p;
-            }
-            else
-            {
-                return GenerateTarget();
-            }*/
         }
     }
 }
