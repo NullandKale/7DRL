@@ -46,6 +46,7 @@ namespace _7DRL
         private Tile[,] lastFrame;
 
         public Entities.drawable princess;
+        public Entities.drawable dragon;
 
         public Entities.drawable player;
         public Components.cStats pcStats;
@@ -205,7 +206,7 @@ namespace _7DRL
             InitializeStairs(reset);
             InitializePlayer(reset);
             InitializeEnemies(reset);
-            InintializePrincess(reset);
+            InintializePrincessAndDragon(reset);
 
             lastFrameDone = true;
             resetWorld = false;
@@ -409,29 +410,46 @@ namespace _7DRL
             }
         }
 
-        private void InintializePrincess(bool reset)
+        private void InintializePrincessAndDragon(bool reset)
         {
             if(!reset)
             {
                 princess = new Entities.drawable();
                 princess.texture = 'P';
-                princess.color = ConsoleColor.Gray;
+                princess.color = ConsoleColor.Magenta;
                 princess.tag = "Princess";
                 onUpdate.Add(princess.update);
+
+                dragon = new Entities.drawable();
+                dragon.color = ConsoleColor.Red;
+                dragon.texture = 'D';
+                dragon.tag = "Enemy";
+                dragon.active = true;
+                var enemyAI = new cEnemyAI(player, pcStats, "Dragon",
+                    215 + (pcStats.level * 5), 35 + (pcStats.level * 2), 10, 8 + (pcStats.level / 10), 1.5, 0.25);
+                dragon.AddComponent(enemyAI);
+                onUpdate.Add(dragon.update);
             }
             int flr = Math.Abs(this.floor);
             if(flr % 10 == 0 && flr != 0)
             {
-                Utils.Point p = Utils.Point.getRandomPointInWorld();
+                Point p = Point.getRandomPointInWorld();
                 princess.pos.xPos = p.x;
                 princess.pos.yPos = p.y;
+
+                p = Point.getRandomPointInWorld();
+                dragon.pos.xPos = p.x;
+                dragon.pos.yPos = p.y;
             }
             else
             {
                 princess.pos.xPos = -1;
                 princess.pos.yPos = -1;
+                dragon.pos.xPos = -1;
+                dragon.pos.yPos = -1;
             }
 
+            dragon.active = true;
             princess.active = true;
         }
 
