@@ -53,11 +53,11 @@ namespace _7DRL.Components
             {
                 if(targetPos == null || getNewTargetPos || EnemiesInRange(d))
                 {
-                    targetPos = GenerateTarget();
+                    targetPos = GenerateTarget(targetPos, d);
                 }
                 if (d.pos.xPos == targetPos.x && d.pos.yPos == targetPos.y)
                 {
-                    targetPos = GenerateTarget();
+                    targetPos = GenerateTarget(targetPos, d);
                 }
                 else
                 {
@@ -209,11 +209,50 @@ namespace _7DRL.Components
             //Console.Write(moveX + ", " + moveY + ", " + canMoveBoth + ", " + canMoveX + ", " + canMoveY);
         }
 
-        private Point GenerateTarget()
+        private Point GenerateTarget(Point p, drawable d)
         {
-            var p = Point.getRandomPointNearbyInWorld(startingPosition);
-            Game.g.LogCombat(p.x + ", " + p.y);
-            return p;
+            var temp = Point.getRandomPointNearbyInWorld(startingPosition);
+            //if (p != null)
+            //{
+            //    if (p.x > d.pos.xPos)
+            //    {
+            //        temp.x = -Math.Abs(temp.x);
+            //    }
+            //    else
+            //    {
+            //        temp.x = Math.Abs(temp.x);
+            //    }
+
+            //    if (p.y > d.pos.yPos)
+            //    {
+            //        temp.y = -Math.Abs(temp.y);
+            //    }
+            //    else
+            //    {
+            //        temp.y = Math.Abs(temp.y);
+            //    }
+            //}
+
+            //if (d.pos.xPos > Game.g.worldSize / 2)
+            //{
+            //    temp.x = 0;
+            //}
+            //else
+            //{
+            //    temp.x = Game.g.worldSize;
+            //}
+
+            //if (d.pos.yPos > Game.g.worldSize / 2)
+            //{
+            //    temp.y = 0;
+            //}
+            //else
+            //{
+            //    temp.y = Game.g.worldSize;
+            //}
+
+            Game.g.LogCombat(temp.x + ", " + temp.y);
+            return temp;
             /*
             if (Managers.CollisionManager.CheckCollision(p.x, p.y))
             {

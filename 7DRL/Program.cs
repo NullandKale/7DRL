@@ -98,7 +98,7 @@ namespace _7DRL
 
                 if(input == -1)
                 {
-                    Console.WriteLine("Invalid Input");
+                    Console.WriteLine("Invalid input, input just a number.");
                 }
                 else if(input == 0)
                 {
@@ -132,17 +132,17 @@ namespace _7DRL
 
                     if (Console.ReadLine().ToUpper() == "R")
                     {
-                        Console.SetCursorPosition(0, 6);
-                        Console.WriteLine("Rolling Stats for " + playerName);
-
                         bool cont = true;
                         Random rng = new Random();
 
                         while (cont)
                         {
+                            Console.SetCursorPosition(0, 7);
+                            Console.WriteLine("Rolling Stats for " + playerName);
+
                             int Total = 0;
 
-                            str = rng.Next(1, 10);
+                            str = rng.Next(3, 10);
                             Total += str;
 
                             dex = rng.Next(1, 10);
@@ -169,7 +169,7 @@ namespace _7DRL
                             Console.WriteLine("Total: " + Total);
                             Console.WriteLine("Enter (Y) to accept and ANYTHING ELSE to ReRoll");
 
-                            if (Console.ReadLine() == "Y")
+                            if (Console.ReadLine().ToUpper() == "Y")
                             {
                                 cont = false;
                             }

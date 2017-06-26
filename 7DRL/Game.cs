@@ -97,10 +97,10 @@ namespace _7DRL
 
             input = new nullEngine.Managers.InputManager();
 
-            enemyCount = 35;
+            enemyCount = 15;
             floor = 1;
 
-            worldSize = 100;
+            worldSize = 80;
             screenX = 119;
             screenY = 28;
 
