@@ -23,7 +23,8 @@ namespace _7DRL
         public bool resetWorldUp;
         public bool rendering;
 
-        private int seed;
+        public int seed;
+        public string startingSeed;
 
         public Tile[,] ground;
         public Tile[,] world;
@@ -69,7 +70,7 @@ namespace _7DRL
 
         private Dictionary<int, string> guiItem = new Dictionary<int, string>();
 
-        public Game(int seed, int Pstr, int Pdex, int Pcon, int Pintel, int Pwis, int Pcha, string playerName)
+        public Game(int seed, int Pstr, int Pdex, int Pcon, int Pintel, int Pwis, int Pcha, string playerName, bool random)
         {
             if (g == null)
             {
@@ -81,7 +82,17 @@ namespace _7DRL
             }
             
             onUpdate = new List<Action>();
-            rng = new Random(seed);
+
+            this.seed = seed;
+
+            if(random)
+            {
+                rng = new Random();
+                this.seed = rng.Next();
+            }
+
+            rng = new Random(this.seed);
+            startingSeed = "SEED: " + this.seed.ToString();
 
             input = new nullEngine.Managers.InputManager();
 
@@ -193,9 +204,9 @@ namespace _7DRL
             InitializeCollisionMap();
             InitializeStairs(reset);
             InitializePlayer(reset);
-            InintializePrincess(reset);
             InitializeEnemies(reset);
-            
+            InintializePrincess(reset);
+
             lastFrameDone = true;
             resetWorld = false;
         }
@@ -219,13 +230,13 @@ namespace _7DRL
                 {
                     if (resetWorldUp)
                     {
-                        ResetWorld(seed + 1);
                         floor++;
+                        ResetWorld(seed + 1);
                     }
                     else
                     {
-                        ResetWorld(seed - 1);
                         floor--;
+                        ResetWorld(seed - 1);
                     }
                     resetWorld = false;
                 }
@@ -408,17 +419,19 @@ namespace _7DRL
                 princess.tag = "Princess";
                 onUpdate.Add(princess.update);
             }
-            if(floor % 10 == 0 && floor != 0)
+            int flr = Math.Abs(this.floor);
+            if(flr % 10 == 0 && flr != 0)
             {
                 Utils.Point p = Utils.Point.getRandomPointInWorld();
                 princess.pos.xPos = p.x;
                 princess.pos.yPos = p.y;
             }
-            else if(floor % 10 != 0)
+            else
             {
                 princess.pos.xPos = -1;
                 princess.pos.yPos = -1;
             }
+
             princess.active = true;
         }
 

@@ -414,7 +414,7 @@ namespace _7DRL
                         }
                     }
                         
-                    Game game = new Game(6, str, dex, con, intel, wis, cha, playerName);
+                    Game game = new Game(6, str, dex, con, intel, wis, cha, playerName, true);
                     game.onLoad(false, Managers.GenerationType.Rooms);
 
                     Timer updateTimer = new Timer(updateTime);

@@ -94,6 +94,7 @@ namespace _7DRL.Components
             }
 
             Console.SetCursorPosition(0, 29);
+
             Console.Write("HP:");
             Console.ForegroundColor = ConsoleColor.Red;
             
@@ -140,6 +141,11 @@ namespace _7DRL.Components
                     Console.Write(" ");
                 }
             }
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.SetCursorPosition(Game.g.screenX - Game.g.startingSeed.Length - 1, 29);
+            Console.Write(Game.g.startingSeed);
+
         }
 
         public void RegenStats()
@@ -255,6 +261,7 @@ namespace _7DRL.Components
             {
                 currentHealth -= attackAmount;
                 Game.g.LogCombat("You DIED");
+                Console.SetCursorPosition(0, 29);
                 Console.WriteLine(" GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER GAME OVER");
                 Game.g.stop = true;
             }

@@ -79,7 +79,7 @@ namespace _7DRL.Components
             {
                 "\"I found you!\"",
                 " P - \"You did.\"",
-                " P - \"... and you will again.\"",
+                " P - \"... and you will, again.\"",
                 "\"What do you mean?\"",
                 "As you walk towards the princess,",
                 "she fades away"
@@ -88,7 +88,7 @@ namespace _7DRL.Components
             {
                 "\"I found you again!\"",
                 " P - \"You did.\"",
-                " P - \"... and you'll forget again.\"",
+                " P - \"... and you'll forget, again.\"",
                 "\"What do you mean?\"",
                 "As you walk towards the princess,",
                 "she fades away"
@@ -98,7 +98,7 @@ namespace _7DRL.Components
                 "\"I found you,\"" +
                 "\" and I didn't forget!\"",
                 " P - \"You did.\"",
-                " P - \"... and you will again.\"",
+                " P - \"... and you will, again.\"",
                 "\"What do you mean?\"",
                 "As you walk towards the princess,",
                 "she fades away"
@@ -108,7 +108,7 @@ namespace _7DRL.Components
                 "\"I found you,\"" +
                 "\" and I didn't forget!\"",
                 " P - \"You did.\"",
-                " P - \"... and you will again.\"",
+                " P - \"... and you will, again.\"",
                 "\"What do you mean?\"",
                 "As you walk towards the princess,",
                 "she fades away"
@@ -122,9 +122,9 @@ namespace _7DRL.Components
 
         public void Run(Entities.drawable d)
         {
-            if(Game.doTick)
+            if (Game.doTick)
             {
-                if(Game.g.rng.Next(0,100) <= 5)
+                if (Game.g.rng.Next(0, 100) <= 5)
                 {
                     List<string> set = new List<string>();
                     set.AddRange(randomThoughtSet[currentSet]);
@@ -137,32 +137,19 @@ namespace _7DRL.Components
                         lastThought = thought;
                     }
                 }
-
-                if(Game.g.floor % 10 == 0 && Game.g.floor != 0)
+                if (Util.dist(d.pos.xPos, d.pos.yPos, Game.g.princess.pos.xPos, Game.g.princess.pos.yPos) < 1.5 && Game.g.princess.active)
                 {
-                    for(int i = -1; i <= 1; i++)
+                    for (int k = 0; k < endThoughtSet[currentSet].Count; k++)
                     {
-                        for (int j = -1; j <= 1; j++)
-                        {
-                            int xPos = d.pos.xPos + i;
-                            int yPos = d.pos.yPos + j;
-
-                            if(Game.g.world[xPos, yPos].Visual == 'P')
-                            {
-                                for(int k = 0; k < endThoughtSet[currentSet].Count; k++)
-                                {
-                                    Game.g.LogCombat(endThoughtSet[currentSet][k]);
-                                }
-                                Game.g.princess.active = false;
-                                if (currentSet < endThoughtSet.Count)
-                                {
-                                    currentSet++;
-                                }
-                            }
-                        }
+                        Game.g.LogCombat(endThoughtSet[currentSet][k]);
+                    }
+                    Game.g.princess.active = false;
+                    if (currentSet < endThoughtSet.Count)
+                    {
+                        currentSet++;
                     }
                 }
-            }
+            }           
         }
     }
 }
