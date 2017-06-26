@@ -10,6 +10,7 @@ namespace _7DRL.Components
 {
     public class cEnemyAI : iComponent
     {
+        public Point startingPosition;
         private Point targetPos;
         private drawable player;
         private cStats playerStats;
@@ -30,10 +31,11 @@ namespace _7DRL.Components
         {   
         }
 
-        public cEnemyAI(drawable pc, cStats pcStats, string enemyName, int health, int attack, int range, int detectRange, double attackRange, double lootChance)
+        public cEnemyAI(drawable pc, cStats pcStats, Point startingPosition, string enemyName, int health, int attack, int range, int detectRange, double attackRange, double lootChance)
         {
             player = pc;
             playerStats = pcStats;
+            this.startingPosition = startingPosition;
             this.enemyName = enemyName;
             this.health = health;
             this.maxHealth = health;
@@ -209,8 +211,10 @@ namespace _7DRL.Components
 
         private Point GenerateTarget()
         {
-            Point p = Point.getRandomPoint(Game.g.worldSize);
-
+            var p = Point.getRandomPointNearbyInWorld(startingPosition);
+            Game.g.LogCombat(p.x + ", " + p.y);
+            return p;
+            /*
             if (Managers.CollisionManager.CheckCollision(p.x, p.y))
             {
                 return p;
@@ -218,7 +222,7 @@ namespace _7DRL.Components
             else
             {
                 return GenerateTarget();
-            }
+            }*/
         }
     }
 }

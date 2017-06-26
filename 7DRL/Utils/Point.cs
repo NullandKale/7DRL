@@ -81,6 +81,19 @@ namespace _7DRL.Utils
             }
         }
 
+        public static Point getRandomPointNearbyInWorld(Point loc)
+        {
+            Point p = getRandomPoint(Game.g.worldSize);
+            if (!Managers.CollisionManager.CheckCollision(p.x, p.y) && dist(p, loc) > 5)
+            {
+                return getRandomPointInWorld();
+            }
+            else
+            {
+                return p;
+            }
+        }
+
         public static Point getRandomDoorPoint(Point pos)
         {
             Point p = getRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));

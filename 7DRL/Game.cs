@@ -425,7 +425,7 @@ namespace _7DRL
                 dragon.texture = 'D';
                 dragon.tag = "Enemy";
                 dragon.active = true;
-                var enemyAI = new cEnemyAI(player, pcStats, "Dragon",
+                var enemyAI = new cEnemyAI(player, pcStats, new Point(-1, - 1), "Dragon",
                     215 + (pcStats.level * 5), 35 + (pcStats.level * 2), 10, 8 + (pcStats.level / 10), 1.5, 0.25);
                 dragon.AddComponent(enemyAI);
                 onUpdate.Add(dragon.update);
@@ -438,6 +438,7 @@ namespace _7DRL
                 princess.pos.yPos = p.y;
 
                 p = Point.getRandomPointInWorld();
+                dragon.GetComponent<cEnemyAI>().startingPosition = p;
                 dragon.pos.xPos = p.x;
                 dragon.pos.yPos = p.y;
             }
@@ -525,7 +526,7 @@ namespace _7DRL
                         enemy[i].texture = 'e';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemyAI[i] = new cEnemyAI(player, pcStats, "Rats",
+                        enemyAI[i] = new cEnemyAI(player, pcStats, enemyPos, "Rats",
                             40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5, 0.10);
                         enemy[i].AddComponent(enemyAI[i]);
                         onUpdate.Add(enemy[i].update);
@@ -535,7 +536,7 @@ namespace _7DRL
                         enemy[i].texture = 'E';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemyAI[i] = new cEnemyAI(player, pcStats, "Skeleton",
+                        enemyAI[i] = new cEnemyAI(player, pcStats, enemyPos, "Skeleton",
                             75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5, 0.25);
                         enemy[i].AddComponent(enemyAI[i]);
                         onUpdate.Add(enemy[i].update);
@@ -550,7 +551,7 @@ namespace _7DRL
                         enemy[i].texture = 's';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemyAI[i] = new cEnemyAI(player, pcStats, "Hornet",
+                        enemyAI[i] = new cEnemyAI(player, pcStats, enemyPos, "Hornet",
                             20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3, 0.10);
                         enemy[i].AddComponent(enemyAI[i]);
                         onUpdate.Add(enemy[i].update);
@@ -560,7 +561,7 @@ namespace _7DRL
                         enemy[i].texture = 'S';
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
-                        enemyAI[i] = new cEnemyAI(player, pcStats, "Archer",
+                        enemyAI[i] = new cEnemyAI(player, pcStats, enemyPos, "Archer",
                             40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5, 0.25);
                         enemy[i].AddComponent(enemyAI[i]);
                         onUpdate.Add(enemy[i].update);
