@@ -441,6 +441,7 @@ namespace _7DRL
                 dragon.GetComponent<cEnemyAI>().startingPosition = p;
                 dragon.pos.xPos = p.x;
                 dragon.pos.yPos = p.y;
+                dragon.active = true;
             }
             else
             {
@@ -448,9 +449,9 @@ namespace _7DRL
                 princess.pos.yPos = -1;
                 dragon.pos.xPos = -1;
                 dragon.pos.yPos = -1;
+                dragon.active = false;
             }
 
-            dragon.active = true;
             princess.active = true;
         }
 
