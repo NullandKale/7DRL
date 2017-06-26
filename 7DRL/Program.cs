@@ -42,7 +42,7 @@ namespace _7DRL
 
             // Set size and Title.
             Console.SetWindowSize(120, 30);
-            Console.Title = "7DRL";
+            Console.Title = "Apocatastasis";
 
             // Disable resizing.
             IntPtr handle = GetConsoleWindow();
@@ -74,7 +74,7 @@ namespace _7DRL
                 // error setting console mode.
             }
 
-            Console.WriteLine("Welcome to ________");
+            Console.WriteLine("    Apocatastasis Welcomes You.");
             Console.WriteLine("(0) New Game");
             Console.WriteLine("(1) Load Game -- NOT IMPLEMENTED");
             Console.WriteLine("(2) Quit");
@@ -442,6 +442,7 @@ namespace _7DRL
                 else
                 {
                     Console.WriteLine("Thanks for playing!");
+                    inputValid = true;
                 }
             }
         }
