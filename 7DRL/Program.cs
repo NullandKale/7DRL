@@ -412,6 +412,13 @@
                     updateTimer.Elapsed += game.update;
 
                     inputValid = true;
+
+                    updateTimer.Start();
+
+                    while (!game.stop)
+                    {
+
+                    }
                 }
                 else if (input == 1)
                 {
@@ -423,8 +430,6 @@
                     inputValid = true;
                 }
             }
-
-            updateTimer.Start();
         }
     }
 }
