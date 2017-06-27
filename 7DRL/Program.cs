@@ -101,6 +101,27 @@
                 else if (input == 0)
                 {
                     // STAT ROLL MENU
+                    bool getRandom = true;
+                    bool RandomSeed = false;
+                    int seed = 0;
+                    while (getRandom)
+                    {
+                        Console.Write("Press enter to use a random seed, or enter a seed");
+                        string seedString = Console.ReadLine();
+
+                        if (seedString == string.Empty)
+                        {
+                            RandomSeed = true;
+                        }
+                        else
+                        {
+                            RandomSeed = false;
+                            byte[] toBytes = System.Text.Encoding.ASCII.GetBytes(seedString);
+                            seed = BitConverter.ToInt32(toBytes, 0);
+                            getRandom = false;
+                        }
+                    }
+
                     bool getName = true;
                     string playerName = string.Empty;
 
@@ -406,7 +427,7 @@
                         }
                     }
 
-                    game = new Game(100, str, dex, con, intel, wis, cha, playerName, true);
+                    game = new Game(seed, str, dex, con, intel, wis, cha, playerName, RandomSeed);
                     game.onLoad(false, Managers.GenerationType.Rooms);
 
                     updateTimer.Elapsed += game.update;
