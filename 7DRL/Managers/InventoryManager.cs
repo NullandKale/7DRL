@@ -1,11 +1,81 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _7DRL.Managers
+﻿namespace _7DRL.Managers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    public enum WeaponEffectType
+    {
+        none,
+        strength,
+        speed,
+        poison,
+        hardening,
+    }
+
+    public enum ArmorEffectType
+    {
+        none,
+        strength,
+        speed,
+        hardening,
+    }
+
+    public enum PotionType
+    {
+        Healing,
+        Vigor,
+        Mana,
+    }
+
+    public enum JewelleryType
+    {
+        Str,
+        Dex,
+        Con,
+        Wis,
+        Int
+    }
+
+    public enum ItemType
+    {
+        Gold,
+        Weapon,
+        Armor,
+        Potion,
+        Ring,
+        Amulet,
+        Tome
+    }
+
+    public enum WeaponType
+    {
+        Sword,
+        Dagger,
+        Axe
+    }
+
+    public enum MaterialType
+    {
+        Leather,
+        Iron,
+        Steel
+    }
+
+    public enum RingMaterialType
+    {
+        Copper,
+        Gold,
+        Silver
+    }
+
+    public enum TomeEffect
+    {
+        Healing,
+        FireStorm,
+        Vigor,
+    }
+
     public class InventoryManager
     {
         public Inventory playerInv;
@@ -38,15 +108,15 @@ namespace _7DRL.Managers
         {
             for (int i = 0; i < lootItems.Count; i++)
             {
-                if(lootItems[i].x != -10)
+                if (lootItems[i].X != -10)
                 {
-                    Game.g.world[lootItems[i].x, lootItems[i].y].color = ConsoleColor.DarkYellow;
-                    Game.g.world[lootItems[i].x, lootItems[i].y].Visual = 'L';
-                    Game.g.world[lootItems[i].x, lootItems[i].y].collideable = false;
+                    Game.g.world[lootItems[i].X, lootItems[i].Y].Color = ConsoleColor.DarkYellow;
+                    Game.g.world[lootItems[i].X, lootItems[i].Y].Visual = 'L';
+                    Game.g.world[lootItems[i].X, lootItems[i].Y].Collideable = false;
                 }
             }
 
-            if(Game.input.isKeyFalling(OpenTK.Input.Key.B))
+            if (Game.input.IsKeyFalling(OpenTK.Input.Key.B))
             {
                 Buy(Game.g.pcStats.level);
             }
@@ -62,11 +132,11 @@ namespace _7DRL.Managers
             lootItems.Clear();
             for (int i = 0; i < lootAmount; i++)
             {
-                lootItems.Add(Utils.Point.getRandomPointInWorld());
+                lootItems.Add(Utils.Point.GetRandomPointInWorld());
             }
         }
 
-        public string getItem(int num)
+        public string GetItem(int num)
         {
             if (playerInv.items.Count > num)
             {
@@ -80,7 +150,7 @@ namespace _7DRL.Managers
 
         public void Buy(int level)
         {
-            if(playerInv.currentGoldAmount >= 100)
+            if (playerInv.currentGoldAmount >= 100)
             {
                 playerInv.currentGoldAmount -= 100;
 
@@ -92,27 +162,27 @@ namespace _7DRL.Managers
 
                 if (temp == ItemType.Weapon)
                 {
-                    playerInv.addItem(Weapon.GenerateWeapon(level));
+                    playerInv.AddItem(Weapon.GenerateWeapon(level));
                 }
                 else if (temp == ItemType.Armor)
                 {
-                    playerInv.addItem(Armor.GenerateArmor(level));
+                    playerInv.AddItem(Armor.GenerateArmor(level));
                 }
                 else if (temp == ItemType.Ring)
                 {
-                    playerInv.addItem(Ring.GenerateRing(level));
+                    playerInv.AddItem(Ring.GenerateRing(level));
                 }
                 else if (temp == ItemType.Amulet)
                 {
-                    playerInv.addItem(Amulet.GenerateAmulet(level));
+                    playerInv.AddItem(Amulet.GenerateAmulet(level));
                 }
                 else if (temp == ItemType.Potion)
                 {
-                    playerInv.addItem(Potion.GeneratePotion(level));
+                    playerInv.AddItem(Potion.GeneratePotion(level));
                 }
                 else if (temp == ItemType.Tome)
                 {
-                    playerInv.addItem(Tome.GenerateTome(level));
+                    playerInv.AddItem(Tome.GenerateTome(level));
                 }
             }
         }
@@ -121,10 +191,10 @@ namespace _7DRL.Managers
         {
             for (int i = 0; i < lootItems.Count; i++)
             {
-                if (lootItems[i].x == lootPosX && lootItems[i].y == lootPosY)
+                if (lootItems[i].X == lootPosX && lootItems[i].Y == lootPosY)
                 {
-                    lootItems[i].x = -10;
-                    lootItems[i].y = -10;
+                    lootItems[i].X = -10;
+                    lootItems[i].Y = -10;
                 }
             }
 
@@ -145,30 +215,29 @@ namespace _7DRL.Managers
             }
             else if (temp == ItemType.Weapon)
             {
-                playerInv.addItem(Weapon.GenerateWeapon(level));
+                playerInv.AddItem(Weapon.GenerateWeapon(level));
             }
             else if (temp == ItemType.Armor)
             {
-                playerInv.addItem(Armor.GenerateArmor(level));
+                playerInv.AddItem(Armor.GenerateArmor(level));
             }
             else if (temp == ItemType.Ring)
             {
-                playerInv.addItem(Ring.GenerateRing(level));
+                playerInv.AddItem(Ring.GenerateRing(level));
             }
             else if (temp == ItemType.Amulet)
             {
-                playerInv.addItem(Amulet.GenerateAmulet(level));
+                playerInv.AddItem(Amulet.GenerateAmulet(level));
             }
             else if (temp == ItemType.Potion)
             {
-                playerInv.addItem(Potion.GeneratePotion(level));
+                playerInv.AddItem(Potion.GeneratePotion(level));
             }
             else if (temp == ItemType.Tome)
             {
-                playerInv.addItem(Tome.GenerateTome(level));
+                playerInv.AddItem(Tome.GenerateTome(level));
             }
-            //Add for new ItemTypes
-
+            
             if (!gotGold)
             {
                 Game.g.LogCombat("Picked up " + playerInv[playerInv.Count - 1]);
@@ -186,17 +255,18 @@ namespace _7DRL.Managers
                 if (equipedWeapon == null)
                 {
                     equipedWeapon = (Weapon)playerInv.items[itemLoc];
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                     equipedWeapon.OnEquip();
                 }
                 else
                 {
-                    playerInv.addItem(equipedWeapon);
+                    playerInv.AddItem(equipedWeapon);
                     equipedWeapon.OnUnequip();
                     equipedWeapon = (Weapon)playerInv.items[itemLoc];
                     equipedWeapon.OnEquip();
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                 }
+
                 return true;
             }
             else
@@ -212,17 +282,18 @@ namespace _7DRL.Managers
                 if (equipedArmor == null)
                 {
                     equipedArmor = (Armor)playerInv.items[itemLoc];
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                     equipedArmor.OnEquip();
                 }
                 else
                 {
-                    playerInv.addItem(equipedArmor);
+                    playerInv.AddItem(equipedArmor);
                     equipedArmor.OnUnequip();
                     equipedArmor = (Armor)playerInv.items[itemLoc];
                     equipedArmor.OnEquip();
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                 }
+
                 return true;
             }
             else
@@ -238,17 +309,18 @@ namespace _7DRL.Managers
                 if (equipedRing == null)
                 {
                     equipedRing = (Ring)playerInv.items[itemLoc];
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                     equipedRing.OnEquip();
                 }
                 else
                 {
-                    playerInv.addItem(equipedRing);
+                    playerInv.AddItem(equipedRing);
                     equipedRing.OnUnequip();
                     equipedRing = (Ring)playerInv.items[itemLoc];
                     equipedRing.OnEquip();
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                 }
+
                 return true;
             }
             else
@@ -259,10 +331,10 @@ namespace _7DRL.Managers
 
         public void Sell(int itemLoc)
         {
-            if(itemLoc < playerInv.items.Count)
+            if (itemLoc < playerInv.items.Count)
             {
                 playerInv.currentGoldAmount += playerInv.items[itemLoc].value;
-                playerInv.removeItem(itemLoc, 1);
+                playerInv.RemoveItem(itemLoc, 1);
             }
         }
 
@@ -273,17 +345,18 @@ namespace _7DRL.Managers
                 if (equipedAmulet == null)
                 {
                     equipedAmulet = (Amulet)playerInv.items[itemLoc];
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                     equipedAmulet.OnEquip();
                 }
                 else
                 {
-                    playerInv.addItem(equipedAmulet);
+                    playerInv.AddItem(equipedAmulet);
                     equipedAmulet.OnUnequip();
                     equipedAmulet = (Amulet)playerInv.items[itemLoc];
                     equipedAmulet.OnEquip();
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                 }
+
                 return true;
             }
             else
@@ -299,17 +372,18 @@ namespace _7DRL.Managers
                 if (equipedTome == null)
                 {
                     equipedTome = (Tome)playerInv.items[itemLoc];
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                     equipedTome.OnEquip();
                 }
                 else
                 {
-                    playerInv.addItem(equipedTome);
+                    playerInv.AddItem(equipedTome);
                     equipedTome.OnUnequip();
                     equipedTome = (Tome)playerInv.items[itemLoc];
                     equipedTome.OnEquip();
-                    playerInv.removeItem(itemLoc, 1);
+                    playerInv.RemoveItem(itemLoc, 1);
                 }
+
                 return true;
             }
             else
@@ -322,7 +396,7 @@ namespace _7DRL.Managers
         {
             if (equipedTome != null)
             {
-                equipedTome.use();
+                equipedTome.Use();
                 return true;
             }
 
@@ -334,7 +408,7 @@ namespace _7DRL.Managers
             if (playerInv.items[itemLoc] is Potion)
             {
                 ((Potion)playerInv.items[itemLoc]).OnEquip();
-                playerInv.removeItem(itemLoc, 1);
+                playerInv.RemoveItem(itemLoc, 1);
                 return true;
             }
             else
@@ -353,12 +427,12 @@ namespace _7DRL.Managers
         public float currentWeight;
         public float MaxWeight;
 
-        public Item this[int index]
+        public Inventory()
         {
-            get
-            {
-                return items[index];
-            }
+            items = new List<Item>();
+            currentGoldAmount = 0;
+
+            UpdateWeight();
         }
 
         public int Count
@@ -369,15 +443,15 @@ namespace _7DRL.Managers
             }
         }
 
-        public Inventory()
+        public Item this[int index]
         {
-            items = new List<Item>();
-            currentGoldAmount = 0;
-
-            updateWeight();
+            get
+            {
+                return items[index];
+            }
         }
 
-        public void addItem(Item item)
+        public void AddItem(Item item)
         {
             for (int i = 0; i < items.Count; i++)
             {
@@ -386,7 +460,7 @@ namespace _7DRL.Managers
                     if (items[i].currentStackSize + item.currentStackSize <= items[i].maxStackSize)
                     {
                         items[i].currentStackSize += item.currentStackSize;
-                        updateWeight();
+                        UpdateWeight();
                         return;
                     }
                     else
@@ -396,7 +470,7 @@ namespace _7DRL.Managers
                         item.currentStackSize = itemsOver;
                         items.Add(item);
                         items.Last().inventoryPos = items.Count;
-                        updateWeight();
+                        UpdateWeight();
                         return;
                     }
                 }
@@ -404,10 +478,10 @@ namespace _7DRL.Managers
 
             items.Add(item);
             items.Last().inventoryPos = items.Count;
-            updateWeight();
+            UpdateWeight();
         }
 
-        public void removeItem(int loc, int amount)
+        public void RemoveItem(int loc, int amount)
         {
             if (items[loc].currentStackSize - amount < 0)
             {
@@ -418,7 +492,7 @@ namespace _7DRL.Managers
                 items.RemoveAt(loc);
             }
 
-            updateWeight();
+            UpdateWeight();
         }
 
         public void CleanInv()
@@ -427,12 +501,12 @@ namespace _7DRL.Managers
             {
                 if (items[i].currentStackSize <= 0)
                 {
-                    removeItem(i, 10000);
+                    RemoveItem(i, 10000);
                 }
             }
         }
 
-        private void updateWeight()
+        private void UpdateWeight()
         {
             MaxWeight = Game.g.pcStats.carryWeight;
 
@@ -450,7 +524,6 @@ namespace _7DRL.Managers
             {
                 Game.g.pcStats.isEncumbered = false;
             }
-
         }
     }
 
@@ -471,12 +544,12 @@ namespace _7DRL.Managers
 
         public override string ToString()
         {
-            return (name + " " + weight + "lb");
+            return name + " " + weight + "lb";
         }
 
         public abstract void OnEquip();
-        public abstract void OnUnequip();
 
+        public abstract void OnUnequip();
     }
 
     public class Tome : Item
@@ -486,13 +559,13 @@ namespace _7DRL.Managers
         public int fireballDamage;
         public int manacost;
 
-        TomeEffect effect;
+        private TomeEffect effect;
 
         public Tome(TomeEffect t, int level)
         {
             weight = 1;
 
-            if(level < 2)
+            if (level < 2)
             {
                 name = "Tome of " + t.ToString();
             }
@@ -500,38 +573,43 @@ namespace _7DRL.Managers
             {
                 name = "Tome of " + t.ToString() + " +" + level;
             }
+
             value = 10 * level;
             maxStackSize = 1;
             currentStackSize = 1;
             effect = t;
 
-            if(t == TomeEffect.FireStorm)
+            if (t == TomeEffect.FireStorm)
             {
                 fireballDamage = (10 + Game.g.pcStats.intel) * level;
                 manacost = 50;
             }
-            else if(t == TomeEffect.Healing)
+            else if (t == TomeEffect.Healing)
             {
                 healAmount = (10 + Game.g.pcStats.intel) * level;
                 manacost = (int)(healAmount * .75f);
             }
-            else if(t== TomeEffect.Vigor)
+            else if (t == TomeEffect.Vigor)
             {
                 vigorAmount = (10 + Game.g.pcStats.intel) * level;
                 manacost = (int)(vigorAmount * .75f);
             }
         }
 
-        public override void OnEquip()
+        public static Tome GenerateTome(int level)
         {
-
+            return new Tome(Util.RandomEnumValue<TomeEffect>(), level);
         }
 
-        public void use()
+        public override void OnEquip()
+        {
+        }
+
+        public void Use()
         {
             if (effect == TomeEffect.Healing)
             {
-                if(Game.g.pcStats.currentMana - manacost >= 0)
+                if (Game.g.pcStats.currentMana - manacost >= 0)
                 {
                     Game.g.pcStats.Heal(healAmount);
                     Game.g.pcStats.currentMana -= manacost;
@@ -543,15 +621,16 @@ namespace _7DRL.Managers
                 {
                     for (int i = 0; i < Game.g.enemy.Length; i++)
                     {
-                        if (Utils.Point.dist(Game.g.player.pos, Game.g.enemy[i].pos) < 5)
+                        if (Utils.Point.Dist(Game.g.player.pos, Game.g.enemy[i].pos) < 5)
                         {
-                            Game.g.enemyAI[i].getHurt(Game.g.enemy[i]);
+                            Game.g.enemyAI[i].GetHurt(Game.g.enemy[i]);
                         }
                     }
+
                     Game.g.pcStats.currentMana -= manacost;
                 }
             }
-            else if(effect == TomeEffect.Vigor)
+            else if (effect == TomeEffect.Vigor)
             {
                 if (Game.g.pcStats.currentMana - manacost >= 0)
                 {
@@ -563,11 +642,6 @@ namespace _7DRL.Managers
 
         public override void OnUnequip()
         {
-        }
-
-        public static Tome GenerateTome(int level)
-        {
-            return new Tome(Util.RandomEnumValue<TomeEffect>(), level);
         }
     }
 
@@ -587,11 +661,11 @@ namespace _7DRL.Managers
 
             texture = 'W';
 
-            if(e == WeaponEffectType.none)
+            if (e == WeaponEffectType.none)
             {
                 name = w.ToString();
             }
-            else if(level < 2)
+            else if (level < 2)
             {
                 name = w.ToString() + " of " + e.ToString();
             }
@@ -606,7 +680,7 @@ namespace _7DRL.Managers
             weight = 10;
             value = 10 * level;
 
-            if(w == WeaponType.Dagger)
+            if (w == WeaponType.Dagger)
             {
                 damage = 5 * level;
                 dexBuff += 1 * level;
@@ -647,6 +721,10 @@ namespace _7DRL.Managers
             }
         }
 
+        public static Weapon GenerateWeapon(int level)
+        {
+            return new Weapon(Util.RandomEnumValue<WeaponType>(), Util.RandomEnumValue<WeaponEffectType>(), level);
+        }
 
         public override void OnEquip()
         {
@@ -667,18 +745,13 @@ namespace _7DRL.Managers
 
             Game.g.pcStats.RegenStats();
         }
-
-        public static Weapon GenerateWeapon(int level)
-        {            
-           return new Weapon(Util.RandomEnumValue<WeaponType>(), Util.RandomEnumValue<WeaponEffectType>(), level);
-        }
     }
 
     public class Potion : Item
     {
-        int HealthIncrease;
-        int StaminaIncrease;
-        int ManaIncrease;
+        private int HealthIncrease;
+        private int StaminaIncrease;
+        private int ManaIncrease;
 
         public Potion(PotionType p, int level)
         {
@@ -703,7 +776,7 @@ namespace _7DRL.Managers
             {
                 HealthIncrease += 100 * level;
             }
-            else if(p == PotionType.Mana)
+            else if (p == PotionType.Mana)
             {
                 ManaIncrease += 100 * level;
             }
@@ -713,9 +786,14 @@ namespace _7DRL.Managers
             }
         }
 
+        public static Potion GeneratePotion(int level)
+        {
+            return new Potion(Util.RandomEnumValue<PotionType>(), level);
+        }
+
         public override void OnEquip()
         {
-            if(Game.g.pcStats.currentHealth + HealthIncrease > Game.g.pcStats.maxHealth)
+            if (Game.g.pcStats.currentHealth + HealthIncrease > Game.g.pcStats.maxHealth)
             {
                 Game.g.pcStats.currentHealth = Game.g.pcStats.maxHealth;
             }
@@ -745,11 +823,6 @@ namespace _7DRL.Managers
 
         public override void OnUnequip()
         {
-        }
-
-        public static Potion GeneratePotion(int level)
-        {
-            return new Potion(Util.RandomEnumValue<PotionType>(),  level);
         }
     }
 
@@ -788,17 +861,17 @@ namespace _7DRL.Managers
             value = 10 * level;
             weight = 20;
 
-            if(m == MaterialType.Leather)
+            if (m == MaterialType.Leather)
             {
                 damageReduct = 5 * level;
                 value -= 5 * level;
                 weight -= 5;
             }
-            else if(m == MaterialType.Iron)
+            else if (m == MaterialType.Iron)
             {
                 damageReduct = 10 * level;
             }
-            else if(m == MaterialType.Steel)
+            else if (m == MaterialType.Steel)
             {
                 damageReduct = 15 * level;
                 value += 5 * level;
@@ -822,6 +895,11 @@ namespace _7DRL.Managers
             }
         }
 
+        public static Armor GenerateArmor(int level)
+        {
+            return new Armor(Util.RandomEnumValue<MaterialType>(), Util.RandomEnumValue<ArmorEffectType>(), level);
+        }
+
         public override void OnEquip()
         {
             Game.g.pcStats.damageReduction = damageReduct;
@@ -840,11 +918,6 @@ namespace _7DRL.Managers
             Game.g.pcStats.con -= ConBuff;
 
             Game.g.pcStats.RegenStats();
-        }
-
-        public static Armor GenerateArmor(int level)
-        {
-            return new Armor(Util.RandomEnumValue<MaterialType>(), Util.RandomEnumValue<ArmorEffectType>(), level);
         }
     }
 
@@ -921,7 +994,12 @@ namespace _7DRL.Managers
                 IntelBuff += (1 + effectMulitplier) * level;
             }
         }
-        
+
+        public static Ring GenerateRing(int level)
+        {
+            return new Ring(Util.RandomEnumValue<RingMaterialType>(), Util.RandomEnumValue<JewelleryType>(), level);
+        }
+
         public override void OnEquip()
         {
             Game.g.pcStats.weaponDamage = damage;
@@ -944,11 +1022,6 @@ namespace _7DRL.Managers
             Game.g.pcStats.intel -= IntelBuff;
 
             Game.g.pcStats.RegenStats();
-        }
-
-        public static Ring GenerateRing(int level)
-        {
-            return new Ring(Util.RandomEnumValue<RingMaterialType>(), Util.RandomEnumValue<JewelleryType>(), level);
         }
     }
 
@@ -1026,6 +1099,11 @@ namespace _7DRL.Managers
             }
         }
 
+        public static Amulet GenerateAmulet(int level)
+        {
+            return new Amulet(Util.RandomEnumValue<RingMaterialType>(), Util.RandomEnumValue<JewelleryType>(), level);
+        }
+
         public override void OnEquip()
         {
             Game.g.pcStats.weaponDamage = damage;
@@ -1049,82 +1127,5 @@ namespace _7DRL.Managers
 
             Game.g.pcStats.RegenStats();
         }
-
-        public static Amulet GenerateAmulet(int level)
-        {
-            return new Amulet(Util.RandomEnumValue<RingMaterialType>(), Util.RandomEnumValue<JewelleryType>(), level);
-        }
-    }
-
-    public enum WeaponEffectType
-    {
-        none,
-        strength,
-        speed,
-        poison,
-        hardening,
-    }
-
-    public enum ArmorEffectType
-    {
-        none,
-        strength,
-        speed,
-        hardening,
-    }
-
-    public enum PotionType
-    {
-        Healing,
-        Vigor,
-        Mana,
-    }
-
-    public enum JewelleryType
-    {
-        Str,
-        Dex,
-        Con,
-        Wis,
-        Int
-    }
-
-    public enum ItemType
-    {
-        Gold,
-        Weapon,
-        Armor,
-        Potion,
-        Ring,
-        Amulet,
-        Tome
-    }
-
-    public enum WeaponType
-    {
-        Sword,
-        Dagger,
-        Axe
-    }
-
-    public enum MaterialType
-    {
-        Leather,
-        Iron,
-        Steel
-    }
-
-    public enum RingMaterialType
-    {
-        Copper,
-        Gold,
-        Silver
-    }
-
-    public enum TomeEffect
-    {
-        Healing,
-        FireStorm,
-        Vigor,
     }
 }

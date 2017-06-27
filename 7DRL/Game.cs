@@ -1,14 +1,12 @@
-﻿using _7DRL.Components;
-using _7DRL.Managers;
-using _7DRL.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _7DRL
+﻿namespace _7DRL
 {
+    using System;
+    using System.Collections.Generic;
+    using Components;
+    using Entities;
+    using Managers;
+    using Utils;
+
     public class Game
     {
         public static Game g;
@@ -45,29 +43,29 @@ namespace _7DRL
 
         private Tile[,] lastFrame;
 
-        public Entities.drawable princess;
-        public Entities.drawable dragon;
-
-        public Entities.drawable player;
-        public Components.cStats pcStats;
+        public Drawable princess;
+        public Drawable dragon;
+               
+        public Drawable player;
+        public cStats pcStats;
         public InventoryManager pcInv;
 
-        public Entities.drawable stairsUp;
-        public Entities.drawable stairsDown;
+        public Drawable stairsUp;
+        public Drawable stairsDown;
 
-        public Entities.drawable[] enemy;
+        public Drawable[] enemy;
         public cEnemyAI[] enemyAI;
-        private int enemyCount;
-
         public int floor;
 
+        public string PName;
+
+        private int enemyCount;
         private int Pstr;
         private int Pdex;
         private int Pcon;
         private int Pintel;
         private int Pwis;
         private int Pcha;
-        public string PName;
 
         private Dictionary<int, string> guiItem = new Dictionary<int, string>();
 
@@ -81,12 +79,12 @@ namespace _7DRL
             {
                 throw new Exception("Too many Game objects");
             }
-            
+
             onUpdate = new List<Action>();
 
             this.seed = seed;
 
-            if(random)
+            if (random)
             {
                 rng = new Random();
                 this.seed = rng.Next();
@@ -125,7 +123,7 @@ namespace _7DRL
                     ground[i, j] = new Tile();
                 }
             }
-            
+
             world = ground;
 
             for (var i = 0; i < screenX; i++)
@@ -152,7 +150,7 @@ namespace _7DRL
             {
                 enemy[i].active = false;
             }
-                        
+
             ground = new Tile[worldSize, worldSize];
             world = new Tile[worldSize, worldSize];
             lastFrame = new Tile[screenX, screenY + 1];
@@ -184,7 +182,7 @@ namespace _7DRL
             {
                 type = GenerationType.Caves;
             }
-            
+
             onLoad(true, type);
         }
 
@@ -212,7 +210,7 @@ namespace _7DRL
             resetWorld = false;
         }
 
-        public void update(Object source, System.Timers.ElapsedEventArgs e)
+        public void update(object source, System.Timers.ElapsedEventArgs e)
         {
             if (lastFrameDone)
             {
@@ -258,9 +256,9 @@ namespace _7DRL
 
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
-                        if(Console.ForegroundColor != world[x + worldOffsetX, y + worldOffsetY].color)
+                        if (Console.ForegroundColor != world[x + worldOffsetX, y + worldOffsetY].Color)
                         {
-                            Console.ForegroundColor = world[x + worldOffsetX, y + worldOffsetY].color;
+                            Console.ForegroundColor = world[x + worldOffsetX, y + worldOffsetY].Color;
                         }
 
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
@@ -323,7 +321,7 @@ namespace _7DRL
             for (int x = 0; x < screenX; x++)
             {
                 if (lastFrame[x, 28].Visual != '-')
-                { 
+                {
                     Console.SetCursorPosition(x, 28);
                     Console.Write('-');
                 }
@@ -340,7 +338,7 @@ namespace _7DRL
                 guiItem[index] = item;
             }
             else
-            { 
+            {
                 guiItem.Add(index, item);
             }
         }
@@ -374,7 +372,7 @@ namespace _7DRL
                 {
                     world[i, j] = new Tile();
                     world[i, j].Visual = ' ';
-                    world[i, j].collideable = false;
+                    world[i, j].Collideable = false;
                 }
             }
         }
@@ -387,7 +385,7 @@ namespace _7DRL
                 {
                     ground[i, j] = new Tile();
                     ground[i, j].Visual = ' ';
-                    ground[i, j].collideable = false;
+                    ground[i, j].Collideable = false;
                 }
             }
         }
@@ -400,11 +398,11 @@ namespace _7DRL
                 {
                     if (ground[i, j].Visual != (char)0x2588)
                     {
-                        ground[i, j].collideable = false;
+                        ground[i, j].Collideable = false;
                     }
                     else
                     {
-                        ground[i, j].collideable = true;
+                        ground[i, j].Collideable = true;
                     }
                 }
             }
@@ -412,35 +410,35 @@ namespace _7DRL
 
         private void InintializePrincessAndDragon(bool reset)
         {
-            if(!reset)
+            if (!reset)
             {
-                princess = new Entities.drawable();
+                princess = new Drawable();
                 princess.texture = 'P';
                 princess.color = ConsoleColor.Magenta;
                 princess.tag = "Princess";
-                onUpdate.Add(princess.update);
+                onUpdate.Add(princess.Update);
 
-                dragon = new Entities.drawable();
+                dragon = new Drawable();
                 dragon.color = ConsoleColor.Red;
                 dragon.texture = 'D';
                 dragon.tag = "Enemy";
                 dragon.active = true;
-                var enemyAI = new cEnemyAI(player, pcStats, new Point(-1, - 1), "Dragon",
+                var enemyAI = new cEnemyAI(player, pcStats, new Point(-1, -1), "Dragon",
                     215 + (pcStats.level * 5), 35 + (pcStats.level * 2), 10, 8 + (pcStats.level / 10), 1.5, 0.25);
                 dragon.AddComponent(enemyAI);
-                onUpdate.Add(dragon.update);
+                onUpdate.Add(dragon.Update);
             }
             int flr = Math.Abs(this.floor);
-            if(flr % 10 == 0 && flr != 0)
+            if (flr % 10 == 0 && flr != 0)
             {
-                Point p = Point.getRandomPointInWorld();
-                princess.pos.xPos = p.x;
-                princess.pos.yPos = p.y;
+                Point p = Point.GetRandomPointInWorld();
+                princess.pos.xPos = p.X;
+                princess.pos.yPos = p.Y;
 
-                p = Point.getRandomPointInWorld();
-                dragon.GetComponent<cEnemyAI>().startingPosition = p;
-                dragon.pos.xPos = p.x;
-                dragon.pos.yPos = p.y;
+                p = Point.GetRandomPointInWorld();
+                dragon.GetComponent<cEnemyAI>().StartingPosition = p;
+                dragon.pos.xPos = p.X;
+                dragon.pos.yPos = p.Y;
                 dragon.active = true;
             }
             else
@@ -459,21 +457,21 @@ namespace _7DRL
         {
             if (!reset)
             {
-                player = new Entities.drawable();
+                player = new Drawable();
                 pcStats = new cStats(Pstr, Pdex, Pcon, Pintel, Pwis, Pcha);
                 pcInv = new InventoryManager(5);
                 player.texture = '@';
                 player.color = ConsoleColor.Blue;
                 player.tag = "Player";
-                Utils.Point p = Utils.Point.getRandomPointInWorld();
-                player.pos.xPos = p.x;
-                player.pos.yPos = p.y;
+                Point p = Point.GetRandomPointInWorld();
+                player.pos.xPos = p.X;
+                player.pos.yPos = p.Y;
                 player.active = true;
-                player.AddComponent(new Components.cKeyboardMoveAndCollide());
-                player.AddComponent(new Components.cStory(10));
-                player.AddComponent(new Components.cCameraFollow(this));
+                player.AddComponent(new cKeyboardMoveAndCollide());
+                player.AddComponent(new cStory(10));
+                player.AddComponent(new cCameraFollow(this));
                 player.AddComponent(pcStats);
-                onUpdate.Add(player.update);
+                onUpdate.Add(player.Update);
             }
             else
             {
@@ -500,22 +498,22 @@ namespace _7DRL
             {
                 for (int i = 0; i < enemyCount - 1; i++)
                 {
-                    if (onUpdate.Contains(enemy[i].update))
+                    if (onUpdate.Contains(enemy[i].Update))
                     {
-                        onUpdate.Remove(enemy[i].update);
+                        onUpdate.Remove(enemy[i].Update);
                     }
                 }
             }
-            enemy = new Entities.drawable[enemyCount];
+            enemy = new Drawable[enemyCount];
             enemyAI = new cEnemyAI[enemyCount];
 
             for (int i = 0; i < enemyCount; i++)
             {
-                enemy[i] = new Entities.drawable();
+                enemy[i] = new Drawable();
                 enemy[i].color = ConsoleColor.Red;
-                Utils.Point enemyPos = Utils.Point.getRandomPointInWorld();
-                enemy[i].pos.xPos = enemyPos.x;
-                enemy[i].pos.yPos = enemyPos.y;
+                Utils.Point enemyPos = Utils.Point.GetRandomPointInWorld();
+                enemy[i].pos.xPos = enemyPos.X;
+                enemy[i].pos.yPos = enemyPos.Y;
 
                 var r = rng.NextDouble();
                 if (r < 0.25)
@@ -528,9 +526,9 @@ namespace _7DRL
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
                         enemyAI[i] = new cEnemyAI(player, pcStats, enemyPos, "Rats",
-                            40 + (pcStats.level * 2), 10 + (pcStats.level), 5, 6 + (pcStats.level / 10), 1.5, 0.10);
+                            40 + (pcStats.level * 2), 10 + pcStats.level, 5, 6 + (pcStats.level / 10), 1.5, 0.10);
                         enemy[i].AddComponent(enemyAI[i]);
-                        onUpdate.Add(enemy[i].update);
+                        onUpdate.Add(enemy[i].Update);
                     }
                     else
                     {
@@ -540,7 +538,7 @@ namespace _7DRL
                         enemyAI[i] = new cEnemyAI(player, pcStats, enemyPos, "Skeleton",
                             75 + (pcStats.level * 5), 20 + (pcStats.level * 2), 10, 4 + (pcStats.level / 10), 1.5, 0.25);
                         enemy[i].AddComponent(enemyAI[i]);
-                        onUpdate.Add(enemy[i].update);
+                        onUpdate.Add(enemy[i].Update);
                     }
                 }
                 else
@@ -553,9 +551,9 @@ namespace _7DRL
                         enemy[i].tag = "Enemy";
                         enemy[i].active = true;
                         enemyAI[i] = new cEnemyAI(player, pcStats, enemyPos, "Hornet",
-                            20 + (pcStats.level * 1), 4 + (pcStats.level), 1, 6 + (pcStats.level / 10), 3, 0.10);
+                            20 + (pcStats.level * 1), 4 + pcStats.level, 1, 6 + (pcStats.level / 10), 3, 0.10);
                         enemy[i].AddComponent(enemyAI[i]);
-                        onUpdate.Add(enemy[i].update);
+                        onUpdate.Add(enemy[i].Update);
                     }
                     else
                     {
@@ -565,7 +563,7 @@ namespace _7DRL
                         enemyAI[i] = new cEnemyAI(player, pcStats, enemyPos, "Archer",
                             40 + (pcStats.level * 5), 8 + (pcStats.level * 2), 1, 4 + (pcStats.level / 10), 4.5, 0.25);
                         enemy[i].AddComponent(enemyAI[i]);
-                        onUpdate.Add(enemy[i].update);
+                        onUpdate.Add(enemy[i].Update);
                     }
                 }
             }
@@ -576,44 +574,44 @@ namespace _7DRL
             if (!reset)
             {
                 Point stairPos;
-                stairsUp = new Entities.drawable();
-                stairPos = Point.getRandomPointInWorld();
-                stairsUp.pos.xPos = stairPos.x;
-                stairsUp.pos.yPos = stairPos.y;
+                stairsUp = new Drawable();
+                stairPos = Point.GetRandomPointInWorld();
+                stairsUp.pos.xPos = stairPos.X;
+                stairsUp.pos.yPos = stairPos.Y;
                 stairsUp.texture = '>';
                 stairsUp.color = ConsoleColor.White;
                 stairsUp.tag = "Stairs";
                 stairsUp.active = true;
                 stairsUp.AddComponent(new cStair(true));
-                onUpdate.Add(stairsUp.update);
+                onUpdate.Add(stairsUp.Update);
 
-                stairsDown = new Entities.drawable();
-                stairPos = Point.getRandomDoorPoint(new Point(stairsUp.pos.xPos, stairsUp.pos.yPos));
-                stairsDown.pos.xPos = stairPos.x;
-                stairsDown.pos.yPos = stairPos.y;
+                stairsDown = new Drawable();
+                stairPos = Point.GetRandomDoorPoint(new Point(stairsUp.pos.xPos, stairsUp.pos.yPos));
+                stairsDown.pos.xPos = stairPos.X;
+                stairsDown.pos.yPos = stairPos.Y;
                 stairsDown.texture = '<';
                 stairsDown.color = ConsoleColor.White;
                 stairsDown.tag = "Stairs";
                 stairsDown.active = true;
                 stairsDown.AddComponent(new cStair(false));
-                onUpdate.Add(stairsDown.update);
+                onUpdate.Add(stairsDown.Update);
             }
             else
             {
-                Utils.Point stairPos = Point.getRandomPointInWorld();
-                stairsUp.pos.xPos = stairPos.x;
-                stairsUp.pos.yPos = stairPos.y;
+                Point stairPos = Point.GetRandomPointInWorld();
+                stairsUp.pos.xPos = stairPos.X;
+                stairsUp.pos.yPos = stairPos.Y;
 
-                stairPos = Point.getRandomDoorPoint(new Point(stairsUp.pos.xPos, stairsUp.pos.yPos));
-                stairsDown.pos.xPos = stairPos.x;
-                stairsDown.pos.yPos = stairPos.y;
+                stairPos = Point.GetRandomDoorPoint(new Point(stairsUp.pos.xPos, stairsUp.pos.yPos));
+                stairsDown.pos.xPos = stairPos.X;
+                stairsDown.pos.yPos = stairPos.Y;
             }
         }
 
         private void DrawInventory()
         {
             AddUIElement(0, PName + " Lvl: " + pcStats.level + " XP needed: " + (pcStats.NeededXP - pcStats.currentXP));
-            AddUIElement(1, pcInv.playerInv.currentGoldAmount + "g lbs: " + pcInv.playerInv.currentWeight + "/"+ pcStats.carryWeight + " Floor: " + floor);
+            AddUIElement(1, pcInv.playerInv.currentGoldAmount + "g lbs: " + pcInv.playerInv.currentWeight + "/" + pcStats.carryWeight + " Floor: " + floor);
             string str = "H: " + pcStats.currentHealth + "/" + pcStats.maxHealth + " M: " + pcStats.currentMana + "/" + pcStats.maxMana + " S: " + pcStats.currentStamina + "/" + pcStats.maxStamina;
             if (pcStats.outOfStam)
             {
@@ -629,12 +627,12 @@ namespace _7DRL
                 AddUIElement(3, "-----------< Inventory " + pcInv.playerInv.items.Count + " >-------------");
 
             }
-            AddUIElement(4, "1(" + (InvNum + 1) + ") " + pcInv.getItem(InvNum));
-            AddUIElement(5, "2(" + (InvNum + 2) + ") " + pcInv.getItem(InvNum + 1));
-            AddUIElement(6, "3(" + (InvNum + 3) + ") " + pcInv.getItem(InvNum + 2));
-            AddUIElement(7, "4(" + (InvNum + 4) + ") " + pcInv.getItem(InvNum + 3));
-            AddUIElement(8, "5(" + (InvNum + 5) + ") " + pcInv.getItem(InvNum + 4));
-            if (input.isKeyRising(OpenTK.Input.Key.Period))
+            AddUIElement(4, "1(" + (InvNum + 1) + ") " + pcInv.GetItem(InvNum));
+            AddUIElement(5, "2(" + (InvNum + 2) + ") " + pcInv.GetItem(InvNum + 1));
+            AddUIElement(6, "3(" + (InvNum + 3) + ") " + pcInv.GetItem(InvNum + 2));
+            AddUIElement(7, "4(" + (InvNum + 4) + ") " + pcInv.GetItem(InvNum + 3));
+            AddUIElement(8, "5(" + (InvNum + 5) + ") " + pcInv.GetItem(InvNum + 4));
+            if (input.IsKeyRising(OpenTK.Input.Key.Period))
             {
                 if (InvNum + 4 < pcInv.playerInv.items.Count)
                 {
@@ -642,7 +640,7 @@ namespace _7DRL
                 }
             }
 
-            if (input.isKeyRising(OpenTK.Input.Key.Comma))
+            if (input.IsKeyRising(OpenTK.Input.Key.Comma))
             {
                 if (InvNum > 0)
                 {
@@ -690,7 +688,7 @@ namespace _7DRL
             {
                 AddUIElement(14, "T:" + pcInv.equipedTome.ToString());
 
-                if (input.isKeyFalling(OpenTK.Input.Key.E))
+                if (input.IsKeyFalling(OpenTK.Input.Key.E))
                 {
                     pcInv.UseTome();
                 }
@@ -710,7 +708,7 @@ namespace _7DRL
             UseItem(OpenTK.Input.Key.Number2, InvNum + 1);
             UseItem(OpenTK.Input.Key.Number3, InvNum + 2);
             UseItem(OpenTK.Input.Key.Number4, InvNum + 3);
-            UseItem(OpenTK.Input.Key.Number5, InvNum + 4);            
+            UseItem(OpenTK.Input.Key.Number5, InvNum + 4);
         }
 
         public void LogCombat(string combat)
@@ -725,9 +723,9 @@ namespace _7DRL
 
         private void UseItem(OpenTK.Input.Key key, int num)
         {
-            if (input.isKeyRising(key))
+            if (input.IsKeyRising(key))
             {
-                if(input.isKeyHeld(OpenTK.Input.Key.ControlLeft))
+                if (input.IsKeyHeld(OpenTK.Input.Key.ControlLeft))
                 {
                     if (pcInv.playerInv.items.Count > num)
                     {

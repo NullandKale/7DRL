@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _7DRL.Extensions
+﻿namespace _7DRL.Extensions
 {
     public static class IntExtensions
     {
         public static int Clamp(this int self, int lowerBound, int upperBound)
         {
-            if (self < lowerBound) self = lowerBound;
-            if (self > upperBound) self = upperBound;
+            if (self < lowerBound)
+            {
+                self = lowerBound;
+            }
+
+            if (self > upperBound)
+            {
+                self = upperBound;
+            }
 
             return self;
         }
@@ -22,7 +23,7 @@ namespace _7DRL.Extensions
 
             num.Clamp(lowerBound, upperBound);
 
-            num = minNum + (num - lowerBound) * (maxNum - minNum) / (upperBound - lowerBound);
+            num = minNum + ((num - lowerBound) * (maxNum - minNum) / (upperBound - lowerBound));
 
             return num;
         }
@@ -31,7 +32,7 @@ namespace _7DRL.Extensions
         {
             var num = self;
 
-            num = minNum + (num - lowerBound) * (maxNum - minNum) / (upperBound - lowerBound);
+            num = minNum + ((num - lowerBound) * (maxNum - minNum) / (upperBound - lowerBound));
 
             return num;
         }

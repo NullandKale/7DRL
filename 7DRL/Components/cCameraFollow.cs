@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _7DRL.Entities;
-using nullEngine;
-
-namespace _7DRL.Components
+﻿namespace _7DRL.Components
 {
-    class cCameraFollow : iComponent
+    using _7DRL.Entities;
+
+    public class cCameraFollow : iComponent
     {
         private Game world;
 
@@ -17,7 +11,7 @@ namespace _7DRL.Components
             world = g;
         }
 
-        public void Run(drawable d)
+        public void Run(Drawable d)
         {
             if (d.pos.xPos > (world.gameX / 2) + world.worldOffsetX)
             {

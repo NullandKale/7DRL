@@ -1,25 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _7DRL.Utils
+﻿namespace _7DRL.Utils
 {
+    using System;
+    using System.Collections.Generic;
+
     public class Point
     {
-        public int x;
-        public int y;
+        public int X;
+        public int Y;
 
         public Point()
         {
-
         }
 
         public Point(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            this.X = x;
+            this.Y = y;
+        }
+
+        public static double Dist(Point p1, Point p2)
+        {
+            double x = Math.Pow(Math.Abs(p1.X - p2.X), 2);
+            double y = Math.Pow(Math.Abs(p1.Y - p2.Y), 2);
+
+            return Math.Sqrt(x + y);
+        }
+
+        public static double Dist(Entities.Transform t1, Entities.Transform t2)
+        {
+            double x = Math.Pow(Math.Abs(t1.xPos - t2.xPos), 2);
+            double y = Math.Pow(Math.Abs(t1.yPos - t2.yPos), 2);
+
+            return Math.Sqrt(x + y);
+        }
+
+        public static Point GetRandomPoint(List<Point> points)
+        {
+            return points[Game.g.rng.Next(0, points.Count)];
+        }
+
+        public static Point GetRandomPoint(int max)
+        {
+            return new Point(Game.g.rng.Next(0, max), Game.g.rng.Next(0, max));
+        }
+
+        public static Point GetRandomPointInWorld()
+        {
+            Point p = GetRandomPoint(Game.g.worldSize);
+            if (!Managers.CollisionManager.CheckCollision(p.X, p.Y))
+            {
+                return GetRandomPointInWorld();
+            }
+            else
+            {
+                return p;
+            }
+        }
+
+        public static Point GetRandomPointNearbyInWorld(Point loc)
+        {
+            Point p = GetRandomPoint(Game.g.worldSize);
+            if (!Managers.CollisionManager.CheckCollision(p.X, p.Y) && Dist(p, loc) > 5)
+            {
+                return GetRandomPointInWorld();
+            }
+            else
+            {
+                return p;
+            }
+        }
+
+        public static Point GetRandomDoorPoint(Point pos)
+        {
+            Point p = GetRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));
+            if (!Managers.CollisionManager.CheckCollision(p.X, p.Y))
+            {
+                return GetRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));
+            }
+            else
+            {
+                return p;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -27,7 +93,7 @@ namespace _7DRL.Utils
             if (obj is Point)
             {
                 Point p = (Point)obj;
-                if (p.x == x && p.y == y)
+                if (p.X == X && p.Y == Y)
                 {
                     return true;
                 }
@@ -39,71 +105,6 @@ namespace _7DRL.Utils
             else
             {
                 return false;
-            }
-        }
-
-        public static double dist(Point p1, Point p2)
-        {
-            double x = Math.Pow(Math.Abs(p1.x - p2.x), 2);
-            double y = Math.Pow(Math.Abs(p1.y - p2.y), 2);
-
-            return Math.Sqrt(x + y);
-        }
-
-        public static double dist(Entities.transform t1, Entities.transform t2)
-        {
-            double x = Math.Pow(Math.Abs(t1.xPos - t2.xPos), 2);
-            double y = Math.Pow(Math.Abs(t1.yPos - t2.yPos), 2);
-
-            return Math.Sqrt(x + y);
-        }
-
-        public static Point getRandomPoint(List<Point> points)
-        {
-            return points[Game.g.rng.Next(0, points.Count)];
-        }
-
-        public static Point getRandomPoint(int max)
-        {
-            return new Point(Game.g.rng.Next(0, max), Game.g.rng.Next(0, max));
-        }
-
-        public static Point getRandomPointInWorld()
-        {
-            Point p = getRandomPoint(Game.g.worldSize);
-            if(!Managers.CollisionManager.CheckCollision(p.x, p.y))
-            {
-                return getRandomPointInWorld();
-            }
-            else
-            {
-                return p;
-            }
-        }
-
-        public static Point getRandomPointNearbyInWorld(Point loc)
-        {
-            Point p = getRandomPoint(Game.g.worldSize);
-            if (!Managers.CollisionManager.CheckCollision(p.x, p.y) && dist(p, loc) > 5)
-            {
-                return getRandomPointInWorld();
-            }
-            else
-            {
-                return p;
-            }
-        }
-
-        public static Point getRandomDoorPoint(Point pos)
-        {
-            Point p = getRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));
-            if (!Managers.CollisionManager.CheckCollision(p.x, p.y))
-            {
-                return getRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));
-            }
-            else
-            {
-                return p;
             }
         }
     }

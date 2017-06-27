@@ -1,28 +1,22 @@
-﻿using _7DRL.Entities;
-using _7DRL.Managers;
-using _7DRL.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _7DRL.Components
+﻿namespace _7DRL.Components
 {
+    using Entities;
+    using Utils;
+
     public class cStair : iComponent
     {
         private bool up;
 
-        public cStair(bool _up)
+        public cStair(bool up)
         {
-            up = _up;
+            this.up = up;
         }
 
-        public void Run(drawable d)
+        public void Run(Drawable d)
         {
-            if(Game.input.isKeyHeld(OpenTK.Input.Key.Space))
+            if (Game.input.IsKeyHeld(OpenTK.Input.Key.Space))
             {
-                if (Point.dist(d.pos, Game.g.player.pos) < 2)
+                if (Point.Dist(d.pos, Game.g.player.pos) < 2)
                 {
                     Game.g.resetWorld = true;
                     Game.g.resetWorldUp = up;

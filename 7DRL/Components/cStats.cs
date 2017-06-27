@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _7DRL.Entities;
-
-namespace _7DRL.Components
+﻿namespace _7DRL.Components
 {
+    using System;
+    using Entities;
+
     public class cStats : iComponent
     {
         public int str;
@@ -43,17 +39,17 @@ namespace _7DRL.Components
 
         private bool debug;
 
-        public cStats(int Pstr, int Pdex, int Pcon, int Pintel, int Pwis, int Pcha)
+        public cStats(int pStr, int pDex, int pCon, int pIntel, int pWis, int pCha)
         {
             level = 1;
             currentXP = 0;
 
-            str = Pstr;
-            dex = Pdex;
-            con = Pcon;
-            intel = Pintel;
-            wis = Pwis;
-            cha = Pcha;
+            str = pStr;
+            dex = pDex;
+            con = pCon;
+            intel = pIntel;
+            wis = pWis;
+            cha = pCha;
 
             isEncumbered = false;
             weaponDamage = 0;
@@ -64,17 +60,18 @@ namespace _7DRL.Components
             currentStamina = maxStamina;
         }
 
-        public void Run(drawable d)
+        public void Run(Drawable d)
         {
-            if(currentXP > NeededXP)
+            if (currentXP > NeededXP)
             {
                 LevelUP();
             }
 
-            if(statsChanged)
+            if (statsChanged)
             {
                 RegenStats();
             }
+
             RegenStats();
 
             if (Game.doTick)
@@ -82,7 +79,7 @@ namespace _7DRL.Components
                 PassiveHeal();
             }
 
-            if (Game.input.isKeyRising(OpenTK.Input.Key.Tilde))
+            if (Game.input.IsKeyRising(OpenTK.Input.Key.Tilde))
             {
                 if (debug)
                 {
@@ -98,8 +95,8 @@ namespace _7DRL.Components
 
             Console.Write("HP:");
             Console.ForegroundColor = ConsoleColor.Red;
-            
-            for(int i = 0; i < 10; i++)
+
+            for (int i = 0; i < 10; i++)
             {
                 if ((float)currentHealth / (float)maxHealth > (float)i / 10f)
                 {
@@ -146,78 +143,33 @@ namespace _7DRL.Components
             Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(Game.g.screenX - Game.g.startingSeed.Length - 1, 29);
             Console.Write(Game.g.startingSeed);
-
         }
 
         public void RegenStats()
         {
-            maxHealth = con * 20 + 5 * level;
-            maxMana = wis * 20 + 5 * level;
-            maxStamina = dex * 20 + 5 * level;
+            maxHealth = (con * 20) + (5 * level);
+            maxMana = (wis * 20) + (5 * level);
+            maxStamina = (dex * 20) + (5 * level);
 
             healRate = con / 6;
             manaRate = intel / 4;
             stamRate = dex / 2;
 
-            NeededXP = 150 * level + 125;
+            NeededXP = (150 * level) + 125;
 
-            carryWeight = str * 2 + 20;
+            carryWeight = (str * 2) + 20;
 
             statsChanged = false;
         }
-
-        private void PassiveHeal()
-        {
-            if(debug)
-            {
-                Heal(100);
-                RegenMana(100);
-                RegenStam(100);
-            }
-
-            RegenMana(manaRate);
-
-            if (!inCombat)
-            {
-                if (((float)currentHealth / (float)maxHealth) < .40f)
-                {
-                    Heal(healRate);
-                }
-
-                RegenStam(stamRate);
-                
-                if (outOfStam)
-                {
-                    if ((float)currentStamina > (float)maxStamina * 0.25f)
-                    {
-                        outOfStam = false;
-                    }
-                }
-                else if (currentStamina <= 0)
-                {
-                    outOfStam = true;
-                }                
-            }
-            else
-            {
-                inCombat = false;
-            }
-        }
-
+        
         public void GainXP(int amount)
         {
             currentXP += amount;
         }
 
-        private void LevelUP()
-        {
-            level++;
-            statsChanged = true;
-        }
-
         public void Heal(int amount)
         {
-            if(currentHealth + amount > maxHealth)
+            if (currentHealth + amount > maxHealth)
             {
                 currentHealth = maxHealth;
             }
@@ -274,11 +226,11 @@ namespace _7DRL.Components
             return attackAmount;
         }
 
-        public int getAttack()
+        public int GetAttack()
         {
             int crit = Game.g.rng.Next(0, 21);
 
-            if(crit < dex)
+            if (crit < dex)
             {
                 return (str + weaponDamage) * 2;
             }
@@ -287,5 +239,51 @@ namespace _7DRL.Components
                 return str + weaponDamage;
             }
         }
+
+
+        private void PassiveHeal()
+        {
+            if (debug)
+            {
+                Heal(100);
+                RegenMana(100);
+                RegenStam(100);
+            }
+
+            RegenMana(manaRate);
+
+            if (!inCombat)
+            {
+                if (((float)currentHealth / (float)maxHealth) < .40f)
+                {
+                    Heal(healRate);
+                }
+
+                RegenStam(stamRate);
+
+                if (outOfStam)
+                {
+                    if ((float)currentStamina > (float)maxStamina * 0.25f)
+                    {
+                        outOfStam = false;
+                    }
+                }
+                else if (currentStamina <= 0)
+                {
+                    outOfStam = true;
+                }
+            }
+            else
+            {
+                inCombat = false;
+            }
+        }
+
+        private void LevelUP()
+        {
+            level++;
+            statsChanged = true;
+        }
+
     }
 }

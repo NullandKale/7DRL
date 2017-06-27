@@ -1,40 +1,36 @@
-﻿using OpenTK;
-using OpenTK.Input;
-using System.Drawing;
-
-
-//This is a slimmed down version of InputManager from
-//https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Managers/InputManager.cs
-
-namespace nullEngine.Managers
+﻿namespace nullEngine.Managers
 {
+    using OpenTK.Input;
+
+    // This is a slimmed down version of InputManager from
+    // https://github.com/NullandKale/SimpleTopDownShooter/blob/master/CS162Final/Managers/InputManager.cs
     public class InputManager
     {
-        //keyboard state storage, one for the current frame and one for the last frame
+        // keyboard state storage, one for the current frame and one for the last frame
         private KeyboardState lastKeyState;
         private KeyboardState currentKeyState;
 
         public InputManager()
         {
-            _7DRL.Game.g.onUpdate.Add(update);
+            _7DRL.Game.g.onUpdate.Add(Update);
         }
 
-        public void update()
+        public void Update()
         {
-            //on update if the currentKeyState is not invalid set lastKeyState to the old currentKeyState
+            // on update if the currentKeyState is not invalid set lastKeyState to the old currentKeyState
             if (currentKeyState != null)
             {
                 lastKeyState = currentKeyState;
             }
 
-            //update currentKeyState
+            // update currentKeyState
             currentKeyState = Keyboard.GetState();
-
         }
-        //keyboard state functions
-        public bool isKeyRising(Key k)
+
+        // keyboard state functions
+        public bool IsKeyRising(Key k)
         {
-            if (!isKeystateValid())
+            if (!IsKeystateValid())
             {
                 return false;
             }
@@ -44,9 +40,9 @@ namespace nullEngine.Managers
             }
         }
 
-        public bool isKeyFalling(Key k)
+        public bool IsKeyFalling(Key k)
         {
-            if (!isKeystateValid())
+            if (!IsKeystateValid())
             {
                 return false;
             }
@@ -56,9 +52,9 @@ namespace nullEngine.Managers
             }
         }
 
-        public bool isKeyHeld(Key k)
+        public bool IsKeyHeld(Key k)
         {
-            if (!isKeystateValid())
+            if (!IsKeystateValid())
             {
                 return false;
             }
@@ -68,8 +64,8 @@ namespace nullEngine.Managers
             }
         }
 
-        //check that the keyboard state is valid | this might not be needed
-        private bool isKeystateValid()
+        // check that the keyboard state is valid | this might not be needed
+        private bool IsKeystateValid()
         {
             return currentKeyState != null && lastKeyState != null;
         }

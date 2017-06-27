@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _7DRL.Components
+﻿namespace _7DRL.Components
 {
-    class cStory : iComponent
+    using System.Collections.Generic;
+
+    public class cStory : iComponent
     {
         private string lastThought;
 
         private int currentSet;
 
-        List<string> genericRandomToughts;
-        List<List<string>> randomThoughtSet;
-        List<string> startThoughts;
-        List<List<string>> endThoughtSet;
+        private List<string> genericRandomToughts;
+        private List<List<string>> randomThoughtSet;
+        private List<string> startThoughts;
+        private List<List<string>> endThoughtSet;
 
         public cStory(int endLevel)
         {
-            
             randomThoughtSet = new List<List<string>>();
             startThoughts = new List<string>();
             endThoughtSet = new List<List<string>>();
@@ -30,7 +25,7 @@ namespace _7DRL.Components
             startThoughts.Add("You hear a faint call... " + Game.g.PName + "!");
             startThoughts.Add("You must go farther down.");
 
-            for(int i = 0; i < startThoughts.Count; i++)
+            for (int i = 0; i < startThoughts.Count; i++)
             {
                 Game.g.LogCombat(startThoughts[i]);
             }
@@ -120,7 +115,7 @@ namespace _7DRL.Components
             endThoughtSet.Add(set4);
         }
 
-        public void Run(Entities.drawable d)
+        public void Run(Entities.Drawable d)
         {
             if (Game.doTick)
             {
@@ -137,19 +132,21 @@ namespace _7DRL.Components
                         lastThought = thought;
                     }
                 }
-                if (Util.dist(d.pos.xPos, d.pos.yPos, Game.g.princess.pos.xPos, Game.g.princess.pos.yPos) < 1.5 && Game.g.princess.active)
+
+                if (Util.Dist(d.pos.xPos, d.pos.yPos, Game.g.princess.pos.xPos, Game.g.princess.pos.yPos) < 1.5 && Game.g.princess.active)
                 {
                     for (int k = 0; k < endThoughtSet[currentSet].Count; k++)
                     {
                         Game.g.LogCombat(endThoughtSet[currentSet][k]);
                     }
+
                     Game.g.princess.active = false;
                     if (currentSet < endThoughtSet.Count)
                     {
                         currentSet++;
                     }
                 }
-            }           
+            }
         }
     }
 }

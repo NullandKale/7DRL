@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _7DRL.Entities;
-using _7DRL.Utils;
-
-namespace _7DRL.Components
+﻿namespace _7DRL.Components
 {
+    using Entities;
+    using Utils;
+
     public class cEnemyAI : iComponent
     {
-        public Point startingPosition;
-        private Point targetPos;
-        private drawable player;
-        private cStats playerStats;
-
-        private bool getNewTargetPos;
-
+        public Point StartingPosition;
         public string enemyName;
         public int maxHealth;
         public int health;
@@ -24,18 +13,23 @@ namespace _7DRL.Components
         public int range;
         public int detectRange;
         public double attackRange;
+
+        private Point targetPos;
+        private Drawable player;
+        private cStats playerStats;
+        private bool getNewTargetPos;
         private int xpAmount;
         private double lootChance;
-        
+
         public cEnemyAI()
-        {   
+        {
         }
 
-        public cEnemyAI(drawable pc, cStats pcStats, Point startingPosition, string enemyName, int health, int attack, int range, int detectRange, double attackRange, double lootChance)
+        public cEnemyAI(Drawable pc, cStats pcStats, Point startingPosition, string enemyName, int health, int attack, int range, int detectRange, double attackRange, double lootChance)
         {
             player = pc;
             playerStats = pcStats;
-            this.startingPosition = startingPosition;
+            this.StartingPosition = startingPosition;
             this.enemyName = enemyName;
             this.health = health;
             this.maxHealth = health;
@@ -47,15 +41,16 @@ namespace _7DRL.Components
             xpAmount = (health + attack + ((int)attackRange * 3)) / 5;
         }
 
-        public void Run(drawable d)
+        public void Run(Drawable d)
         {
-            if (Point.dist(player.pos, d.pos) > detectRange)
+            if (Point.Dist(player.pos, d.pos) > detectRange)
             {
-                if(targetPos == null || getNewTargetPos || EnemiesInRange(d))
+                if (targetPos == null || getNewTargetPos || EnemiesInRange(d))
                 {
                     targetPos = GenerateTarget(targetPos, d);
                 }
-                if (d.pos.xPos == targetPos.x && d.pos.yPos == targetPos.y)
+
+                if (d.pos.xPos == targetPos.X && d.pos.yPos == targetPos.Y)
                 {
                     targetPos = GenerateTarget(targetPos, d);
                 }
@@ -66,7 +61,7 @@ namespace _7DRL.Components
             }
             else
             {
-                if (Point.dist(player.pos, d.pos) > attackRange)
+                if (Point.Dist(player.pos, d.pos) > attackRange)
                 {
                     MoveTowards(new Point(player.pos.xPos, player.pos.yPos), d);
                 }
@@ -81,50 +76,51 @@ namespace _7DRL.Components
             health = maxHealth;
         }
 
-        private void Attack(drawable d)
+        public void GetHurt(Drawable enemy)
         {
-            if (Point.dist(d.pos, player.pos) < attackRange)
+            Game.g.LogCombat("You did " + Damage(playerStats.GetAttack(), enemy, playerStats) + " damage to " + enemyName);
+        }
+
+        private void Attack(Drawable d)
+        {
+            if (Point.Dist(d.pos, player.pos) < attackRange)
             {
                 playerStats.inCombat = true;
 
                 int attack = damage + Game.g.rng.Next(-range, range);
 
-                if (Point.dist(player.pos, d.pos) > 1.5)
+                if (Point.Dist(player.pos, d.pos) > 1.5)
                 {
                     Game.g.LogCombat("You got " + playerStats.Damage(attack) + " damage from " + enemyName);
                 }
                 else
-                { 
+                {
                     int whoseFirst = Game.g.rng.Next(0, 21);
 
                     if (whoseFirst < playerStats.dex)
-                    {             
-                        Game.g.LogCombat("You did " + Damage(playerStats.getAttack(), d, playerStats) + " damage to " + enemyName);
+                    {
+                        Game.g.LogCombat("You did " + Damage(playerStats.GetAttack(), d, playerStats) + " damage to " + enemyName);
                         Game.g.LogCombat("You got " + playerStats.Damage(attack) + " damage from " + enemyName);
                     }
                     else
                     {
                         Game.g.LogCombat("You got " + playerStats.Damage(attack) + " damage from " + enemyName);
-                        Game.g.LogCombat("You did " + Damage(playerStats.getAttack(), d, playerStats) + " damage to " + enemyName);
+                        Game.g.LogCombat("You did " + Damage(playerStats.GetAttack(), d, playerStats) + " damage to " + enemyName);
                     }
                 }
             }
         }
-
-        public void getHurt(drawable enemy)
+        
+        private int Damage(int amount, Drawable d, cStats playerStats)
         {
-            Game.g.LogCombat("You did " + Damage(playerStats.getAttack(), enemy, playerStats) + " damage to " + enemyName);
-        }
-
-        private int Damage(int amount, drawable d, cStats playerStats)
-        {
-            if(health - amount <= 0)
+            if (health - amount <= 0)
             {
-                if(Game.g.rng.NextDouble() < lootChance)
+                if (Game.g.rng.NextDouble() < lootChance)
                 {
                     Game.g.pcInv.SpawnLoot(d.pos.xPos, d.pos.yPos);
                 }
-                d.setPos(-1, -1);
+
+                d.SetPos(-1, -1);
                 d.active = false;
                 playerStats.GainXP(xpAmount);
             }
@@ -136,13 +132,13 @@ namespace _7DRL.Components
             return amount;
         }
 
-        private bool EnemiesInRange(drawable d)
+        private bool EnemiesInRange(Drawable d)
         {
-            for(int i = -4; i <= 4; i++)
+            for (int i = -4; i <= 4; i++)
             {
                 for (int j = -4; j <= 4; j++)
                 {
-                    if(Game.isInWorld(d.pos.xPos + i, d.pos.yPos + j))
+                    if (Game.isInWorld(d.pos.xPos + i, d.pos.yPos + j))
                     {
                         if (Game.g.world[d.pos.xPos + i, d.pos.yPos + j].Visual == 'e' ||
                             Game.g.world[d.pos.xPos + i, d.pos.yPos + j].Visual == 'E' ||
@@ -158,25 +154,27 @@ namespace _7DRL.Components
             return false;
         }
 
-        private void MoveTowards(Point target, drawable d)
+        private void MoveTowards(Point target, Drawable d)
         {
             int moveX = 0;
             int moveY = 0;
 
-            if (target.x > d.pos.xPos)
+            if (target.X > d.pos.xPos)
             {
                 moveX++;
             }
-            if (target.x < d.pos.xPos)
+
+            if (target.X < d.pos.xPos)
             {
                 moveX--;
             }
 
-            if (target.y > d.pos.yPos)
+            if (target.Y > d.pos.yPos)
             {
                 moveY++;
             }
-            if (target.y < d.pos.yPos)
+
+            if (target.Y < d.pos.yPos)
             {
                 moveY--;
             }
@@ -185,34 +183,29 @@ namespace _7DRL.Components
             bool canMoveX = Managers.CollisionManager.CheckCollision(moveX, 0, d);
             bool canMoveY = Managers.CollisionManager.CheckCollision(0, moveY, d);
 
-            if(!(canMoveBoth || canMoveX || canMoveY))
+            if (!(canMoveBoth || canMoveX || canMoveY))
             {
-                //if the enemy is colliding pick a new targetPos
+                // if the enemy is colliding pick a new targetPos
                 getNewTargetPos = true;
             }
 
-
             if (canMoveBoth && moveX != 0 && moveY != 0)
             {
-                d.setPosRelative(moveX, moveY);
+                d.SetPosRelative(moveX, moveY);
             }
             else if (canMoveX && moveX != 0)
             {
-                d.setPosRelative(moveX, 0);
+                d.SetPosRelative(moveX, 0);
             }
             else if (canMoveY && moveY != 0)
             {
-                d.setPosRelative(0, moveY);
+                d.SetPosRelative(0, moveY);
             }
-
-            //Console.SetCursorPosition(0, 29);
-            //Console.Write(moveX + ", " + moveY + ", " + canMoveBoth + ", " + canMoveX + ", " + canMoveY);
         }
 
-        private Point GenerateTarget(Point p, drawable d)
+        private Point GenerateTarget(Point p, Drawable d)
         {
-            var temp = Point.getRandomPointNearbyInWorld(startingPosition);
-            //Game.g.LogCombat(temp.x + ", " + temp.y);
+            var temp = Point.GetRandomPointNearbyInWorld(StartingPosition);
             return temp;
         }
     }

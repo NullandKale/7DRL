@@ -1,41 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-using System.Timers;
-
-namespace _7DRL
+﻿namespace _7DRL
 {
-    class Program
+    using System;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Timers;
+
+    public class Program
     {
         private const int MF_BYCOMMAND = 0x00000000;
-        public const int SC_MAXIMIZE = 0xF030;
-        public const int SC_SIZE = 0xF000;
-        public const int ENABLE_QUICK_EDIT = 0x0040;
-        public const int ENABLE_MOUSE_INPUT = 0x0010;
+        private const int SC_MAXIMIZE = 0xF030;
+        private const int SC_SIZE = 0xF000;
+        private const int ENABLE_QUICK_EDIT = 0x0040;
+        private const int ENABLE_MOUSE_INPUT = 0x0010;
 
         [DllImport("user32.dll")]
-        public static extern int DeleteMenu(IntPtr hMenu, int nPosition, int wFlags);
+        private static extern int DeleteMenu(IntPtr hMenu, int nPosition, int wFlags);
 
         [DllImport("user32.dll")]
         private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
 
         [DllImport("kernel32.dll", ExactSpelling = true)]
         private static extern IntPtr GetConsoleWindow();
-        
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern IntPtr GetStdHandle(int nStdHandle);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool GetConsoleMode(IntPtr hConsoleHandle, out int lpMode);
+        private static extern IntPtr GetStdHandle(int nStdHandle);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool GetConsoleMode(IntPtr hConsoleHandle, out int lpMode);
 
         [DllImport("kernel32.dll")]
-        static extern bool SetConsoleMode(IntPtr hConsoleHandle, int dwMode);
+        private static extern bool SetConsoleMode(IntPtr hConsoleHandle, int dwMode);
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             int fps = 30;
             int updateTime = 1000 / fps;
@@ -69,9 +65,9 @@ namespace _7DRL
             mode &= ~ENABLE_MOUSE_INPUT;
 
             if (!SetConsoleMode(handle, mode))
-            {
-                Console.WriteLine(Marshal.GetLastWin32Error());
+            {                
                 // error setting console mode.
+                Console.WriteLine(Marshal.GetLastWin32Error());
             }
 
             Console.WriteLine("    Apocatastasis Welcomes You.");
@@ -93,25 +89,24 @@ namespace _7DRL
                 }
                 catch
                 {
-
                 }
 
-                if(input == -1)
+                if (input == -1)
                 {
                     Console.WriteLine("Invalid input, input just a number.");
                 }
-                else if(input == 0)
+                else if (input == 0)
                 {
-                    //STAT ROLL MENU
+                    // STAT ROLL MENU
                     bool getName = true;
-                    string playerName = "";
+                    string playerName = string.Empty;
 
                     while (getName)
                     {
                         Console.Write("Enter Your Name!: ");
                         playerName = Console.ReadLine();
 
-                        if (playerName == "" || playerName.Count() > 21)
+                        if (playerName == string.Empty || playerName.Count() > 21)
                         {
                             Console.WriteLine("Your name must be 1 - 20 characters long");
                         }
@@ -221,7 +216,6 @@ namespace _7DRL
                                     }
                                     catch
                                     {
-
                                     }
 
                                     if (amount > 10 || str + amount > 10)
@@ -253,7 +247,6 @@ namespace _7DRL
                                     }
                                     catch
                                     {
-
                                     }
 
                                     if (amount > 10 || dex + amount > 10)
@@ -285,7 +278,6 @@ namespace _7DRL
                                     }
                                     catch
                                     {
-
                                     }
 
                                     if (amount > 10 || con + amount > 10)
@@ -317,7 +309,6 @@ namespace _7DRL
                                     }
                                     catch
                                     {
-
                                     }
 
                                     if (amount > 10 || intel + amount > 10)
@@ -349,7 +340,6 @@ namespace _7DRL
                                     }
                                     catch
                                     {
-
                                     }
 
                                     if (amount > 10 || wis + amount > 10)
@@ -381,7 +371,6 @@ namespace _7DRL
                                     }
                                     catch
                                     {
-
                                     }
 
                                     if (amount > 10 || cha + amount > 10)
@@ -399,7 +388,7 @@ namespace _7DRL
                                         Total -= amount;
                                     }
                                 }
-                                else if(selection == "GOD")
+                                else if (selection == "GOD")
                                 {
                                     str = 10;
                                     dex = 10;
@@ -413,21 +402,17 @@ namespace _7DRL
                             }
                         }
                     }
-                        
+
                     Game game = new Game(6, str, dex, con, intel, wis, cha, playerName, true);
                     game.onLoad(false, Managers.GenerationType.Rooms);
 
                     Timer updateTimer = new Timer(updateTime);
-
-                    //updateTimer.Elapsed += game.update;
-                    //updateTimer.Start();
 
                     while (game.running)
                     {
                         if (game.stop)
                         {
                             updateTimer.Stop();
-                            //game.running = false;
                         }
                         else
                         {
@@ -435,7 +420,7 @@ namespace _7DRL
                         }
                     }
                 }
-                else if(input == 1)
+                else if (input == 1)
                 {
                     Console.WriteLine("We can't do that yet");
                 }

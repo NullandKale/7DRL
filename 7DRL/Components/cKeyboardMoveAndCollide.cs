@@ -1,47 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using _7DRL.Entities;
-using nullEngine;
-
-namespace _7DRL.Components
+﻿namespace _7DRL.Components
 {
+    using System;
+    using Entities;
+
     class cKeyboardMoveAndCollide : iComponent
     {
-        int frame = 0;
-        bool debug;
+        private bool debug;
 
-        public void Run(drawable d)
+        public void Run(Drawable d)
         {
-            if(!Game.g.pcStats.isEncumbered)
+            if (!Game.g.pcStats.isEncumbered)
             {
                 int moveX = 0;
                 int moveY = 0;
 
-                if(Game.input.isKeyHeld(OpenTK.Input.Key.ShiftLeft) && Game.g.pcStats.currentStamina > 0
+                if (Game.input.IsKeyHeld(OpenTK.Input.Key.ShiftLeft) && Game.g.pcStats.currentStamina > 0
                     && !Game.g.pcStats.outOfStam)
                 {
-                    if (Game.input.isKeyHeld(OpenTK.Input.Key.A))
+                    if (Game.input.IsKeyHeld(OpenTK.Input.Key.A))
                     {
                         moveX--;
                         Game.doTick = true;
                     }
 
-                    if (Game.input.isKeyHeld(OpenTK.Input.Key.D))
+                    if (Game.input.IsKeyHeld(OpenTK.Input.Key.D))
                     {
                         moveX++;
                         Game.doTick = true;
                     }
 
-                    if (Game.input.isKeyHeld(OpenTK.Input.Key.W))
+                    if (Game.input.IsKeyHeld(OpenTK.Input.Key.W))
                     {
                         moveY--;
                         Game.doTick = true;
                     }
 
-                    if (Game.input.isKeyHeld(OpenTK.Input.Key.S))
+                    if (Game.input.IsKeyHeld(OpenTK.Input.Key.S))
                     {
                         moveY++;
                         Game.doTick = true;
@@ -54,34 +48,34 @@ namespace _7DRL.Components
                 }
                 else
                 {
-                    if (Game.input.isKeyFalling(OpenTK.Input.Key.A))
+                    if (Game.input.IsKeyFalling(OpenTK.Input.Key.A))
                     {
                         moveX--;
                         Game.doTick = true;
                     }
 
-                    if (Game.input.isKeyFalling(OpenTK.Input.Key.D))
+                    if (Game.input.IsKeyFalling(OpenTK.Input.Key.D))
                     {
                         moveX++;
                         Game.doTick = true;
                     }
 
-                    if (Game.input.isKeyFalling(OpenTK.Input.Key.W))
+                    if (Game.input.IsKeyFalling(OpenTK.Input.Key.W))
                     {
                         moveY--;
                         Game.doTick = true;
                     }
 
-                    if (Game.input.isKeyFalling(OpenTK.Input.Key.S))
+                    if (Game.input.IsKeyFalling(OpenTK.Input.Key.S))
                     {
                         moveY++;
                         Game.doTick = true;
                     }
                 }
 
-                if(Game.input.isKeyRising(OpenTK.Input.Key.Tilde))
+                if (Game.input.IsKeyRising(OpenTK.Input.Key.Tilde))
                 {
-                    if(debug)
+                    if (debug)
                     {
                         Game.g.pcStats.weaponDamage = 0;
                         debug = false;
@@ -97,13 +91,13 @@ namespace _7DRL.Components
                     }
                 }
 
-                if(Game.input.isKeyFalling(OpenTK.Input.Key.Space))
+                if (Game.input.IsKeyFalling(OpenTK.Input.Key.Space))
                 {
                     for (int x = -1; x <= 1; x++)
                     {
                         for (int y = -1; y <= 1; y++)
                         {
-                            if(!(x == 0 && y == 0))
+                            if (!(x == 0 && y == 0))
                             {
                                 int xPos = d.pos.xPos + x;
                                 int yPos = d.pos.yPos + y;
@@ -122,20 +116,16 @@ namespace _7DRL.Components
 
                 if (canMoveBoth && moveX != 0 && moveY != 0)
                 {
-                    d.setPosRelative(moveX, moveY);
+                    d.SetPosRelative(moveX, moveY);
                 }
                 else if (canMoveX && moveX != 0)
                 {
-                    d.setPosRelative(moveX, 0);
+                    d.SetPosRelative(moveX, 0);
                 }
                 else if (canMoveY && moveY != 0)
                 {
-                    d.setPosRelative(0, moveY);
+                    d.SetPosRelative(0, moveY);
                 }
-
-                //frame++;
-                //Console.SetCursorPosition(0, 29);
-                //Console.Write("[" + d.pos.xPos + "," + d.pos.yPos + "] " + frame);
             }
         }
     }

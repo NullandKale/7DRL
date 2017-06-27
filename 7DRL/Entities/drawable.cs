@@ -1,30 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace _7DRL.Entities
+﻿namespace _7DRL.Entities
 {
-    public class drawable
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    public class Drawable
     {
         public char texture;
         public ConsoleColor color;
-        public transform pos;
+        public Transform pos;
         public List<Components.iComponent> components;
         public bool active = true;
         public string tag;
 
-        public drawable()
+        public Drawable()
         {
             color = ConsoleColor.Green;
             components = new List<Components.iComponent>();
-            pos = new transform();
+            pos = new Transform();
         }
 
-        public void update()
+        public void Update()
         {
-            if(active)
+            if (active)
             {
                 if (tag == "Stairs")
                 {
@@ -33,14 +31,14 @@ namespace _7DRL.Entities
                         components[i].Run(this);
                     }
                 }
-                else if(Game.doTick && tag != "Player")
+                else if (Game.doTick && tag != "Player")
                 {
                     for (int i = 0; i < components.Count; i++)
                     {
                         components[i].Run(this);
                     }
                 }
-                else if(tag == "Player")
+                else if (tag == "Player")
                 {
                     for (int i = 0; i < components.Count; i++)
                     {
@@ -48,13 +46,13 @@ namespace _7DRL.Entities
                     }
                 }
 
-                draw();
+                Draw();
             }
         }
 
         public void AddComponent(Components.iComponent c)
         {
-            if(!components.Contains(c))
+            if (!components.Contains(c))
             {
                 components.Add(c);
             }
@@ -64,41 +62,34 @@ namespace _7DRL.Entities
         {
             if (components.Any(c => c.GetType() == typeof(T)))
             {
-                return (T) components[components.IndexOf(components.Find(c => c.GetType() == typeof(T)))];
+                return (T)components[components.IndexOf(components.Find(c => c.GetType() == typeof(T)))];
             }
 
             return default(T);
         }
 
-        public void setPos(int x, int y)
+        public void SetPos(int x, int y)
         {
-            Game.g.world[pos.xPos, pos.yPos].collideable = false;
+            Game.g.world[pos.xPos, pos.yPos].Collideable = false;
             pos.xPos = x;
             pos.yPos = y;
         }
 
-        public void setPosRelative(int x, int y)
+        public void SetPosRelative(int x, int y)
         {
-            Game.g.world[pos.xPos, pos.yPos].collideable = false;
+            Game.g.world[pos.xPos, pos.yPos].Collideable = false;
             pos.xPos += x;
             pos.yPos += y;
         }
 
-        private void draw()
+        private void Draw()
         {
             if (pos.xPos != -1 && pos.yPos != -1)
             {
-
                 Game.g.world[pos.xPos, pos.yPos].Visual = texture;
-                Game.g.world[pos.xPos, pos.yPos].color = color;
-                Game.g.world[pos.xPos, pos.yPos].collideable = true;
+                Game.g.world[pos.xPos, pos.yPos].Color = color;
+                Game.g.world[pos.xPos, pos.yPos].Collideable = true;
             }
         }
-    }
-
-    public class transform
-    {
-        public int xPos;
-        public int yPos;
     }
 }
