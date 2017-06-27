@@ -56,6 +56,7 @@
             int numberRooms = 20;
             int maxRoomSize = 20;
             int minRoomSize = 5;
+            int maxWidthDiff = 5;
             int hallSize = 2;
 
             cellmap = DoSimulationStep(cellmap, worldSize);
@@ -67,7 +68,7 @@
 
             for (int i = 0; i < numberRooms; i++)
             {
-                rooms.Add(GetRandomRect(worldSize, minRoomSize, maxRoomSize, rooms));
+                rooms.Add(GetRandomRect(worldSize, minRoomSize, maxRoomSize, maxWidthDiff, rooms));
             }
 
             cellmap = DrawRooms(rooms, cellmap);
@@ -79,10 +80,21 @@
             return cellmap;
         }
 
-        public static Room GetRandomRect(int worldSize, int minRoomSize, int maxRoomSize, List<Room> rooms)
+        public static Room GetRandomRect(int worldSize, int minRoomSize, int maxRoomSize, int widthDiff, List<Room> rooms)
         {
             int height = Game.g.rng.Next(minRoomSize, maxRoomSize);
-            int width = Game.g.rng.Next(minRoomSize, maxRoomSize);
+
+            int width = 0;
+
+            if(height - widthDiff < minRoomSize)
+            {
+                width = minRoomSize;
+            }
+            else
+            {
+                width = Game.g.rng.Next(height - widthDiff, height + widthDiff);
+            }
+
             int xCord = Game.g.rng.Next(0, worldSize - width + 1);
             int yCord = Game.g.rng.Next(0, worldSize - height + 1);
             Room temp = new Room();
@@ -92,7 +104,7 @@
             {
                 if (rooms[i].roomRect.IntersectsWith(temp.roomRect))
                 {
-                    return GetRandomRect(worldSize, minRoomSize, maxRoomSize, rooms);
+                    return GetRandomRect(worldSize, minRoomSize, maxRoomSize, widthDiff, rooms);
                 }
             }
 
@@ -190,13 +202,19 @@
                     {
                         if (!rooms[j].twoConnectedRooms && rooms[j] != rooms[i] && rooms[i] != rooms[j].connectedRoom0)
                         {
-                            rooms[j].twoConnectedRooms = true;
-                            rooms[j].connectedRoom1 = rooms[i];
+                            double dist = Util.Dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[j].roomRect.X, rooms[j].roomRect.Y);
+
+                            if (i != j && rooms[i].connectedRoom0 != rooms[j] && dist < worldSize / distprecentage)
+                            {
+                                rooms[j].twoConnectedRooms = true;
+                                rooms[j].connectedRoom1 = rooms[i];
+                                break;
+                            }
                         }
                     }
                 }
             }
-            
+
             for (int i = 0; i < rooms.Count; i++)
             {
                 int xDiff = rooms[i].roomRect.X - rooms[i].connectedRoom0.roomRect.X;
