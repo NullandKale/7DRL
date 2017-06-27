@@ -34,8 +34,8 @@
             this.health = health;
             this.maxHealth = health;
             this.range = range;
-            this.detectRange = detectRange;
-            this.attackRange = attackRange;
+            this.detectRange = detectRange * detectRange;
+            this.attackRange = attackRange * attackRange;
             damage = attack;
             this.lootChance = lootChance;
             xpAmount = (health + attack + ((int)attackRange * 3)) / 5;
@@ -43,7 +43,7 @@
 
         public void Run(Drawable d)
         {
-            if (Point.Dist(player.pos, d.pos) > detectRange)
+            if (Point.SquareDist(player.pos, d.pos) > detectRange)
             {
                 if (targetPos == null || getNewTargetPos || EnemiesInRange(d))
                 {
@@ -61,7 +61,7 @@
             }
             else
             {
-                if (Point.Dist(player.pos, d.pos) > attackRange)
+                if (Point.SquareDist(player.pos, d.pos) > attackRange)
                 {
                     MoveTowards(new Point(player.pos.xPos, player.pos.yPos), d);
                 }
@@ -83,13 +83,13 @@
 
         private void Attack(Drawable d)
         {
-            if (Point.Dist(d.pos, player.pos) < attackRange)
+            if (Point.SquareDist(d.pos, player.pos) < attackRange)
             {
                 playerStats.inCombat = true;
 
                 int attack = damage + Game.g.rng.Next(-range, range);
 
-                if (Point.Dist(player.pos, d.pos) > 1.5)
+                if (Point.SquareDist(player.pos, d.pos) > 1.5)
                 {
                     Game.g.LogCombat("You got " + playerStats.Damage(attack) + " damage from " + enemyName);
                 }

@@ -112,6 +112,7 @@
                             int xPos = x + rooms[i].roomRect.X;
                             int yPos = y + rooms[i].roomRect.Y;
                             cellmap[xPos, yPos].Visual = wall;
+                            cellmap[xPos, yPos].Color = ConsoleColor.DarkGray;
                             cellmap[xPos, yPos].Collideable = true;
                         }
                         else
@@ -366,6 +367,7 @@
                     {
                         map[x, y] = new Tile();
                         map[x, y].Visual = wall;
+                        map[x, y].Color = ConsoleColor.DarkGray;
                         map[x, y].Collideable = true;
                     }
                 }
@@ -433,6 +435,7 @@
                     if (x == 0 || y == 0 || x == worldSize || y == worldSize)
                     {
                         newMap[x, y].Visual = wall;
+                        newMap[x, y].Color = ConsoleColor.DarkGray;
                         newMap[x, y].Collideable = true;
                         continue;
                     }
@@ -451,6 +454,7 @@
                         else
                         {
                             newMap[x, y].Visual = wall;
+                            newMap[x, y].Color = ConsoleColor.DarkGray;
                             newMap[x, y].Collideable = true;
                         }
                     }
@@ -460,6 +464,7 @@
                         if (nbs > 4)
                         {
                             newMap[x, y].Visual = wall;
+                            newMap[x, y].Color = ConsoleColor.DarkGray;
                             newMap[x, y].Collideable = true;
                         }
                         else
@@ -483,6 +488,7 @@
                     if (x == 0 || y == 0 || x == worldSize - 1 || y == worldSize - 1)
                     {
                         map[x, y].Visual = wall;
+                        map[x, y].Color = ConsoleColor.DarkGray;
                         map[x, y].Collideable = true;
                     }
                 }

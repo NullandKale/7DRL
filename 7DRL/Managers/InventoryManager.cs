@@ -621,7 +621,7 @@
                 {
                     for (int i = 0; i < Game.g.enemy.Length; i++)
                     {
-                        if (Utils.Point.Dist(Game.g.player.pos, Game.g.enemy[i].pos) < 5)
+                        if (Utils.Point.SquareDist(Game.g.player.pos, Game.g.enemy[i].pos) < 25)
                         {
                             Game.g.enemyAI[i].GetHurt(Game.g.enemy[i]);
                         }

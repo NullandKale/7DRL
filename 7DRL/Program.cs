@@ -33,7 +33,7 @@
 
         private static void Main(string[] args)
         {
-            int fps = 30;
+            int fps = 120;
             int updateTime = 1000 / fps;
 
             // Set size and Title.
@@ -403,22 +403,20 @@
                         }
                     }
 
-                    Game game = new Game(6, str, dex, con, intel, wis, cha, playerName, true);
+                    Game game = new Game(100, str, dex, con, intel, wis, cha, playerName, false);
                     game.onLoad(false, Managers.GenerationType.Rooms);
 
                     Timer updateTimer = new Timer(updateTime);
+                    updateTimer.Elapsed += game.update;
+                    updateTimer.Start();
 
-                    while (game.running)
-                    {
-                        if (game.stop)
-                        {
-                            updateTimer.Stop();
-                        }
-                        else
-                        {
-                            game.update(null, null);
-                        }
-                    }
+                    //while (game.running)
+                    //{
+                    //    if (game.stop)
+                    //    {
+                    //        updateTimer.Stop();
+                    //    }
+                    //}
                 }
                 else if (input == 1)
                 {

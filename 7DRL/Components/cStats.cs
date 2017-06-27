@@ -58,6 +58,10 @@
             currentHealth = maxHealth;
             currentMana = maxMana;
             currentStamina = maxStamina;
+
+            Console.SetCursorPosition(0, 29);
+
+            Console.Write("HP:           Mana:           Stam:");
         }
 
         public void Run(Drawable d)
@@ -91,11 +95,8 @@
                 }
             }
 
-            Console.SetCursorPosition(0, 29);
-
-            Console.Write("HP:");
+            Console.SetCursorPosition(3, 29);
             Console.ForegroundColor = ConsoleColor.Red;
-
             for (int i = 0; i < 10; i++)
             {
                 if ((float)currentHealth / (float)maxHealth > (float)i / 10f)
@@ -108,10 +109,8 @@
                 }
             }
 
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Mana:");
             Console.ForegroundColor = ConsoleColor.Blue;
-
+            Console.SetCursorPosition(19, 29);
             for (int i = 0; i < 10; i++)
             {
                 if ((float)currentMana / (float)maxMana > (float)i / 10f)
@@ -124,10 +123,8 @@
                 }
             }
 
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(" Stam:");
             Console.ForegroundColor = ConsoleColor.Green;
-
+            Console.SetCursorPosition(35, 29);
             for (int i = 0; i < 10; i++)
             {
                 if ((float)currentStamina / (float)maxStamina > (float)i / 10f)
@@ -206,9 +203,10 @@
         public int Damage(int attackAmount)
         {
             attackAmount = attackAmount - damageReduction;
-            if (attackAmount < 0)
+
+            if (attackAmount < attackAmount * 0.80)
             {
-                return 0;
+                attackAmount = (int)(attackAmount * 0.80f);
             }
             else if (currentHealth - attackAmount < 0)
             {

@@ -16,7 +16,7 @@
         {
             if (Game.input.IsKeyHeld(OpenTK.Input.Key.Space))
             {
-                if (Point.Dist(d.pos, Game.g.player.pos) < 2)
+                if (Point.SquareDist(d.pos, Game.g.player.pos) < 4)
                 {
                     Game.g.resetWorld = true;
                     Game.g.resetWorldUp = up;

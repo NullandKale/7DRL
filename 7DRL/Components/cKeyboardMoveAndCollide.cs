@@ -77,17 +77,13 @@
                 {
                     if (debug)
                     {
-                        Game.g.pcStats.weaponDamage = 0;
+                        Game.g.pcStats.weaponDamage -= 100;
                         debug = false;
-                        Console.SetCursorPosition(0, 29);
-                        Console.Write("                                               ");
                     }
                     else
                     {
-                        Game.g.pcStats.weaponDamage = 100;
+                        Game.g.pcStats.weaponDamage += 100;
                         debug = true;
-                        Console.SetCursorPosition(0, 29);
-                        Console.Write("                        GOD MODE");
                     }
                 }
 

@@ -26,12 +26,28 @@
             return Math.Sqrt(x + y);
         }
 
+        public static double SquareDist(Point p1, Point p2)
+        {
+            double x = Math.Pow(Math.Abs(p1.X - p2.X), 2);
+            double y = Math.Pow(Math.Abs(p1.Y - p2.Y), 2);
+
+            return x + y;
+        }
+
         public static double Dist(Entities.Transform t1, Entities.Transform t2)
         {
             double x = Math.Pow(Math.Abs(t1.xPos - t2.xPos), 2);
             double y = Math.Pow(Math.Abs(t1.yPos - t2.yPos), 2);
 
             return Math.Sqrt(x + y);
+        }
+
+        public static double SquareDist(Entities.Transform t1, Entities.Transform t2)
+        {
+            double x = Math.Pow(Math.Abs(t1.xPos - t2.xPos), 2);
+            double y = Math.Pow(Math.Abs(t1.yPos - t2.yPos), 2);
+
+            return x + y;
         }
 
         public static Point GetRandomPoint(List<Point> points)
@@ -72,10 +88,11 @@
 
         public static Point GetRandomDoorPoint(Point pos)
         {
-            Point p = GetRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));
+            List<Point> validPoints = Util.FloodFill(Game.g.ground, pos, Game.g.worldSize);
+            Point p = GetRandomPoint(validPoints);
             if (!Managers.CollisionManager.CheckCollision(p.X, p.Y))
             {
-                return GetRandomPoint(Util.FloodFill(Game.g.ground, pos, Game.g.worldSize));
+                return GetRandomPoint(validPoints);
             }
             else
             {
@@ -90,21 +107,19 @@
 
         public override bool Equals(object obj)
         {
-            if (obj is Point)
+            Point p = (Point)obj;
+
+            if(p.X != X)
             {
-                Point p = (Point)obj;
-                if (p.X == X && p.Y == Y)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return false;
+            }
+            else if (p.Y != Y)
+            {
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
     }

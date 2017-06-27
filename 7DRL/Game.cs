@@ -136,6 +136,8 @@
 
             worldOffsetX = 0;
             worldOffsetY = 0;
+
+            drawBorders();
         }
 
         public void ResetWorld(int _seed)
@@ -212,7 +214,7 @@
 
         public void update(object source, System.Timers.ElapsedEventArgs e)
         {
-            if (lastFrameDone)
+            if (lastFrameDone && !stop)
             {
                 ClearWorld();
                 lastFrameDone = false;
@@ -248,11 +250,15 @@
         private void Draw()
         {
             rendering = true;
+            bool setPos = true;
             for (int y = 0; y < screenY; y++)
             {
                 for (int x = 0; x < gameX; x++)
                 {
-                    Console.SetCursorPosition(x, y);
+                    if (setPos)
+                    {
+                        Console.SetCursorPosition(x, y);
+                    }
 
                     if (world[x + worldOffsetX, y + worldOffsetY].Visual != ' ')
                     {
@@ -262,22 +268,52 @@
                         }
 
                         Console.Write(world[x + worldOffsetX, y + worldOffsetY].Visual);
+                        setPos = false;
                         world[x + worldOffsetX, y + worldOffsetY].Visual = ' ';
                         lastFrame[x, y] = world[x + worldOffsetX, y + worldOffsetY];
                     }
                     else if (lastFrame[x, y] != ground[x + worldOffsetX, y + worldOffsetY])
                     {
-                        if (ground[x + worldOffsetX, y + worldOffsetY].Visual == (char)0x2588)
+                        if (Console.ForegroundColor != ground[x + worldOffsetX, y + worldOffsetY].Color)
                         {
-                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                            Console.ForegroundColor = ground[x + worldOffsetX, y + worldOffsetY].Color;
                         }
 
                         Console.Write(ground[x + worldOffsetX, y + worldOffsetY].Visual);
+                        setPos = false;
                         lastFrame[x, y] = ground[x + worldOffsetX, y + worldOffsetY];
                     }
+                    setPos = true;
                 }
             }
 
+            Console.ForegroundColor = ConsoleColor.White;
+            for (int x = gameX; x < screenX; x++)
+            {
+                for (int y = 0; y < screenY; y++)
+                {
+                    if(x != gameX)
+                    {
+                        if (y == 0 && x == gameX + 1)
+                        {
+                            for (var j = 0; j < guiItem.Count; j++)
+                            {
+                                Console.SetCursorPosition(x, j);
+                                Console.Write(guiItem[j]);
+                                for (var i = gameX + 1 + guiItem[j].Length; i < screenX + 1; i++)
+                                {
+                                    Console.Write(' ');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            rendering = false;
+        }
+
+        public void drawBorders()
+        {
             Console.ForegroundColor = ConsoleColor.White;
             for (int x = gameX; x < screenX; x++)
             {
@@ -300,24 +336,8 @@
                             };
                         }
                     }
-                    else
-                    {
-                        if (y == 0 && x == gameX + 1)
-                        {
-                            for (var j = 0; j < guiItem.Count; j++)
-                            {
-                                Console.SetCursorPosition(x, j);
-                                Console.Write(guiItem[j]);
-                                for (var i = gameX + 1 + guiItem[j].Length; i < screenX + 1; i++)
-                                {
-                                    Console.Write(' ');
-                                }
-                            }
-                        }
-                    }
                 }
             }
-
             for (int x = 0; x < screenX; x++)
             {
                 if (lastFrame[x, 28].Visual != '-')
@@ -326,9 +346,6 @@
                     Console.Write('-');
                 }
             }
-
-            ClearWorld();
-            rendering = false;
         }
 
         public void AddUIElement(int index, string item)
