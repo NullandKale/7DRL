@@ -75,6 +75,9 @@
             Console.WriteLine("(1) Load Game -- NOT IMPLEMENTED");
             Console.WriteLine("(2) Quit");
 
+            Timer updateTimer = new Timer(updateTime);
+            Game game;
+
             bool inputValid = false;
 
             while (!inputValid)
@@ -403,20 +406,12 @@
                         }
                     }
 
-                    Game game = new Game(100, str, dex, con, intel, wis, cha, playerName, false);
+                    game = new Game(100, str, dex, con, intel, wis, cha, playerName, false);
                     game.onLoad(false, Managers.GenerationType.Rooms);
 
-                    Timer updateTimer = new Timer(updateTime);
                     updateTimer.Elapsed += game.update;
-                    updateTimer.Start();
 
-                    //while (game.running)
-                    //{
-                    //    if (game.stop)
-                    //    {
-                    //        updateTimer.Stop();
-                    //    }
-                    //}
+                    inputValid = true;
                 }
                 else if (input == 1)
                 {
@@ -428,6 +423,8 @@
                     inputValid = true;
                 }
             }
+
+            updateTimer.Start();
         }
     }
 }
