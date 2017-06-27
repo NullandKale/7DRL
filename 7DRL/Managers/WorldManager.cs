@@ -55,8 +55,8 @@
         {
             int numberRooms = 20;
             int maxRoomSize = 20;
-            int minRoomSize = 5;
-            int maxWidthDiff = 5;
+            int minRoomSize = 6;
+            int maxWidthDiff = 6;
             int hallSize = 2;
 
             cellmap = DoSimulationStep(cellmap, worldSize);
@@ -88,7 +88,7 @@
 
             if(height - widthDiff < minRoomSize)
             {
-                width = minRoomSize;
+                width = width = Game.g.rng.Next(minRoomSize, height + widthDiff);
             }
             else
             {
@@ -184,7 +184,7 @@
 
             List<Room> connectedRooms = new List<Room>();
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < rooms.Count * 4; i++)
             {
                 Room temp = WalkRooms(i, rooms[1]);
 
@@ -193,6 +193,8 @@
                     connectedRooms.Add(temp);
                 }
             }
+
+            bool allroomsConnected = false;
 
             for (int i = 0; i < rooms.Count; i++)
             {
@@ -204,11 +206,49 @@
                         {
                             double dist = Util.Dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[j].roomRect.X, rooms[j].roomRect.Y);
 
-                            if (i != j && rooms[i].connectedRoom0 != rooms[j] && dist < worldSize / distprecentage)
+                            if (i != j && rooms[i].connectedRoom0 != rooms[j] && dist < worldSize / 3)
                             {
                                 rooms[j].twoConnectedRooms = true;
                                 rooms[j].connectedRoom1 = rooms[i];
+                                allroomsConnected = true;
                                 break;
+                            }
+                        }
+                    }
+                    if (allroomsConnected == false)
+                    {
+                        for (int j = 0; j < rooms.Count; j++)
+                        {
+                            if (!rooms[j].twoConnectedRooms && rooms[j] != rooms[i] && rooms[i] != rooms[j].connectedRoom0)
+                            {
+                                double dist = Util.Dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[j].roomRect.X, rooms[j].roomRect.Y);
+
+                                if (i != j && rooms[i].connectedRoom0 != rooms[j] && dist < worldSize / 2)
+                                {
+                                    rooms[j].twoConnectedRooms = true;
+                                    rooms[j].connectedRoom1 = rooms[i];
+                                    allroomsConnected = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (allroomsConnected == false)
+                    {
+                        for (int j = 0; j < rooms.Count; j++)
+                        {
+                            if (!rooms[j].twoConnectedRooms && rooms[j] != rooms[i] && rooms[i] != rooms[j].connectedRoom0)
+                            {
+                                double dist = Util.Dist(rooms[i].roomRect.X, rooms[i].roomRect.Y, rooms[j].roomRect.X, rooms[j].roomRect.Y);
+
+                                if (i != j && rooms[i].connectedRoom0 != rooms[j] && dist < worldSize)
+                                {
+                                    rooms[j].twoConnectedRooms = true;
+                                    rooms[j].connectedRoom1 = rooms[i];
+                                    allroomsConnected = true;
+                                    break;
+                                }
                             }
                         }
                     }

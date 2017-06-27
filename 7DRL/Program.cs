@@ -71,8 +71,8 @@
             }
 
             Console.WriteLine("    Apocatastasis Welcomes You.");
-            Console.WriteLine("(0) New Game");
-            Console.WriteLine("(1) Load Game -- NOT IMPLEMENTED");
+            Console.WriteLine("(0) Create Character and Game");
+            Console.WriteLine("(1) Start Game with default Character");
             Console.WriteLine("(2) Quit");
 
             Timer updateTimer = new Timer(updateTime);
@@ -406,7 +406,7 @@
                         }
                     }
 
-                    game = new Game(100, str, dex, con, intel, wis, cha, playerName, false);
+                    game = new Game(100, str, dex, con, intel, wis, cha, playerName, true);
                     game.onLoad(false, Managers.GenerationType.Rooms);
 
                     updateTimer.Elapsed += game.update;
@@ -422,7 +422,28 @@
                 }
                 else if (input == 1)
                 {
-                    Console.WriteLine("We can't do that yet");
+                    string playerName = "Maaarrr";
+
+                    int str = 7;
+                    int dex = 5;
+                    int con = 7;
+                    int intel = 5;
+                    int wis = 5;
+                    int cha = 5;
+
+                    game = new Game(100, str, dex, con, intel, wis, cha, playerName, true);
+                    game.onLoad(false, Managers.GenerationType.Rooms);
+
+                    updateTimer.Elapsed += game.update;
+
+                    inputValid = true;
+
+                    updateTimer.Start();
+
+                    while (!game.stop)
+                    {
+
+                    }
                 }
                 else
                 {
