@@ -9,6 +9,7 @@
 
         public void Run(Drawable d)
         {
+            Game.doTick = false;
             if (!Game.g.pcStats.isEncumbered)
             {
                 int moveX = 0;

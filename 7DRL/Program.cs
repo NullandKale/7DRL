@@ -33,7 +33,7 @@
 
         private static void Main(string[] args)
         {
-            int fps = 120;
+            int fps = 80;
             int updateTime = 1000 / fps;
 
             // Set size and Title.

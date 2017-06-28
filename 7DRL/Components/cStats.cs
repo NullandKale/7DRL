@@ -202,13 +202,16 @@
 
         public int Damage(int attackAmount)
         {
-            attackAmount = attackAmount - damageReduction;
+            int adjAttackAmount = attackAmount - damageReduction;
 
-            if (attackAmount < attackAmount * 0.80)
+            if (adjAttackAmount < attackAmount * 0.20)
             {
-                attackAmount = (int)(attackAmount * 0.80f);
+                adjAttackAmount = (int)(attackAmount * 0.20f);
             }
-            else if (currentHealth - attackAmount < 0)
+
+            attackAmount = adjAttackAmount;
+
+            if (currentHealth - attackAmount < 0)
             {
                 currentHealth -= attackAmount;
                 Game.g.LogCombat("You DIED");

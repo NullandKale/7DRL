@@ -208,6 +208,8 @@
             InitializeEnemies(reset);
             InintializePrincessAndDragon(reset);
 
+            onUpdate.Add(player.Update);
+
             lastFrameDone = true;
             resetWorld = false;
         }
@@ -224,7 +226,6 @@
                 }
 
                 DrawInventory();
-
                 Draw();
 
                 if (resetWorld)
@@ -243,7 +244,6 @@
                 }
 
                 lastFrameDone = true;
-                doTick = false;
             }
         }
 
@@ -488,7 +488,6 @@
                 player.AddComponent(new cStory(10));
                 player.AddComponent(new cCameraFollow(this));
                 player.AddComponent(pcStats);
-                onUpdate.Add(player.Update);
             }
             else
             {
@@ -528,7 +527,7 @@
             {
                 enemy[i] = new Drawable();
                 enemy[i].color = ConsoleColor.Red;
-                Utils.Point enemyPos = Utils.Point.GetRandomPointInWorld();
+                Utils.Point enemyPos = Utils.Point.GetRandomPointInWorldAwayFromPlayer();
                 enemy[i].pos.xPos = enemyPos.X;
                 enemy[i].pos.yPos = enemyPos.Y;
 

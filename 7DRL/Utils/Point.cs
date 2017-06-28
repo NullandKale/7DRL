@@ -73,6 +73,19 @@
             }
         }
 
+        public static Point GetRandomPointInWorldAwayFromPlayer()
+        {
+            Point p = GetRandomPoint(Game.g.worldSize);
+            if (!Managers.CollisionManager.CheckCollision(p.X, p.Y) || Point.SquareDist(new Point(Game.g.player.pos.xPos, Game.g.player.pos.yPos), p) < 64)
+            {
+                return GetRandomPointInWorld();
+            }
+            else
+            {
+                return p;
+            }
+        }
+
         public static Point GetRandomPointNearbyInWorld(Point loc)
         {
             Point p = GetRandomPoint(Game.g.worldSize);
