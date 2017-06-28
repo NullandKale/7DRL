@@ -9,6 +9,8 @@ Controls.
 
 WASD - movement.
 
+Shift + WASD - sprint
+
 E - use Tome.
 
 12345 - Equip item in slot X
