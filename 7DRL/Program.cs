@@ -445,12 +445,12 @@
                 {
                     string playerName = "Maaarrr";
 
-                    int str = 7;
-                    int dex = 5;
-                    int con = 7;
+                    int str = 8;
+                    int dex = 7;
+                    int con = 9;
                     int intel = 5;
                     int wis = 5;
-                    int cha = 5;
+                    int cha = 1;
 
                     game = new Game(100, str, dex, con, intel, wis, cha, playerName, true);
                     game.onLoad(false, Managers.GenerationType.Rooms);
